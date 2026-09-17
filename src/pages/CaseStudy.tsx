@@ -8,6 +8,7 @@ import {
   Sparkles,
   BarChart3,
   Figma,
+  ImageIcon,
 } from "lucide-react";
 import Header from "@/components/Layout/Header";
 import Footer from "@/components/Layout/Footer";
@@ -239,6 +240,34 @@ export default function CaseStudy() {
                     {parseFigmaUrl(project.figmaUrl)?.nodeId &&
                       ` · node ${parseFigmaUrl(project.figmaUrl)?.nodeId}`}
                   </p>
+                </section>
+              )}
+
+              {project.figmaImages && project.figmaImages.length > 0 && (
+                <section>
+                  <SectionHeader
+                    icon={<ImageIcon size={18} className="text-accent" />}
+                    label="Screens"
+                    title="Design Screenshots"
+                  />
+                  <div className="space-y-4">
+                    {project.figmaImages.map((img, i) => (
+                      <figure
+                        key={i}
+                        className="rounded-card border border-border overflow-hidden bg-background-card"
+                      >
+                        <img
+                          src={img}
+                          alt={`Screen ${i + 1}`}
+                          className="w-full h-auto"
+                          loading="lazy"
+                        />
+                        <figcaption className="px-4 py-2 border-t border-border text-xs font-mono text-foreground-subtle">
+                          Screen {i + 1}
+                        </figcaption>
+                      </figure>
+                    ))}
+                  </div>
                 </section>
               )}
             </article>

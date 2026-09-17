@@ -397,9 +397,11 @@ function ProjectModal({
             onChange={(m) => set("metrics", m)}
           />
 
-          <FigmaUrlField
+          <FigmaMediaField
             url={form.figmaUrl || ""}
-            onChange={(v) => set("figmaUrl", v)}
+            images={form.figmaImages || []}
+            onChangeUrl={(v) => set("figmaUrl", v)}
+            onChangeImages={(arr) => set("figmaImages", arr)}
           />
         </div>
 
@@ -619,61 +621,156 @@ function CoverUploader({
   );
 }
 
-function FigmaUrlField({
+function FigmaMediaField({
   url,
-  onChange,
+  images,
+  onChangeUrl,
+  onChangeImages,
 }: {
   url: string;
-  onChange: (v: string) => void;
+  images: string[];
+  onChangeUrl: (v: string) => void;
+  onChangeImages: (arr: string[]) => void;
 }) {
   const parsed = url ? parseFigmaUrl(url) : null;
   const valid = url ? isValidFigmaUrl(url) : false;
 
+  const handleFileUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const files = Array.from(e.target.files || []);
+    if (files.length === 0) return;
+    const urls: string[] = [];
+    for (const f of files) {
+      const u = await readFileAsDataURL(f);
+      urls.push(u);
+    }
+    onChangeImages([...images, ...urls]);
+    e.target.value = "";
+  };
+
+  const removeImage = (i: number) => {
+    onChangeImages(images.filter((_, j) => j !== i));
+  };
+
+  const moveImage = (i: number, dir: -1 | 1) => {
+    const j = i + dir;
+    if (j < 0 || j >= images.length) return;
+    const arr = [...images];
+    [arr[i], arr[j]] = [arr[j], arr[i]];
+    onChangeImages(arr);
+  };
+
   return (
-    <div className="border-t border-border pt-5">
-      <label className="flex items-center gap-2 font-mono text-[10px] uppercase tracking-wider text-foreground-subtle mb-2">
-        <Figma size={12} /> Figma Design Link (optional)
+    <div className="border-t border-border pt-5 space-y-5">
+      <label className="flex items-center gap-2 font-mono text-[10px] uppercase tracking-wider text-foreground-subtle">
+        <Figma size={12} /> Figma Design — URL + Screenshots
       </label>
-      <input
-        className={`w-full rounded-button border bg-background-elevated px-3 py-2 text-sm focus:outline-none font-mono ${
-          url && !valid
-            ? "border-red-500 focus:border-red-400"
-            : valid
-            ? "border-green-500/50 focus:border-green-400"
-            : "border-border focus:border-accent"
-        }`}
-        value={url}
-        onChange={(e) => onChange(e.target.value)}
-        placeholder="https://www.figma.com/file/xxxxx/...?node-id=1234-5678"
-      />
-      {url && (
-        <div className="mt-2 text-xs">
-          {valid && parsed ? (
-            <div className="flex items-center gap-2 text-green-400">
-              <Figma size={12} />
-              <span className="font-mono">
-                {parsed.fileKey}
-                {parsed.nodeId && ` · node ${parsed.nodeId}`}
-              </span>
-              <a
-                href={url}
-                target="_blank"
-                rel="noreferrer"
-                className="text-accent hover:underline ml-2"
-              >
-                Open ↗
-              </a>
-            </div>
-          ) : (
-            <p className="text-red-400">请输入有效的 Figma 文件链接</p>
-          )}
-        </div>
-      )}
-      {!url && (
-        <p className="text-[11px] text-foreground-subtle mt-2">
-          添加后，Case Study 页面底部会自动嵌入 Figma 预览
+
+      <div>
+        <p className="text-[11px] text-foreground-subtle mb-2">
+          Option A: Paste Figma file link (live embed)
         </p>
-      )}
+        <input
+          className={`w-full rounded-button border bg-background-elevated px-3 py-2 text-sm focus:outline-none font-mono ${
+            url && !valid
+              ? "border-red-500 focus:border-red-400"
+              : valid
+              ? "border-green-500/50 focus:border-green-400"
+              : "border-border focus:border-accent"
+          }`}
+          value={url}
+          onChange={(e) => onChangeUrl(e.target.value)}
+          placeholder="https://www.figma.com/file/xxxxx/...?node-id=1234-5678"
+        />
+        {url && (
+          <div className="mt-2 text-xs">
+            {valid && parsed ? (
+              <div className="flex items-center gap-2 text-green-400">
+                <Figma size={12} />
+                <span className="font-mono">
+                  {parsed.fileKey}
+                  {parsed.nodeId && ` · node ${parsed.nodeId}`}
+                </span>
+                <a
+                  href={url}
+                  target="_blank"
+                  rel="noreferrer"
+                  className="text-accent hover:underline ml-2"
+                >
+                  Open ↗
+                </a>
+              </div>
+            ) : (
+              <p className="text-red-400">无效的 Figma 链接</p>
+            )}
+          </div>
+        )}
+      </div>
+
+      <div>
+        <p className="text-[11px] text-foreground-subtle mb-2">
+          Option B: Upload exported Figma screenshots (PNG / JPG)
+        </p>
+
+        {images.length > 0 && (
+          <div className="grid grid-cols-2 sm:grid-cols-3 gap-2 mb-3">
+            {images.map((img, i) => (
+              <div
+                key={i}
+                className="relative group aspect-video rounded-button overflow-hidden border border-border bg-background-card"
+              >
+                <img
+                  src={img}
+                  alt={`figma-${i}`}
+                  className="w-full h-full object-cover"
+                />
+                <div className="absolute inset-0 bg-black/60 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center gap-1">
+                  <button
+                    onClick={() => moveImage(i, -1)}
+                    disabled={i === 0}
+                    className="p-1.5 rounded-button bg-background border border-border disabled:opacity-30"
+                    title="Move up"
+                  >
+                    ←
+                  </button>
+                  <button
+                    onClick={() => moveImage(i, 1)}
+                    disabled={i === images.length - 1}
+                    className="p-1.5 rounded-button bg-background border border-border disabled:opacity-30"
+                    title="Move down"
+                  >
+                    →
+                  </button>
+                  <button
+                    onClick={() => removeImage(i)}
+                    className="p-1.5 rounded-button bg-red-500/80 hover:bg-red-500"
+                    title="Delete"
+                  >
+                    <X size={12} />
+                  </button>
+                </div>
+                <span className="absolute top-1 left-1 font-mono text-[10px] bg-black/60 px-1.5 py-0.5 rounded">
+                  {i + 1}
+                </span>
+              </div>
+            ))}
+          </div>
+        )}
+
+        <label className="flex items-center justify-center gap-2 rounded-button border border-dashed border-border bg-background-elevated hover:border-accent hover:text-accent transition-colors cursor-pointer py-4 text-sm text-foreground-muted">
+          <Plus size={14} />
+          <span>Upload screenshots</span>
+          <input
+            type="file"
+            accept="image/png,image/jpeg,image/webp"
+            multiple
+            onChange={handleFileUpload}
+            className="hidden"
+          />
+        </label>
+        <p className="text-[10px] text-foreground-subtle mt-1.5">
+          从 Figma 导出 PNG/JPG 截图上传，支持多张，会按顺序展示
+        </p>
+      </div>
     </div>
   );
 }
