@@ -18,6 +18,7 @@ dist-ssr
 .idea
 .DS_Store
 .trae/
+.vercel/
 *.suo
 *.ntvs*
 *.njsproj
