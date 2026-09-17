@@ -25,6 +25,7 @@ export interface Project {
   tools?: string[];
   teamSize?: string;
   duration?: string;
+  figmaUrl?: string;
 }
 
 export const projects: Project[] = [

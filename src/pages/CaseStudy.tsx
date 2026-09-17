@@ -7,11 +7,13 @@ import {
   Target,
   Sparkles,
   BarChart3,
+  Figma,
 } from "lucide-react";
 import Header from "@/components/Layout/Header";
 import Footer from "@/components/Layout/Footer";
 import { useAdminStore } from "@/store/admin";
 import Badge from "@/components/UI/Badge";
+import { buildFigmaEmbedUrl, parseFigmaUrl } from "@/utils/figma";
 
 export default function CaseStudy() {
   const projects = useAdminStore((s) => s.projects);
@@ -97,6 +99,21 @@ export default function CaseStudy() {
                     ))}
                   </div>
                 </div>
+                {project.figmaUrl && parseFigmaUrl(project.figmaUrl) && (
+                  <a
+                    href={project.figmaUrl}
+                    target="_blank"
+                    rel="noreferrer"
+                    className="flex items-center gap-2 rounded-button border border-border bg-background-card hover:border-accent hover:bg-accent/5 px-3 py-2.5 transition-all group"
+                  >
+                    <Figma size={16} className="text-accent" />
+                    <span className="text-sm font-medium">View in Figma</span>
+                    <ArrowUpRight
+                      size={14}
+                      className="ml-auto text-foreground-muted group-hover:text-accent transition-colors"
+                    />
+                  </a>
+                )}
               </div>
             </aside>
 
@@ -183,6 +200,47 @@ export default function CaseStudy() {
                   {project.roleDetail || project.role}
                 </p>
               </section>
+
+              {project.figmaUrl && parseFigmaUrl(project.figmaUrl) && (
+                <section>
+                  <SectionHeader
+                    icon={<Figma size={18} className="text-accent" />}
+                    label="Design"
+                    title="View in Figma"
+                  />
+                  <div className="rounded-card border border-border overflow-hidden bg-background-card">
+                    <div className="flex items-center justify-between px-4 py-3 border-b border-border">
+                      <div className="flex items-center gap-2">
+                        <Figma size={16} className="text-accent" />
+                        <span className="text-sm font-medium">
+                          {parseFigmaUrl(project.figmaUrl)?.fileName || "Figma File"}
+                        </span>
+                      </div>
+                      <a
+                        href={project.figmaUrl}
+                        target="_blank"
+                        rel="noreferrer"
+                        className="flex items-center gap-1.5 text-xs text-accent hover:underline"
+                      >
+                        Open in new tab <ArrowUpRight size={12} />
+                      </a>
+                    </div>
+                    <div className="aspect-video w-full bg-black/20">
+                      <iframe
+                        src={buildFigmaEmbedUrl(project.figmaUrl) || undefined}
+                        className="w-full h-full"
+                        allow="fullscreen"
+                        loading="lazy"
+                      />
+                    </div>
+                  </div>
+                  <p className="text-xs text-foreground-subtle mt-2 font-mono">
+                    {parseFigmaUrl(project.figmaUrl)?.fileKey}
+                    {parseFigmaUrl(project.figmaUrl)?.nodeId &&
+                      ` · node ${parseFigmaUrl(project.figmaUrl)?.nodeId}`}
+                  </p>
+                </section>
+              )}
             </article>
           </div>
         </div>

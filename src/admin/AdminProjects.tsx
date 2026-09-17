@@ -1,8 +1,9 @@
 import { useState } from "react";
-import { Plus, Pencil, Trash2, X, ChevronDown, ImageIcon } from "lucide-react";
+import { Plus, Pencil, Trash2, X, ChevronDown, ImageIcon, Figma } from "lucide-react";
 import { useAdminStore } from "@/store/admin";
 import { categories, Project } from "@/data/projects";
 import { readFileAsDataURL, slugify } from "@/utils/upload";
+import { parseFigmaUrl, isValidFigmaUrl } from "@/utils/figma";
 
 const emptyProject: Project = {
   slug: "",
@@ -395,6 +396,11 @@ function ProjectModal({
             metrics={form.metrics || []}
             onChange={(m) => set("metrics", m)}
           />
+
+          <FigmaUrlField
+            url={form.figmaUrl || ""}
+            onChange={(v) => set("figmaUrl", v)}
+          />
         </div>
 
         <div className="sticky bottom-0 flex justify-end gap-2 p-5 border-t border-border bg-background rounded-b-card">
@@ -609,6 +615,65 @@ function CoverUploader({
           ))}
         </div>
       </div>
+    </div>
+  );
+}
+
+function FigmaUrlField({
+  url,
+  onChange,
+}: {
+  url: string;
+  onChange: (v: string) => void;
+}) {
+  const parsed = url ? parseFigmaUrl(url) : null;
+  const valid = url ? isValidFigmaUrl(url) : false;
+
+  return (
+    <div className="border-t border-border pt-5">
+      <label className="flex items-center gap-2 font-mono text-[10px] uppercase tracking-wider text-foreground-subtle mb-2">
+        <Figma size={12} /> Figma Design Link (optional)
+      </label>
+      <input
+        className={`w-full rounded-button border bg-background-elevated px-3 py-2 text-sm focus:outline-none font-mono ${
+          url && !valid
+            ? "border-red-500 focus:border-red-400"
+            : valid
+            ? "border-green-500/50 focus:border-green-400"
+            : "border-border focus:border-accent"
+        }`}
+        value={url}
+        onChange={(e) => onChange(e.target.value)}
+        placeholder="https://www.figma.com/file/xxxxx/...?node-id=1234-5678"
+      />
+      {url && (
+        <div className="mt-2 text-xs">
+          {valid && parsed ? (
+            <div className="flex items-center gap-2 text-green-400">
+              <Figma size={12} />
+              <span className="font-mono">
+                {parsed.fileKey}
+                {parsed.nodeId && ` · node ${parsed.nodeId}`}
+              </span>
+              <a
+                href={url}
+                target="_blank"
+                rel="noreferrer"
+                className="text-accent hover:underline ml-2"
+              >
+                Open ↗
+              </a>
+            </div>
+          ) : (
+            <p className="text-red-400">请输入有效的 Figma 文件链接</p>
+          )}
+        </div>
+      )}
+      {!url && (
+        <p className="text-[11px] text-foreground-subtle mt-2">
+          添加后，Case Study 页面底部会自动嵌入 Figma 预览
+        </p>
+      )}
     </div>
   );
 }
