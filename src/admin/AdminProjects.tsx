@@ -1,9 +1,15 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Plus, Pencil, Trash2, X, ChevronDown, ImageIcon, Figma } from "lucide-react";
 import { useAdminStore } from "@/store/admin";
 import { categories, Project } from "@/data/projects";
 import { readFileAsDataURL, slugify } from "@/utils/upload";
 import { parseFigmaUrl, isValidFigmaUrl } from "@/utils/figma";
+import {
+  fetchFigmaFile,
+  fetchFigmaImages,
+  proxyImageToDataUrl,
+  type FigmaFrame,
+} from "@/utils/figmaApi";
 
 const emptyProject: Project = {
   slug: "",
@@ -634,6 +640,17 @@ function FigmaMediaField({
 }) {
   const parsed = url ? parseFigmaUrl(url) : null;
   const valid = url ? isValidFigmaUrl(url) : false;
+  const [token, setToken] = useState<string>(
+    () => localStorage.getItem("figma_token") || ""
+  );
+  const [showToken, setShowToken] = useState(false);
+  const [importOpen, setImportOpen] = useState(false);
+
+  const saveToken = (v: string) => {
+    setToken(v);
+    if (v) localStorage.setItem("figma_token", v);
+    else localStorage.removeItem("figma_token");
+  };
 
   const handleFileUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const files = Array.from(e.target.files || []);
@@ -662,53 +679,104 @@ function FigmaMediaField({
   return (
     <div className="border-t border-border pt-5 space-y-5">
       <label className="flex items-center gap-2 font-mono text-[10px] uppercase tracking-wider text-foreground-subtle">
-        <Figma size={12} /> Figma Design — URL + Screenshots
+        <Figma size={12} /> Figma Design — URL + Import + Screenshots
       </label>
+
+      {!token ? (
+        <div className="rounded-button border border-border bg-background-card p-4">
+          <p className="text-sm mb-3">
+            <strong className="text-foreground">Enable Figma import</strong>
+            <span className="text-foreground-muted ml-2">
+              Generate a Personal Access Token at{" "}
+              <a
+                href="https://www.figma.com/settings/developers#personal-access-tokens"
+                target="_blank"
+                rel="noreferrer"
+                className="text-accent hover:underline font-mono text-xs"
+              >
+                figma.com/settings/developers
+              </a>
+            </span>
+          </p>
+          <div className="flex gap-2">
+            <input
+              type={showToken ? "text" : "password"}
+              className="flex-1 rounded-button border border-border bg-background-elevated px-3 py-2 text-sm font-mono focus:border-accent focus:outline-none"
+              placeholder="figd_xxxxxxxxxxxxxxxxxxxxxxxxx"
+              value={token}
+              onChange={(e) => saveToken(e.target.value)}
+            />
+            <button
+              type="button"
+              onClick={() => setShowToken(!showToken)}
+              className="px-3 text-xs text-foreground-muted hover:text-foreground"
+            >
+              {showToken ? "Hide" : "Show"}
+            </button>
+          </div>
+        </div>
+      ) : (
+        <div className="flex items-center justify-between rounded-button border border-green-500/30 bg-green-500/5 px-3 py-2">
+          <span className="text-xs font-mono text-green-400">
+            ✓ Figma token saved locally
+          </span>
+          <button
+            type="button"
+            onClick={() => saveToken("")}
+            className="text-xs text-foreground-muted hover:text-red-400"
+          >
+            Clear
+          </button>
+        </div>
+      )}
 
       <div>
         <p className="text-[11px] text-foreground-subtle mb-2">
-          Option A: Paste Figma file link (live embed)
+          Figma file link
         </p>
-        <input
-          className={`w-full rounded-button border bg-background-elevated px-3 py-2 text-sm focus:outline-none font-mono ${
-            url && !valid
-              ? "border-red-500 focus:border-red-400"
-              : valid
-              ? "border-green-500/50 focus:border-green-400"
-              : "border-border focus:border-accent"
-          }`}
-          value={url}
-          onChange={(e) => onChangeUrl(e.target.value)}
-          placeholder="https://www.figma.com/file/xxxxx/...?node-id=1234-5678"
-        />
-        {url && (
-          <div className="mt-2 text-xs">
-            {valid && parsed ? (
-              <div className="flex items-center gap-2 text-green-400">
-                <Figma size={12} />
-                <span className="font-mono">
-                  {parsed.fileKey}
-                  {parsed.nodeId && ` · node ${parsed.nodeId}`}
-                </span>
-                <a
-                  href={url}
-                  target="_blank"
-                  rel="noreferrer"
-                  className="text-accent hover:underline ml-2"
-                >
-                  Open ↗
-                </a>
-              </div>
-            ) : (
-              <p className="text-red-400">无效的 Figma 链接</p>
-            )}
+        <div className="flex gap-2">
+          <input
+            className={`flex-1 rounded-button border bg-background-elevated px-3 py-2 text-sm focus:outline-none font-mono ${
+              url && !valid
+                ? "border-red-500 focus:border-red-400"
+                : valid
+                ? "border-green-500/50 focus:border-green-400"
+                : "border-border focus:border-accent"
+            }`}
+            value={url}
+            onChange={(e) => onChangeUrl(e.target.value)}
+            placeholder="https://www.figma.com/file/xxxxx/...?node-id=1234-5678"
+          />
+          {valid && token && (
+            <button
+              type="button"
+              onClick={() => setImportOpen(true)}
+              className="rounded-button bg-accent hover:bg-accent-hover text-background px-4 py-2 text-sm font-medium whitespace-nowrap inline-flex items-center gap-1.5"
+            >
+              <Figma size={14} /> Import
+            </button>
+          )}
+        </div>
+        {url && valid && parsed && (
+          <div className="mt-2 text-xs flex items-center gap-2 text-green-400 font-mono">
+            <Figma size={12} />
+            {parsed.fileKey}
+            {parsed.nodeId && ` · node ${parsed.nodeId}`}
+            <a
+              href={url}
+              target="_blank"
+              rel="noreferrer"
+              className="text-accent hover:underline ml-2"
+            >
+              Open ↗
+            </a>
           </div>
         )}
       </div>
 
       <div>
         <p className="text-[11px] text-foreground-subtle mb-2">
-          Option B: Upload exported Figma screenshots (PNG / JPG)
+          Or upload exported screenshots manually (PNG / JPG)
         </p>
 
         {images.length > 0 && (
@@ -725,25 +793,25 @@ function FigmaMediaField({
                 />
                 <div className="absolute inset-0 bg-black/60 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center gap-1">
                   <button
+                    type="button"
                     onClick={() => moveImage(i, -1)}
                     disabled={i === 0}
                     className="p-1.5 rounded-button bg-background border border-border disabled:opacity-30"
-                    title="Move up"
                   >
                     ←
                   </button>
                   <button
+                    type="button"
                     onClick={() => moveImage(i, 1)}
                     disabled={i === images.length - 1}
                     className="p-1.5 rounded-button bg-background border border-border disabled:opacity-30"
-                    title="Move down"
                   >
                     →
                   </button>
                   <button
+                    type="button"
                     onClick={() => removeImage(i)}
                     className="p-1.5 rounded-button bg-red-500/80 hover:bg-red-500"
-                    title="Delete"
                   >
                     <X size={12} />
                   </button>
@@ -767,9 +835,208 @@ function FigmaMediaField({
             className="hidden"
           />
         </label>
-        <p className="text-[10px] text-foreground-subtle mt-1.5">
-          从 Figma 导出 PNG/JPG 截图上传，支持多张，会按顺序展示
-        </p>
+      </div>
+
+      {importOpen && parsed && token && (
+        <FigmaImportModal
+          fileKey={parsed.fileKey}
+          initialNodeId={parsed.nodeId}
+          token={token}
+          onClose={() => setImportOpen(false)}
+          onImport={(imgs) => {
+            onChangeImages([...images, ...imgs]);
+            setImportOpen(false);
+          }}
+        />
+      )}
+    </div>
+  );
+}
+
+function FigmaImportModal({
+  fileKey,
+  initialNodeId,
+  token,
+  onClose,
+  onImport,
+}: {
+  fileKey: string;
+  initialNodeId?: string;
+  token: string;
+  onClose: () => void;
+  onImport: (images: string[]) => void;
+}) {
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
+  const [frames, setFrames] = useState<FigmaFrame[]>([]);
+  const [selected, setSelected] = useState<Set<string>>(new Set());
+  const [fetching, setFetching] = useState(false);
+  const [progress, setProgress] = useState("");
+
+  useEffect(() => {
+    fetchFigmaFile(
+      `https://www.figma.com/file/${fileKey}${
+        initialNodeId ? `?node-id=${initialNodeId.replace(":", "-")}` : ""
+      }`,
+      token
+    )
+      .then((info) => {
+        setFrames(info?.frames || []);
+      })
+      .catch((e) => setError(e.message || "Failed to load Figma file"))
+      .finally(() => setLoading(false));
+  }, [fileKey, initialNodeId, token]);
+
+  const toggle = (id: string) => {
+    setSelected((prev) => {
+      const n = new Set(prev);
+      if (n.has(id)) n.delete(id);
+      else n.add(id);
+      return n;
+    });
+  };
+
+  const toggleAll = () => {
+    if (selected.size === frames.length) setSelected(new Set());
+    else setSelected(new Set(frames.map((f) => f.id)));
+  };
+
+  const handleImport = async () => {
+    const ids = Array.from(selected);
+    if (ids.length === 0) return;
+    setFetching(true);
+    setProgress(`Fetching ${ids.length} frame${ids.length > 1 ? "s" : ""}...`);
+    try {
+      const imageMap = await fetchFigmaImages(fileKey, ids, token);
+      const result: string[] = [];
+      const entries = Object.entries(imageMap);
+      for (let i = 0; i < entries.length; i++) {
+        const [, figmaUrl] = entries[i];
+        if (!figmaUrl) continue;
+        setProgress(`Loading image ${i + 1}/${entries.length}`);
+        try {
+          const dataUrl = await proxyImageToDataUrl(figmaUrl);
+          result.push(dataUrl);
+        } catch {
+          /* skip */
+        }
+      }
+      onImport(result);
+    } catch (e) {
+      setError(e.message || "Import failed");
+    } finally {
+      setFetching(false);
+      setProgress("");
+    }
+  };
+
+  return (
+    <div className="fixed inset-0 z-[60] bg-black/70 backdrop-blur-sm flex items-center justify-center p-4">
+      <div className="w-full max-w-2xl bg-background border border-border rounded-card shadow-2xl max-h-[85vh] flex flex-col">
+        <div className="flex items-center justify-between p-4 border-b border-border">
+          <div className="flex items-center gap-2">
+            <Figma size={18} className="text-accent" />
+            <h3 className="font-display font-semibold">Import from Figma</h3>
+          </div>
+          <button
+            type="button"
+            onClick={onClose}
+            className="p-2 rounded-button hover:bg-background-card text-foreground-muted"
+          >
+            <X size={18} />
+          </button>
+        </div>
+
+        <div className="flex-1 overflow-y-auto p-4">
+          {loading && (
+            <div className="text-center py-12 text-foreground-muted">
+              Loading Figma file...
+            </div>
+          )}
+
+          {error && (
+            <div className="rounded-button border border-red-500/50 bg-red-500/10 px-4 py-3 text-sm text-red-400">
+              {error}
+              <p className="text-xs mt-2 opacity-80">
+                Make sure your token has file read access and the file link is correct.
+              </p>
+            </div>
+          )}
+
+          {!loading && !error && frames.length === 0 && (
+            <div className="text-center py-12 text-foreground-muted text-sm">
+              No frames found. Try adding a specific node-id to your Figma URL.
+            </div>
+          )}
+
+          {!loading && frames.length > 0 && (
+            <>
+              <div className="flex items-center justify-between mb-3">
+                <p className="text-xs text-foreground-muted">
+                  {frames.length} frame{frames.length > 1 ? "s" : ""} found ·{" "}
+                  {selected.size} selected
+                </p>
+                <button
+                  type="button"
+                  onClick={toggleAll}
+                  className="text-xs text-accent hover:underline"
+                >
+                  {selected.size === frames.length ? "Deselect all" : "Select all"}
+                </button>
+              </div>
+              <div className="space-y-1">
+                {frames.map((f) => (
+                  <label
+                    key={f.id}
+                    className={`flex items-center gap-3 rounded-button border px-3 py-2.5 cursor-pointer transition-colors ${
+                      selected.has(f.id)
+                        ? "border-accent bg-accent/10"
+                        : "border-border hover:border-border/80"
+                    }`}
+                  >
+                    <input
+                      type="checkbox"
+                      checked={selected.has(f.id)}
+                      onChange={() => toggle(f.id)}
+                      className="accent-accent w-4 h-4"
+                    />
+                    <Figma size={14} className="text-accent flex-shrink-0" />
+                    <span className="text-sm truncate flex-1">{f.name}</span>
+                    <span className="font-mono text-[10px] text-foreground-subtle">
+                      {f.type}
+                    </span>
+                  </label>
+                ))}
+              </div>
+            </>
+          )}
+        </div>
+
+        <div className="flex items-center justify-between p-4 border-t border-border">
+          <p className="text-xs text-foreground-muted font-mono">
+            {progress || fileKey}
+          </p>
+          <div className="flex gap-2">
+            <button
+              type="button"
+              onClick={onClose}
+              disabled={fetching}
+              className="rounded-button border border-border px-4 py-2 text-sm hover:bg-background-card disabled:opacity-50"
+            >
+              Cancel
+            </button>
+            <button
+              type="button"
+              onClick={handleImport}
+              disabled={selected.size === 0 || fetching}
+              className="rounded-button bg-accent hover:bg-accent-hover disabled:opacity-50 disabled:hover:bg-accent text-background px-4 py-2 text-sm font-medium"
+            >
+              {fetching
+                ? "Importing..."
+                : `Import ${selected.size} frame${selected.size !== 1 ? "s" : ""}`}
+            </button>
+          </div>
+        </div>
       </div>
     </div>
   );
