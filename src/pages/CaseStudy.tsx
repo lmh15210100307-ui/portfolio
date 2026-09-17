@@ -254,13 +254,14 @@ export default function CaseStudy() {
                     {project.figmaImages.map((img, i) => (
                       <figure
                         key={i}
-                        className="rounded-card border border-border overflow-hidden bg-background-card"
+                        className="protected-media rounded-card border border-border overflow-hidden bg-background-card"
                       >
                         <img
                           src={img}
                           alt={`Screen ${i + 1}`}
-                          className="w-full h-auto"
+                          className="w-full h-auto select-none"
                           loading="lazy"
+                          draggable={false}
                         />
                         <figcaption className="px-4 py-2 border-t border-border text-xs font-mono text-foreground-subtle">
                           Screen {i + 1}

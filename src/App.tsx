@@ -10,12 +10,15 @@ import AdminOverview from "@/admin/AdminOverview";
 import AdminProjects from "@/admin/AdminProjects";
 import AdminProfile from "@/admin/AdminProfile";
 import { useAdminStore } from "@/store/admin";
+import { useSiteProtection } from "@/hooks/useSiteProtection";
 
 export default function App() {
   const load = useAdminStore((s) => s.load);
   useEffect(() => {
     load();
   }, [load]);
+
+  useSiteProtection();
 
   return (
     <Router>

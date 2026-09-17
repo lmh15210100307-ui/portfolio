@@ -87,10 +87,10 @@ export default function Footer() {
         </div>
 
         <div className="mt-16 pt-8 border-t border-border/50 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
-          <p className="text-xs font-mono text-foreground-subtle">
-            © {year} {site.name}. Crafted with care.
-          </p>
-          <p className="text-xs font-mono text-foreground-subtle">
+          <div className="text-xs font-mono text-foreground-subtle leading-relaxed">
+            © {year} {site.name}. All portfolio works, case studies, and images on this site are protected by copyright law. Unauthorized reproduction, modification, or commercial use is strictly prohibited.
+          </div>
+          <p className="text-xs font-mono text-foreground-subtle whitespace-nowrap">
             {site.location}
           </p>
         </div>
