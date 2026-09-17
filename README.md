@@ -119,6 +119,50 @@ npm run build
 
 > 💡 **Cross-device workflow**: Export JSON on old machine → AirDrop to new machine → Import in Admin. All images (stored as base64) travel with the JSON.
 
+## 🔐 Data Boundary: Open Source vs Private
+
+This repository contains the full site template with **sample data**. When you deploy your own instance, your real portfolio content stays out of Git.
+
+### What's public in this repo
+
+- All source code (React components, routing, styling, admin panel)
+- Sample projects in `src/data/projects.ts`
+- Sample personal info in `src/data/site.ts`
+- Framework configs (`vite.config.ts`, `tailwind.config.js`, `vercel.json`)
+
+### What stays private on your machine
+
+- Your real portfolio projects and case studies
+- Cover images uploaded via Admin (stored as base64 in browser localStorage)
+- Your real bio, skills, experience timeline
+- Any custom styling you add locally before pushing to production
+
+### How it works
+
+```
+GitHub (public template)           Your local machine
+├── src/data/projects.ts           ├── Admin / real portfolio
+│   └── Sample Project 1/2/3      │   └── Your 6 real cases
+├── src/data/site.ts                ├── localStorage
+│   └── Sample profile              │   └── Your real resume
+└── UI / components                 └── Images you upload via Admin
+
+git push  → GitHub gets UI updates + sample data
+/admin    → Your local browser only (never commits to Git)
+```
+
+### Release checklist before pushing
+
+```bash
+npm run check          # TypeScript type check
+git status --short     # Review what changed — no real names, URLs, or credentials
+```
+
+### Deploying your private version
+
+UI updates → `git push` → Vercel auto-redeploys (recommended)
+Content updates → Edit in `/admin` → works immediately, no deploy needed
+
 ## 📄 License
 
 [MIT](./LICENSE) — free for personal and commercial use. Attribution appreciated but not required.
