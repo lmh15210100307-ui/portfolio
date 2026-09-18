@@ -1,49 +1,32 @@
 import { useState, useEffect } from "react";
-import { THEMES, DEFAULT_THEME, getTheme, Theme } from "@/config/themes";
+import { ThemeMode, applyTheme } from "@/config/themes";
 
 const STORAGE_KEY = "navi_portfolio_theme";
 
-function resolveInitialTheme(): string {
+function resolveInitialTheme(): ThemeMode {
   try {
-    const saved = localStorage.getItem(STORAGE_KEY);
-    if (saved && THEMES.some((t) => t.id === saved)) return saved;
+    const saved = localStorage.getItem(STORAGE_KEY) as ThemeMode | null;
+    if (saved === "dark" || saved === "light") return saved;
   } catch {}
-  return DEFAULT_THEME;
-}
-
-function applyTheme(id: string) {
-  const theme = getTheme(id);
-  const root = document.documentElement;
-  root.setAttribute("data-theme", id);
-  if (theme.mode === "light") {
-    root.classList.remove("dark");
-    root.classList.add("light");
-  } else {
-    root.classList.remove("light");
-    root.classList.add("dark");
-  }
-  Object.entries(theme.colors).forEach(([key, val]) => {
-    root.style.setProperty(key, val);
-  });
+  return window.matchMedia("(prefers-color-scheme: dark)").matches
+    ? "dark"
+    : "light";
 }
 
 export function useTheme() {
-  const [themeId, setThemeId] = useState<string>(resolveInitialTheme);
+  const [mode, setMode] = useState<ThemeMode>(resolveInitialTheme);
 
   useEffect(() => {
-    applyTheme(themeId);
+    applyTheme(mode);
     try {
-      localStorage.setItem(STORAGE_KEY, themeId);
+      localStorage.setItem(STORAGE_KEY, mode);
     } catch {}
-  }, [themeId]);
-
-  const theme: Theme = getTheme(themeId);
+  }, [mode]);
 
   return {
-    themeId,
-    theme,
-    setTheme: setThemeId,
-    themes: THEMES,
-    isDark: theme.mode === "dark",
+    mode,
+    setMode,
+    toggle: () => setMode((m) => (m === "dark" ? "light" : "dark")),
+    isDark: mode === "dark",
   };
 }
