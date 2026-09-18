@@ -13,9 +13,9 @@ import { useAdminStore } from "@/store/admin";
 import { useState, useEffect } from "react";
 
 const navItems = [
-  { to: "/admin", label: "Overview", icon: LayoutDashboard, end: true },
-  { to: "/admin/projects", label: "Projects", icon: FolderKanban },
-  { to: "/admin/profile", label: "Profile", icon: UserCog },
+  { to: "/admin", label: "概览", icon: LayoutDashboard, end: true },
+  { to: "/admin/projects", label: "作品集", icon: FolderKanban },
+  { to: "/admin/profile", label: "个人资料", icon: UserCog },
 ];
 
 export default function AdminLayout() {
@@ -78,9 +78,9 @@ export default function AdminLayout() {
               NV
             </div>
             <div>
-              <p className="font-display font-semibold text-sm">Portfolio</p>
+              <p className="font-display font-semibold text-sm">作品集</p>
               <p className="font-mono text-[10px] uppercase tracking-wider text-foreground-subtle">
-                Admin Panel
+                管理后台
               </p>
             </div>
           </div>
@@ -113,25 +113,25 @@ export default function AdminLayout() {
             className="w-full flex items-center justify-center gap-2 rounded-button bg-foreground text-background px-3 py-2.5 text-sm font-medium hover:bg-accent transition-colors disabled:opacity-50"
           >
             <Save size={16} />
-            {saving ? "Saving..." : "Save"}
+            {saving ? "保存中..." : "保存"}
           </button>
           <button
             onClick={handleExport}
             className="w-full flex items-center gap-2 rounded-button px-3 py-2 text-sm text-foreground-muted hover:text-foreground hover:bg-background-elevated transition-colors"
           >
-            <Download size={16} /> Export
+            <Download size={16} /> 导出
           </button>
           <button
             onClick={handleImport}
             className="w-full flex items-center gap-2 rounded-button px-3 py-2 text-sm text-foreground-muted hover:text-foreground hover:bg-background-elevated transition-colors"
           >
-            <Upload size={16} /> Import
+            <Upload size={16} /> 导入
           </button>
           <button
             onClick={() => window.open("/", "_blank")}
             className="w-full flex items-center gap-2 rounded-button px-3 py-2 text-sm text-foreground-muted hover:text-foreground hover:bg-background-elevated transition-colors"
           >
-            <Eye size={16} /> View Site
+            <Eye size={16} /> 预览网站
           </button>
         </div>
       </aside>
@@ -143,9 +143,9 @@ export default function AdminLayout() {
               NV
             </div>
             <div className="min-w-0">
-              <h1 className="font-display font-semibold text-sm truncate">Admin</h1>
+              <h1 className="font-display font-semibold text-sm truncate">管理后台</h1>
               <p className="font-mono text-[10px] text-foreground-subtle truncate">
-                {projects.length} projects
+                共 {projects.length} 个作品
               </p>
             </div>
           </div>
@@ -155,13 +155,13 @@ export default function AdminLayout() {
               disabled={saving}
               className="inline-flex items-center gap-1 rounded-button bg-foreground text-background px-3 py-1.5 text-xs font-medium hover:bg-accent transition-colors disabled:opacity-50"
             >
-              <Save size={12} /> {saving ? "..." : "Save"}
+              <Save size={12} /> {saving ? "..." : "保存"}
             </button>
             <button
               onClick={() => navigate("/")}
               className="text-xs text-foreground-muted hover:text-foreground px-2 py-1.5"
             >
-              Site
+              预览
             </button>
           </div>
         </header>

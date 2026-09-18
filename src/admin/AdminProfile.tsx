@@ -20,7 +20,7 @@ export default function AdminProfile() {
     <div className="max-w-3xl space-y-8">
       <div className="flex items-center justify-between">
         <div>
-          <h2 className="font-display font-bold text-2xl">Profile & Info</h2>
+          <h2 className="font-display font-bold text-2xl">个人资料 &amp; 信息</h2>
           <p className="text-sm text-foreground-muted">
             编辑你的个人信息、技能和经历
           </p>
@@ -30,36 +30,36 @@ export default function AdminProfile() {
           disabled={saving}
           className="inline-flex items-center gap-2 rounded-button bg-foreground text-background px-4 py-2.5 text-sm font-medium hover:bg-accent transition-colors disabled:opacity-50"
         >
-          <Save size={14} /> {saving ? "Saving..." : "Save"}
+          <Save size={14} /> {saving ? "保存中..." : "保存"}
         </button>
       </div>
 
       <section className="rounded-card border border-border bg-background-card p-6 space-y-5">
         <h3 className="font-display font-semibold text-lg border-b border-border pb-3">
-          Basic Info
-        </h3>
+            基本信息
+          </h3>
         <div className="grid grid-cols-2 gap-3">
-          <Input label="Name" value={site.name} onChange={(v) => updateSite({ name: v })} />
-          <Input label="Initials" value={site.initials} onChange={(v) => updateSite({ initials: v })} />
+          <Input label="姓名" value={site.name} onChange={(v) => updateSite({ name: v })} />
+          <Input label="缩写" value={site.initials} onChange={(v) => updateSite({ initials: v })} />
         </div>
-        <Input label="Title / Role" value={site.title} onChange={(v) => updateSite({ title: v })} />
-        <Input label="Tagline" value={site.tagline} onChange={(v) => updateSite({ tagline: v })} />
-        <Input label="Location" value={site.location} onChange={(v) => updateSite({ location: v })} />
-        <Input label="Email" value={site.email} onChange={(v) => updateSite({ email: v })} />
+        <Input label="标题 / 角色" value={site.title} onChange={(v) => updateSite({ title: v })} />
+        <Input label="一句话介绍" value={site.tagline} onChange={(v) => updateSite({ tagline: v })} />
+        <Input label="所在地" value={site.location} onChange={(v) => updateSite({ location: v })} />
+        <Input label="邮箱" value={site.email} onChange={(v) => updateSite({ email: v })} />
         <Textarea
-          label="Bio"
+          label="个人简介"
           rows={4}
           value={site.bio}
           onChange={(v) => updateSite({ bio: v })}
         />
         <Textarea
-          label="Philosophy"
+          label="设计哲学"
           rows={3}
           value={site.philosophy}
           onChange={(v) => updateSite({ philosophy: v })}
         />
         <Input
-          label="Philosophy Highlight"
+          label="哲学金句"
           value={site.philosophyHighlight}
           onChange={(v) => updateSite({ philosophyHighlight: v })}
         />
@@ -67,8 +67,8 @@ export default function AdminProfile() {
 
       <section className="rounded-card border border-border bg-background-card p-6 space-y-5">
         <h3 className="font-display font-semibold text-lg border-b border-border pb-3">
-          Social Links
-        </h3>
+            社交链接
+          </h3>
         <div className="grid grid-cols-2 gap-3">
           <Input
             label="LinkedIn"
@@ -95,19 +95,19 @@ export default function AdminProfile() {
 
       <section className="rounded-card border border-border bg-background-card p-6 space-y-5">
         <div className="flex items-center justify-between border-b border-border pb-3">
-          <h3 className="font-display font-semibold text-lg">Skills</h3>
+          <h3 className="font-display font-semibold text-lg">技能</h3>
           <button
             onClick={() =>
               updateSite({
                 skills: [
                   ...site.skills,
-                  { category: "New Group", icon: "LayoutGrid", items: [] },
+                  { category: "新分组", icon: "LayoutGrid", items: [] },
                 ],
               })
             }
             className="text-xs text-accent flex items-center gap-1"
           >
-            <Plus size={12} /> Add Group
+            <Plus size={12} /> 添加分组
           </button>
         </div>
         {site.skills.map((s, i) => (
@@ -166,7 +166,7 @@ export default function AdminProfile() {
                 </span>
               ))}
               <input
-                placeholder="+ add skill"
+                placeholder="+ 添加技能"
                 className="text-xs bg-transparent outline-none w-20 text-foreground-muted placeholder:text-foreground-subtle"
                 onKeyDown={(e) => {
                   if (e.key === "Enter") {
@@ -187,7 +187,7 @@ export default function AdminProfile() {
 
       <section className="rounded-card border border-border bg-background-card p-6 space-y-5">
         <div className="flex items-center justify-between border-b border-border pb-3">
-          <h3 className="font-display font-semibold text-lg">Experience</h3>
+          <h3 className="font-display font-semibold text-lg">工作经历</h3>
           <button
             onClick={() =>
               updateSite({
@@ -199,7 +199,7 @@ export default function AdminProfile() {
             }
             className="text-xs text-accent flex items-center gap-1"
           >
-            <Plus size={12} /> Add Experience
+            <Plus size={12} /> 添加经历
           </button>
         </div>
         {site.experience.map((exp, i) => (
@@ -232,7 +232,7 @@ export default function AdminProfile() {
             <div className="grid grid-cols-2 gap-2">
               <input
                 className="rounded-button border border-border bg-background px-3 py-2 text-sm font-medium focus:border-accent focus:outline-none"
-                placeholder="Role"
+                placeholder="角色"
                 value={exp.role}
                 onChange={(e) => {
                   const arr = [...site.experience];
@@ -242,7 +242,7 @@ export default function AdminProfile() {
               />
               <input
                 className="rounded-button border border-border bg-background px-3 py-2 text-sm focus:border-accent focus:outline-none"
-                placeholder="Company"
+                placeholder="公司"
                 value={exp.company}
                 onChange={(e) => {
                   const arr = [...site.experience];
@@ -254,7 +254,7 @@ export default function AdminProfile() {
             <textarea
               rows={2}
               className="w-full rounded-button border border-border bg-background px-3 py-2 text-sm focus:border-accent focus:outline-none resize-none"
-              placeholder="Description"
+              placeholder="描述"
               value={exp.desc}
               onChange={(e) => {
                 const arr = [...site.experience];
@@ -268,7 +268,7 @@ export default function AdminProfile() {
 
       {toast && (
         <div className="fixed bottom-6 right-6 bg-accent text-background px-4 py-2 rounded-button text-sm z-50 shadow-lg">
-          ✓ Saved
+          ✓ 已保存
         </div>
       )}
     </div>

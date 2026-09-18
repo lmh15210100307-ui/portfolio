@@ -10,9 +10,9 @@ import { useReveal } from "@/hooks/useReveal";
 
 export default function Work() {
   const projects = useAdminStore((s) => s.projects);
-  const [filter, setFilter] = useState<string>("All");
+  const [filter, setFilter] = useState<string>("全部");
   const filtered =
-    filter === "All"
+    filter === "全部"
       ? projects
       : projects.filter((p) => p.category === filter);
 
@@ -29,23 +29,22 @@ export default function Work() {
             className="mb-16 lg:mb-20"
           >
             <p className="font-mono text-xs uppercase tracking-[0.2em] text-accent mb-3">
-              Portfolio
+              作品集
             </p>
             <h1 className="font-display font-bold text-4xl md:text-6xl lg:text-7xl leading-tight">
-              All projects
+              全部作品
             </h1>
             <p className="mt-6 text-foreground-muted max-w-xl">
-              A curated selection of product design work — from AI agents and
-              enterprise SaaS to design systems and mobile experiences.
+              精选产品设计作品 — 从 AI Agent 与企业 SaaS，到设计系统与移动端体验。
             </p>
           </motion.div>
 
           <div className="flex flex-wrap gap-2 mb-10 lg:mb-12">
             <FilterButton
-              active={filter === "All"}
-              onClick={() => setFilter("All")}
+              active={filter === "全部"}
+              onClick={() => setFilter("全部")}
             >
-              All
+              全部
             </FilterButton>
             {categories.map((c) => (
               <FilterButton
@@ -125,7 +124,7 @@ function ProjectCard({ project }: { project: Project }) {
           {project.summary}
         </p>
         <div className="mt-4 flex items-center gap-1 text-xs font-mono text-foreground-muted group-hover:text-accent transition-colors">
-          VIEW CASE STUDY
+          查看案例详情
           <ArrowUpRight size={14} />
         </div>
       </div>

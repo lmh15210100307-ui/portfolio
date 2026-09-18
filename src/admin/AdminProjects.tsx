@@ -15,7 +15,7 @@ const emptyProject: Project = {
   slug: "",
   title: "",
   subtitle: "",
-  category: "AI Product",
+  category: "AI 产品",
   year: new Date().getFullYear(),
   role: "",
   client: "",

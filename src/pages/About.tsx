@@ -36,15 +36,15 @@ export default function About() {
             </div>
             <div className="lg:col-span-7 flex flex-col justify-center">
               <p className="font-mono text-xs uppercase tracking-[0.2em] text-accent mb-3">
-                About Me
+                关于我
               </p>
               <h1 className="font-display font-bold text-4xl md:text-5xl lg:text-6xl leading-tight mb-6">
-                Hi, I'm {site.name}. <br />
-                <span className="text-foreground-muted">I design for </span>
+                你好，我是 {site.name}。 <br />
+                <span className="text-foreground-muted">设计追求 </span>
                 <span className="bg-gradient-to-r from-accent via-blue-400 to-purple-400 bg-clip-text text-transparent">
-                  clarity &amp; impact
+                  清晰 &amp; 价值
                 </span>
-                .
+                。
               </h1>
               <p className="text-lg text-foreground-muted leading-relaxed max-w-2xl">
                 {site.bio}
@@ -63,7 +63,7 @@ export default function About() {
           </motion.div>
 
           <div className="mb-24 lg:mb-32">
-            <SectionTitle label="Methodology" title="How I approach design" />
+            <SectionTitle label="方法论" title="我的设计方法" />
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-4">
               {site.methodology.map((m, i) => (
                 <MethodCard key={m.step} item={m} index={i} />
@@ -72,7 +72,7 @@ export default function About() {
           </div>
 
           <div className="mb-24 lg:mb-32">
-            <SectionTitle label="Skills" title="Toolbox & capabilities" />
+            <SectionTitle label="技能" title="工具 &amp; 能力" />
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
               {site.skills.map((s, i) => (
                 <SkillCard key={s.category} skill={s} index={i} />
@@ -81,7 +81,7 @@ export default function About() {
           </div>
 
           <div>
-            <SectionTitle label="Experience" title="Career path" />
+            <SectionTitle label="经历" title="职业历程" />
             <div className="relative">
               <div className="absolute left-4 lg:left-5 top-0 bottom-0 w-px bg-border" />
               <div className="space-y-8 lg:space-y-10">
