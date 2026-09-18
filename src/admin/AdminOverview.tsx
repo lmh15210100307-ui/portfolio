@@ -17,7 +17,7 @@ export default function AdminOverview() {
       <section>
         <div className="rounded-card border border-border bg-gradient-to-br from-accent/10 via-background-card to-background-card p-8">
           <p className="font-mono text-xs uppercase tracking-wider text-accent mb-2">
-            Welcome back
+            欢迎回来
           </p>
           <h2 className="font-display font-bold text-3xl mb-2">
             {site.name}
@@ -36,9 +36,9 @@ export default function AdminOverview() {
               <FolderKanban size={18} />
             </div>
             <div>
-              <p className="font-display font-semibold text-lg">Projects</p>
+              <p className="font-display font-semibold text-lg">作品集</p>
               <p className="font-mono text-xs text-foreground-subtle">
-                {projects.length} total
+                共 {projects.length} 个
               </p>
             </div>
           </div>
@@ -63,9 +63,9 @@ export default function AdminOverview() {
               <UserCog size={18} />
             </div>
             <div>
-              <p className="font-display font-semibold text-lg">Profile</p>
+              <p className="font-display font-semibold text-lg">个人资料</p>
               <p className="font-mono text-xs text-foreground-subtle">
-                {site.experience.length} experiences · {site.skills.length} skill groups
+                {site.experience.length} 段经历 · {site.skills.length} 组技能
               </p>
             </div>
           </div>
@@ -75,7 +75,7 @@ export default function AdminOverview() {
 
       <section>
         <h3 className="font-display font-semibold text-lg mb-4 flex items-center gap-2">
-          <BarChart3 size={16} className="text-accent" /> Projects by Year
+          <BarChart3 size={16} className="text-accent" /> 作品年份分布
         </h3>
         <div className="space-y-3">
           {years.map((year) => {

@@ -2,19 +2,19 @@ import { useReveal } from "@/hooks/useReveal";
 
 const strengths = [
   {
-    title: "AI-Native Design",
+    title: "AI 原生设计",
     desc: "深度参与 AI 产品从 0 到 1，熟悉 Prompt 设计、Agent 交互、人机协作等新模式。",
     metric: "6+",
     metricLabel: "AI 产品",
   },
   {
-    title: "Complex Problem",
+    title: "复杂问题拆解",
     desc: "擅长把复杂业务拆解为清晰的信息架构与流畅的用户路径，让 B 端产品不再难用。",
     metric: "12",
     metricLabel: "重构项目",
   },
   {
-    title: "Design at Scale",
+    title: "规模化设计",
     desc: "设计系统建设经验，推动 8 条业务线统一规范，让设计效率提升 5 倍。",
     metric: "8",
     metricLabel: "业务接入",
@@ -27,11 +27,10 @@ export default function Strengths() {
       <div className="container">
         <div className="max-w-2xl mb-16 lg:mb-20">
           <p className="font-mono text-xs uppercase tracking-[0.2em] text-accent mb-3">
-            What I Bring
+            我的优势
           </p>
           <h2 className="font-display font-bold text-3xl md:text-5xl leading-tight">
-            Three things I'm <br className="hidden md:block" />
-            really good at.
+            三件我最擅长的事。
           </h2>
         </div>
 

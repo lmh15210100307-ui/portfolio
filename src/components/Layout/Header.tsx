@@ -5,10 +5,10 @@ import { Menu, X } from "lucide-react";
 import { useAdminStore } from "@/store/admin";
 
 const navItems = [
-  { to: "/", label: "Home" },
-  { to: "/work", label: "Work" },
-  { to: "/about", label: "About" },
-  { to: "/contact", label: "Contact" },
+  { to: "/", label: "首页" },
+  { to: "/work", label: "作品" },
+  { to: "/about", label: "关于" },
+  { to: "/contact", label: "联系" },
 ];
 
 export default function Header() {

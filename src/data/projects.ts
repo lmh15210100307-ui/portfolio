@@ -8,7 +8,7 @@ export interface Project {
   slug: string;
   title: string;
   subtitle: string;
-  category: "AI Product" | "B2B SaaS" | "Design System" | "Mobile App" | "Brand";
+  category: "AI 产品" | "B2B SaaS" | "设计系统" | "移动端" | "品牌";
   year: number;
   role: string;
   client?: string;
@@ -32,17 +32,17 @@ export interface Project {
 export const projects: Project[] = [
   {
     slug: "ai-copilot-platform",
-    title: "AI Copilot for Enterprise",
-    subtitle: "企业级 AI 智能助手平台",
-    category: "AI Product",
+    title: "企业级 AI Copilot 平台",
+    subtitle: "让 AI 真正理解业务的智能助手",
+    category: "AI 产品",
     year: 2025,
-    role: "Lead Product Designer",
-    client: "Internal",
+    role: "首席产品设计师",
+    client: "内部项目",
     cover: "",
     coverGradient: "from-blue-600/20 via-purple-600/20 to-pink-600/20",
     summary:
       "为百万级企业用户打造的 AI Copilot，融合大模型能力与业务场景，让复杂工作自动化。",
-    highlights: ["AI Agent", "B 端 SaaS", "Design System"],
+    highlights: ["AI Agent", "B 端 SaaS", "设计系统"],
     metrics: [
       { label: "日活用户", value: "120", unit: "K" },
       { label: "任务效率", value: "3.2", unit: "x" },
@@ -66,12 +66,12 @@ export const projects: Project[] = [
   },
   {
     slug: "data-dashboard-redesign",
-    title: "Data Platform 2.0",
-    subtitle: "数据平台体验重塑",
+    title: "数据平台 2.0",
+    subtitle: "从 30 分钟到 3 分钟的体验重塑",
     category: "B2B SaaS",
     year: 2024,
-    role: "Senior Product Designer",
-    client: "Finance Dept",
+    role: "高级产品设计师",
+    client: "财务部门",
     cover: "",
     coverGradient: "from-emerald-600/20 via-teal-600/20 to-cyan-600/20",
     summary:
@@ -98,12 +98,12 @@ export const projects: Project[] = [
   },
   {
     slug: "design-system-unify",
-    title: "Unified Design System",
-    subtitle: "跨业务线统一设计系统",
-    category: "Design System",
+    title: "统一设计系统",
+    subtitle: "让 8 条业务线设计效率提升 5 倍",
+    category: "设计系统",
     year: 2024,
-    role: "Design System Lead",
-    client: "Company Wide",
+    role: "设计系统负责人",
+    client: "全公司",
     cover: "",
     coverGradient: "from-orange-600/20 via-amber-600/20 to-yellow-600/20",
     summary:
@@ -131,12 +131,12 @@ export const projects: Project[] = [
   },
   {
     slug: "workflow-mobile",
-    title: "Workflow Mobile",
-    subtitle: "移动端审批工作流",
-    category: "Mobile App",
+    title: "移动端审批工作流",
+    subtitle: "85% 审批在 5 分钟内完成",
+    category: "移动端",
     year: 2023,
-    role: "Product Designer",
-    client: "Internal Tool",
+    role: "产品设计师",
+    client: "内部工具",
     cover: "",
     coverGradient: "from-rose-600/20 via-red-600/20 to-orange-600/20",
     summary: "让审批随时随地发生，移动端重构后 85% 审批在 5 分钟内完成。",
@@ -160,12 +160,12 @@ export const projects: Project[] = [
   },
   {
     slug: "brand-refresh",
-    title: "Brand Refresh",
-    subtitle: "品牌视觉升级",
-    category: "Brand",
+    title: "品牌视觉焕新",
+    subtitle: "从 Logo 到完整视觉语言系统",
+    category: "品牌",
     year: 2023,
-    role: "Brand Designer",
-    client: "Company Brand",
+    role: "品牌设计师",
+    client: "公司品牌",
     cover: "",
     coverGradient: "from-violet-600/20 via-purple-600/20 to-fuchsia-600/20",
     summary:
@@ -190,12 +190,12 @@ export const projects: Project[] = [
   },
   {
     slug: "ai-design-toolkit",
-    title: "AI Design Toolkit",
-    subtitle: "设计师的 AI 提效工具箱",
-    category: "AI Product",
+    title: "设计师 AI 提效工具箱",
+    subtitle: "让设计效率翻倍的 Figma 插件",
+    category: "AI 产品",
     year: 2025,
-    role: "Product Designer",
-    client: "Internal",
+    role: "产品设计师",
+    client: "内部项目",
     cover: "",
     coverGradient: "from-indigo-600/20 via-blue-600/20 to-cyan-600/20",
     summary:
@@ -225,9 +225,9 @@ export const getProjectBySlug = (slug: string): Project | undefined => {
 };
 
 export const categories = [
-  "AI Product",
+  "AI 产品",
   "B2B SaaS",
-  "Design System",
-  "Mobile App",
-  "Brand",
+  "设计系统",
+  "移动端",
+  "品牌",
 ] as const;

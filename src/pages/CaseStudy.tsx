@@ -24,12 +24,12 @@ export default function CaseStudy() {
   if (!project) {
     return (
       <div className="min-h-screen flex flex-col items-center justify-center bg-background">
-        <h1 className="font-display text-3xl mb-4">Project not found</h1>
+        <h1 className="font-display text-3xl mb-4">未找到该作品</h1>
         <Link
           to="/work"
           className="inline-flex items-center gap-2 text-accent hover:underline"
         >
-          <ArrowLeft size={16} /> Back to Work
+          <ArrowLeft size={16} /> 返回作品集
         </Link>
       </div>
     );
@@ -59,7 +59,7 @@ export default function CaseStudy() {
                 to="/work"
                 className="inline-flex items-center gap-2 text-sm text-foreground-muted hover:text-foreground mb-8 transition-colors"
               >
-                <ArrowLeft size={16} /> All Projects
+                <ArrowLeft size={16} /> 全部作品
               </Link>
               <div className="flex flex-wrap gap-2 mb-6">
                 <Badge variant="accent">{project.category}</Badge>
@@ -81,16 +81,16 @@ export default function CaseStudy() {
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-16">
             <aside className="lg:col-span-4">
               <div className="space-y-8 lg:sticky lg:top-28">
-                <InfoRow label="Role" value={project.role} />
+                <InfoRow label="角色" value={project.role} />
                 <InfoRow
-                  label="Client"
-                  value={project.client || "Internal"}
+                  label="合作方"
+                  value={project.client || "内部项目"}
                 />
-                <InfoRow label="Duration" value={project.duration || "—"} />
-                <InfoRow label="Team" value={project.teamSize || "—"} />
+                <InfoRow label="时长" value={project.duration || "—"} />
+                <InfoRow label="团队" value={project.teamSize || "—"} />
                 <div className="pt-6 border-t border-border">
                   <p className="font-mono text-xs uppercase tracking-wider text-foreground-subtle mb-3">
-                    Tools
+                    工具
                   </p>
                   <div className="flex flex-wrap gap-1.5">
                     {(project.tools || []).map((t) => (
@@ -108,7 +108,7 @@ export default function CaseStudy() {
                     className="flex items-center gap-2 rounded-button border border-border bg-background-card hover:border-accent hover:bg-accent/5 px-3 py-2.5 transition-all group"
                   >
                     <Figma size={16} className="text-accent" />
-                    <span className="text-sm font-medium">View in Figma</span>
+                    <span className="text-sm font-medium">在 Figma 中查看</span>
                     <ArrowUpRight
                       size={14}
                       className="ml-auto text-foreground-muted group-hover:text-accent transition-colors"
@@ -151,8 +151,8 @@ export default function CaseStudy() {
               <section>
                 <SectionHeader
                   icon={<Target size={18} className="text-accent" />}
-                  label="Challenge"
-                  title="The problem"
+                  label="挑战"
+                  title="问题背景"
                 />
                 <p className="text-lg lg:text-xl leading-relaxed text-foreground/90">
                   {project.challenge || project.summary}
@@ -162,11 +162,11 @@ export default function CaseStudy() {
               <section>
                 <SectionHeader
                   icon={<Sparkles size={18} className="text-accent" />}
-                  label="Process"
-                  title="How we solved it"
+                  label="过程"
+                  title="如何解决"
                 />
                 <div className="space-y-4">
-                  {(project.process || ["Research", "Design", "Prototype", "Launch"]).map(
+                  {(project.process || ["研究", "设计", "原型", "上线"]).map(
                     (step, i) => (
                       <div
                         key={i}
@@ -187,16 +187,16 @@ export default function CaseStudy() {
               <section>
                 <SectionHeader
                   icon={<CheckCircle2 size={18} className="text-accent" />}
-                  label="Outcome"
-                  title="The results"
+                  label="成果"
+                  title="项目结果"
                 />
                 <p className="text-lg lg:text-xl leading-relaxed text-foreground/90">
-                  {project.outcome || "A successful launch with measurable impact across key metrics."}
+                  {project.outcome || "成功上线并在核心指标上取得了可衡量的效果。"}
                 </p>
               </section>
 
               <section>
-                <SectionHeader label="Role" title="What I did" />
+                <SectionHeader label="角色" title="我的职责" />
                 <p className="text-lg leading-relaxed text-foreground/90">
                   {project.roleDetail || project.role}
                 </p>
@@ -206,15 +206,15 @@ export default function CaseStudy() {
                 <section>
                   <SectionHeader
                     icon={<Figma size={18} className="text-accent" />}
-                    label="Design"
-                    title="View in Figma"
+                    label="设计"
+                    title="在 Figma 中查看"
                   />
                   <div className="rounded-card border border-border overflow-hidden bg-background-card">
                     <div className="flex items-center justify-between px-4 py-3 border-b border-border">
                       <div className="flex items-center gap-2">
                         <Figma size={16} className="text-accent" />
                         <span className="text-sm font-medium">
-                          {parseFigmaUrl(project.figmaUrl)?.fileName || "Figma File"}
+                          {parseFigmaUrl(project.figmaUrl)?.fileName || "Figma 文件"}
                         </span>
                       </div>
                       <a
@@ -223,7 +223,7 @@ export default function CaseStudy() {
                         rel="noreferrer"
                         className="flex items-center gap-1.5 text-xs text-accent hover:underline"
                       >
-                        Open in new tab <ArrowUpRight size={12} />
+                        在新标签页打开 <ArrowUpRight size={12} />
                       </a>
                     </div>
                     <div className="aspect-video w-full bg-black/20">
@@ -247,8 +247,8 @@ export default function CaseStudy() {
                 <section>
                   <SectionHeader
                     icon={<ImageIcon size={18} className="text-accent" />}
-                    label="Screens"
-                    title="Design Screenshots"
+                    label="界面"
+                    title="设计截图"
                   />
                   <div className="space-y-4">
                     {project.figmaImages.map((img, i) => (
@@ -258,13 +258,13 @@ export default function CaseStudy() {
                       >
                         <img
                           src={img}
-                          alt={`Screen ${i + 1}`}
+                          alt={`界面 ${i + 1}`}
                           className="w-full h-auto select-none"
                           loading="lazy"
                           draggable={false}
                         />
                         <figcaption className="px-4 py-2 border-t border-border text-xs font-mono text-foreground-subtle">
-                          Screen {i + 1}
+                          界面 {i + 1}
                         </figcaption>
                       </figure>
                     ))}
@@ -279,8 +279,8 @@ export default function CaseStudy() {
           <section className="border-t border-border/50 py-20 lg:py-28">
             <div className="container">
               <h2 className="font-display font-bold text-3xl md:text-4xl mb-10">
-                More in {project.category}
-              </h2>
+                  同类作品 · {project.category}
+                </h2>
               <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
                 {related.slice(0, 3).map((r) => (
                   <Link

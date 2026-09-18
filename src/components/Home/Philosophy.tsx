@@ -16,7 +16,7 @@ export default function Philosophy() {
           className="reveal max-w-4xl mx-auto text-center"
         >
           <p className="font-mono text-xs uppercase tracking-[0.2em] text-accent mb-8">
-            Design Philosophy
+            设计哲学
           </p>
           <blockquote className="font-display font-semibold text-2xl md:text-4xl lg:text-5xl leading-[1.2] mb-10">
             "{site.philosophy}"
@@ -25,7 +25,7 @@ export default function Philosophy() {
             to="/about"
             className="group inline-flex items-center gap-2 rounded-button border border-border text-foreground-muted hover:text-foreground hover:border-accent px-6 py-3 text-sm font-medium transition-all"
           >
-            Read my story
+            阅读我的故事
             <ArrowUpRight
               size={16}
               className="transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5"

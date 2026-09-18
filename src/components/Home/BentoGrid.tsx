@@ -62,7 +62,7 @@ function BentoCard({
 
           <div className="mt-4 flex items-center gap-2 text-foreground-muted group-hover:text-foreground transition-colors">
             <span className="font-mono text-xs uppercase tracking-wider">
-              View Case Study
+            查看案例详情
             </span>
             <motion.span
               initial={{ x: 0, y: 0 }}
@@ -89,18 +89,18 @@ export default function BentoGrid() {
         <div className="flex items-end justify-between mb-12 lg:mb-16">
           <div>
             <p className="font-mono text-xs uppercase tracking-[0.2em] text-accent mb-3">
-              Selected Work
+              精选作品
             </p>
             <h2 className="font-display font-bold text-3xl md:text-5xl leading-tight">
-              Recent projects &amp; <br className="hidden md:block" />
-              design explorations.
+              近期项目 &amp; <br className="hidden md:block" />
+              设计探索。
             </h2>
           </div>
           <Link
             to="/work"
             className="hidden md:inline-flex items-center gap-2 text-sm text-foreground-muted hover:text-foreground transition-colors group"
           >
-            View all
+            查看全部
             <ArrowUpRight
               size={16}
               className="transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5"
@@ -121,7 +121,7 @@ export default function BentoGrid() {
             to="/work"
             className="inline-flex items-center gap-2 text-sm text-foreground-muted hover:text-foreground transition-colors"
           >
-            View all projects
+            查看全部作品
             <ArrowUpRight size={16} />
           </Link>
         </div>

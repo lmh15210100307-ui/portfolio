@@ -35,27 +35,27 @@ export default function Footer() {
 
           <div className="lg:col-span-3">
             <h4 className="text-xs font-mono uppercase tracking-wider text-foreground-subtle mb-4">
-              Navigate
+              导航
             </h4>
             <ul className="space-y-3">
               <li>
                 <Link to="/" className="text-sm text-foreground-muted hover:text-foreground transition-colors">
-                  Home
+                  首页
                 </Link>
               </li>
               <li>
                 <Link to="/work" className="text-sm text-foreground-muted hover:text-foreground transition-colors">
-                  Work
+                  作品
                 </Link>
               </li>
               <li>
                 <Link to="/about" className="text-sm text-foreground-muted hover:text-foreground transition-colors">
-                  About
+                  关于
                 </Link>
               </li>
               <li>
                 <Link to="/contact" className="text-sm text-foreground-muted hover:text-foreground transition-colors">
-                  Contact
+                  联系
                 </Link>
               </li>
             </ul>
@@ -63,7 +63,7 @@ export default function Footer() {
 
           <div className="lg:col-span-4">
             <h4 className="text-xs font-mono uppercase tracking-wider text-foreground-subtle mb-4">
-              Elsewhere
+              其他渠道
             </h4>
             <ul className="space-y-3">
               {Object.entries(site.social).map(([key, url]) => (
@@ -88,7 +88,7 @@ export default function Footer() {
 
         <div className="mt-16 pt-8 border-t border-border/50 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
           <div className="text-xs font-mono text-foreground-subtle leading-relaxed">
-            © {year} {site.name}. All portfolio works, case studies, and images on this site are protected by copyright law. Unauthorized reproduction, modification, or commercial use is strictly prohibited.
+            © {year} {site.name}. 本网站所有作品、案例研究和图片均受著作权法保护。未经授权的复制、修改或商业使用均属严格禁止。
           </div>
           <p className="text-xs font-mono text-foreground-subtle whitespace-nowrap">
             {site.location}
