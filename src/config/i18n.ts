@@ -134,6 +134,93 @@ export interface Dict {
     descPH: string;
     saved: string;
   };
+  adminProjects: {
+    title: string;
+    subtitle: string;
+    newProject: string;
+    editProject: string;
+    featured: string;
+    emptyHint: string;
+    confirmDelete: string;
+    slugExists: string;
+    titleRequired: string;
+    cancel: string;
+    saveProject: string;
+    addItem: string;
+    gradients: { label: string; value: string }[];
+    fields: {
+      title: string;
+      slug: string;
+      subtitle: string;
+      category: string;
+      year: string;
+      featured: string;
+      featuredHint: string;
+      role: string;
+      client: string;
+      summary: string;
+      teamSize: string;
+      duration: string;
+      challenge: string;
+      process: string;
+      highlights: string;
+      tools: string;
+      outcome: string;
+      roleDetail: string;
+    };
+    ph: {
+      title: string;
+      subtitle: string;
+      role: string;
+      summary: string;
+      teamSize: string;
+      duration: string;
+      challenge: string;
+      process: string;
+      highlights: string;
+      outcome: string;
+      roleDetail: string;
+    };
+    metrics: {
+      label: string;
+      phLabel: string;
+      add: string;
+    };
+    cover: {
+      label: string;
+      hint: string;
+      gradientHint: string;
+    };
+    figma: {
+      title: string;
+      enableTitle: string;
+      tokenHint: string;
+      goSettings: string;
+      hide: string;
+      show: string;
+      saved: string;
+      clear: string;
+      fileUrl: string;
+      importBtn: string;
+      node: string;
+      openInFigma: string;
+      manualHint: string;
+      uploadShot: string;
+      modalTitle: string;
+      loadFailed: string;
+      loading: string;
+      errorHint: string;
+      noFrames: string;
+      found: string;
+      selectAll: string;
+      deselectAll: string;
+      progressFetch: string;
+      progressImg: string;
+      importing: string;
+      importFailed: string;
+      importN: string;
+    };
+  };
 }
 
 export const translations: Record<Lang, Dict> = {
@@ -289,6 +376,99 @@ export const translations: Record<Lang, Dict> = {
       descPH: "描述",
       saved: "✓ 已保存",
     },
+    adminProjects: {
+      title: "作品集",
+      subtitle: "管理你的项目案例，点击添加新项目",
+      newProject: "新建项目",
+      editProject: "编辑项目",
+      featured: "精选",
+      emptyHint: "还没有项目，点击「新建项目」开始吧",
+      confirmDelete: "确定删除此项目？",
+      slugExists: "项目链接标识已存在，请修改标题",
+      titleRequired: "请填写项目标题",
+      cancel: "取消",
+      saveProject: "保存项目",
+      addItem: "添加一项",
+      gradients: [
+        { label: "AI · 紫色", value: "from-blue-600/20 via-purple-600/20 to-pink-600/20" },
+        { label: "数据 · 青色", value: "from-emerald-600/20 via-teal-600/20 to-cyan-600/20" },
+        { label: "设计 · 琥珀", value: "from-orange-600/20 via-amber-600/20 to-yellow-600/20" },
+        { label: "移动 · 玫红", value: "from-rose-600/20 via-red-600/20 to-orange-600/20" },
+        { label: "品牌 · 紫罗兰", value: "from-violet-600/20 via-purple-600/20 to-fuchsia-600/20" },
+      ],
+      fields: {
+        title: "项目标题 *",
+        slug: "链接标识（自动）",
+        subtitle: "副标题",
+        category: "分类",
+        year: "年份",
+        featured: "精选项目",
+        featuredHint: "首页展示",
+        role: "你的角色",
+        client: "合作方（可选）",
+        summary: "一句话简介",
+        teamSize: "团队规模",
+        duration: "项目时长",
+        challenge: "挑战背景",
+        process: "设计流程",
+        highlights: "项目亮点",
+        tools: "使用工具",
+        outcome: "项目成果",
+        roleDetail: "我的职责详情",
+      },
+      ph: {
+        title: "AI 智能助手平台",
+        subtitle: "企业级 AI 智能助手平台",
+        role: "首席产品设计师",
+        summary: "一句话描述这个项目",
+        teamSize: "4 人设计团队",
+        duration: "6 个月",
+        challenge: "面临的核心问题和挑战是什么？",
+        process: "设计流程的每一步",
+        highlights: "2-3 个核心亮点标签",
+        outcome: "最终成果和影响",
+        roleDetail: "你具体做了什么",
+      },
+      metrics: {
+        label: "成果数据",
+        phLabel: "指标描述 (如 日活用户)",
+        add: "添加数据",
+      },
+      cover: {
+        label: "封面图",
+        hint: "点击上传封面图",
+        gradientHint: "或选择渐变背景",
+      },
+      figma: {
+        title: "Figma 设计 — 链接 + 导入 + 截图",
+        enableTitle: "开启 Figma 一键导入",
+        tokenHint: "在 Figma 开发者设置中生成个人访问 Token ",
+        goSettings: "前往设置",
+        hide: "隐藏",
+        show: "显示",
+        saved: "✓ Figma Token 已保存",
+        clear: "清除",
+        fileUrl: "Figma 文件链接",
+        importBtn: "导入",
+        node: "节点",
+        openInFigma: "在 Figma 中打开",
+        manualHint: "或手动上传导出的截图（PNG / JPG）",
+        uploadShot: "上传截图",
+        modalTitle: "从 Figma 导入画板",
+        loadFailed: "加载 Figma 文件失败",
+        loading: "正在加载 Figma 文件...",
+        errorHint: "请确认 Token 有文件读取权限，且文件链接正确。",
+        noFrames: "没有找到画板，试试在 Figma 链接里加上具体的 node-id。",
+        found: "找到 {n} 个画板 · 已选 {s} 个",
+        selectAll: "全选",
+        deselectAll: "取消全选",
+        progressFetch: "正在获取 {n} 个画板...",
+        progressImg: "正在加载图片 {i}/{total}",
+        importing: "正在导入...",
+        importFailed: "导入失败",
+        importN: "导入 {n} 个画板",
+      },
+    },
   },
 
   en: {
@@ -442,6 +622,99 @@ export const translations: Record<Lang, Dict> = {
       companyPH: "Company",
       descPH: "Description",
       saved: "✓ Saved",
+    },
+    adminProjects: {
+      title: "Projects",
+      subtitle: "Manage your case studies. Click to add a new project.",
+      newProject: "New Project",
+      editProject: "Edit Project",
+      featured: "Featured",
+      emptyHint: "No projects yet. Click \"New Project\" to get started.",
+      confirmDelete: "Delete this project?",
+      slugExists: "Slug already exists. Please change the title.",
+      titleRequired: "Please enter a project title",
+      cancel: "Cancel",
+      saveProject: "Save Project",
+      addItem: "Add item",
+      gradients: [
+        { label: "AI · Purple", value: "from-blue-600/20 via-purple-600/20 to-pink-600/20" },
+        { label: "Data · Cyan", value: "from-emerald-600/20 via-teal-600/20 to-cyan-600/20" },
+        { label: "Design · Amber", value: "from-orange-600/20 via-amber-600/20 to-yellow-600/20" },
+        { label: "Mobile · Rose", value: "from-rose-600/20 via-red-600/20 to-orange-600/20" },
+        { label: "Brand · Violet", value: "from-violet-600/20 via-purple-600/20 to-fuchsia-600/20" },
+      ],
+      fields: {
+        title: "Project Title *",
+        slug: "Slug (auto)",
+        subtitle: "Subtitle",
+        category: "Category",
+        year: "Year",
+        featured: "Featured",
+        featuredHint: "Show on homepage",
+        role: "Your Role",
+        client: "Client (optional)",
+        summary: "One-line Summary",
+        teamSize: "Team Size",
+        duration: "Duration",
+        challenge: "Challenge",
+        process: "Process",
+        highlights: "Highlights",
+        tools: "Tools",
+        outcome: "Outcome",
+        roleDetail: "Your Role Detail",
+      },
+      ph: {
+        title: "AI Copilot Platform",
+        subtitle: "Enterprise-grade AI copilot platform",
+        role: "Lead Product Designer",
+        summary: "One-line description of the project",
+        teamSize: "4-person design team",
+        duration: "6 months",
+        challenge: "What was the core problem or challenge?",
+        process: "Each step of the design process",
+        highlights: "2-3 key highlights",
+        outcome: "Final results and impact",
+        roleDetail: "What you specifically did",
+      },
+      metrics: {
+        label: "Metrics",
+        phLabel: "Metric (e.g. DAU)",
+        add: "Add metric",
+      },
+      cover: {
+        label: "Cover Image",
+        hint: "Click to upload cover image",
+        gradientHint: "or choose a gradient background",
+      },
+      figma: {
+        title: "Figma Design — Link + Import + Screenshots",
+        enableTitle: "Enable one-click Figma import",
+        tokenHint: "Generate a personal access token in Figma developer settings ",
+        goSettings: "Go to settings",
+        hide: "Hide",
+        show: "Show",
+        saved: "✓ Figma Token saved",
+        clear: "Clear",
+        fileUrl: "Figma file URL",
+        importBtn: "Import",
+        node: "Node",
+        openInFigma: "Open in Figma",
+        manualHint: "or manually upload exported screenshots (PNG / JPG)",
+        uploadShot: "Upload screenshots",
+        modalTitle: "Import frames from Figma",
+        loadFailed: "Failed to load Figma file",
+        loading: "Loading Figma file...",
+        errorHint: "Make sure the token has file read permission and the file link is correct.",
+        noFrames: "No frames found. Try adding a node-id to the Figma link.",
+        found: "{n} frames found · {s} selected",
+        selectAll: "Select all",
+        deselectAll: "Deselect all",
+        progressFetch: "Fetching {n} frames...",
+        progressImg: "Loading image {i}/{total}",
+        importing: "Importing...",
+        importFailed: "Import failed",
+        importN: "Import {n} frames",
+      },
     },
   },
 };

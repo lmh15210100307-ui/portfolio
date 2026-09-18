@@ -27,7 +27,8 @@ export function saveLocalData(data: CloudData): void {
     localStorage.setItem(STORAGE_KEY, JSON.stringify(data));
   } catch (e) {
     if (e instanceof DOMException && e.name === "QuotaExceededError") {
-      alert("浏览器存储空间已满，请删除大文件图片后重试");
+      const isZh = document.documentElement.lang.startsWith("zh");
+      alert(isZh ? "浏览器存储空间已满，请删除大文件图片后重试" : "Storage full. Please remove large images and try again.");
     }
   }
 }
@@ -52,7 +53,8 @@ export function downloadData(data: CloudData): void {
 export function parseImportedJSON(text: string): CloudData {
   const data = JSON.parse(text);
   if (!data.projects || !data.site) {
-    throw new Error("文件格式不正确");
+    const isZh = document.documentElement.lang.startsWith("zh");
+    throw new Error(isZh ? "文件格式不正确" : "Invalid file format");
   }
   return data;
 }
