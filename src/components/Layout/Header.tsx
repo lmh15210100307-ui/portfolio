@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { Link, NavLink, useLocation } from "react-router-dom";
 import { motion, AnimatePresence } from "framer-motion";
 import { Menu, X, Sun, Moon, Globe } from "lucide-react";
@@ -14,11 +14,42 @@ export default function Header() {
   const [scrolled, setScrolled] = useState(false);
   const [mobileOpen, setMobileOpen] = useState(false);
 
+  const navRef = useRef<HTMLDivElement>(null);
+  const activeRef = useRef<HTMLAnchorElement>(null);
+  const [pill, setPill] = useState({ left: 0, width: 0, opacity: 0 });
+
   useEffect(() => {
     const handleScroll = () => setScrolled(window.scrollY > 20);
     window.addEventListener("scroll", handleScroll, { passive: true });
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
+
+  // 计算选中 pill 的位置 — 只在 mount + 路由变化 + resize 时计算
+  useEffect(() => {
+    const updatePill = () => {
+      if (activeRef.current && navRef.current) {
+        const navRect = navRef.current.getBoundingClientRect();
+        const itemRect = activeRef.current.getBoundingClientRect();
+        setPill({
+          left: itemRect.left - navRect.left,
+          width: itemRect.width,
+          opacity: 1,
+        });
+      }
+    };
+    updatePill();
+    window.addEventListener("resize", updatePill);
+    // 字体加载完成后重新计算（字体加载会改变文字宽度）
+    if (document.fonts) document.fonts.ready.then(updatePill);
+    return () => window.removeEventListener("resize", updatePill);
+  }, [location.pathname, t]);
+
+  const navItems = [
+    { to: "/", end: true, label: t.nav.home },
+    { to: "/work", label: t.nav.work },
+    { to: "/about", label: t.nav.about },
+    { to: "/contact", label: t.nav.contact },
+  ];
 
   return (
     <motion.header
@@ -41,13 +72,24 @@ export default function Header() {
           </span>
         </Link>
 
-        <nav className="hidden md:flex items-center gap-1">
-          {[
-            { to: "/", end: true, label: t.nav.home },
-            { to: "/work", label: t.nav.work },
-            { to: "/about", label: t.nav.about },
-            { to: "/contact", label: t.nav.contact },
-          ].map((item) => {
+        <nav ref={navRef} className="hidden md:flex items-center gap-1 relative">
+          {/* 单一绝对定位 pill — 稳定滑动，不跳 */}
+          <motion.div
+            className="absolute bg-foreground rounded-full pointer-events-none"
+            animate={{
+              left: pill.left,
+              width: pill.width,
+              opacity: pill.opacity,
+            }}
+            transition={{ type: "spring", bounce: 0.25, duration: 0.5 }}
+            style={{
+              top: "50%",
+              height: "32px",
+              y: "-50%",
+            }}
+          />
+
+          {navItems.map((item) => {
             const isActive = item.end
               ? location.pathname === item.to
               : location.pathname.startsWith(item.to);
@@ -56,20 +98,14 @@ export default function Header() {
                 key={item.to}
                 to={item.to}
                 end={item.end}
-                className={`relative text-sm font-medium transition-all rounded-full px-4 py-1.5 ${
+                ref={isActive ? activeRef : null}
+                className={`relative z-10 text-sm font-medium rounded-full px-4 py-1.5 transition-colors ${
                   isActive
                     ? "text-background"
                     : "text-foreground hover:text-accent"
                 }`}
               >
                 {item.label}
-                {isActive && (
-                  <motion.div
-                    layoutId="nav-pill"
-                    className="absolute inset-0 bg-foreground rounded-full -z-10"
-                    transition={{ type: "spring", bounce: 0.25 }}
-                  />
-                )}
               </NavLink>
             );
           })}
