@@ -25,6 +25,24 @@
 @tailwind components;
 @tailwind utilities;
 
+@layer utilities {
+  .card-gradient-border {
+    position: relative;
+  }
+  .card-gradient-border::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    border-radius: inherit;
+    padding: 1px;
+    background: linear-gradient(90deg, #ec4899, #fb923c, #a855f7);
+    -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+    -webkit-mask-composite: xor;
+    mask-composite: exclude;
+    pointer-events: none;
+  }
+}
+
 :root,
 html.dark {
   --background: #0a0e1a;

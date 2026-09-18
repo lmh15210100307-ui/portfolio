@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { Link, NavLink } from "react-router-dom";
+import { Link, NavLink, useLocation } from "react-router-dom";
 import { motion, AnimatePresence } from "framer-motion";
 import { Menu, X, Sun, Moon, Globe } from "lucide-react";
 import { useAdminStore } from "@/store/admin";
@@ -10,6 +10,7 @@ export default function Header() {
   const site = useAdminStore((s) => s.site);
   const { mode, toggle: toggleTheme, isDark } = useTheme();
   const { lang, toggle: toggleLang, t, pick } = useI18n();
+  const location = useLocation();
   const [scrolled, setScrolled] = useState(false);
   const [mobileOpen, setMobileOpen] = useState(false);
 
@@ -35,105 +36,43 @@ export default function Header() {
           <div className="w-9 h-9 rounded-card bg-accent/10 border border-accent/30 flex items-center justify-center font-display font-bold text-accent text-sm transition-all group-hover:bg-accent group-hover:text-background">
             {pick(site.initials)}
           </div>
-          <span className="font-display font-semibold text-lg hidden sm:block">
+          <span className="font-display font-semibold text-lg hidden sm:block after:content-[''] after:block after:w-6 after:h-0.5 after:bg-accent after:mt-0.5">
             {pick(site.name)}
           </span>
         </Link>
 
         <nav className="hidden md:flex items-center gap-1">
-          <NavLink
-            to="/"
-            end
-            className={({ isActive }) =>
-              `relative px-4 py-2 rounded-pill text-sm font-medium transition-all ${
-                isActive
-                  ? "text-foreground"
-                  : "text-foreground-muted hover:text-foreground"
-              }`
-            }
-          >
-            {({ isActive }) => (
-              <>
-                {t.nav.home}
+          {[
+            { to: "/", end: true, label: t.nav.home },
+            { to: "/work", label: t.nav.work },
+            { to: "/about", label: t.nav.about },
+            { to: "/contact", label: t.nav.contact },
+          ].map((item) => {
+            const isActive = item.end
+              ? location.pathname === item.to
+              : location.pathname.startsWith(item.to);
+            return (
+              <NavLink
+                key={item.to}
+                to={item.to}
+                end={item.end}
+                className={`relative text-sm font-medium transition-all rounded-full px-4 py-1.5 ${
+                  isActive
+                    ? "text-background"
+                    : "text-foreground hover:text-accent"
+                }`}
+              >
+                {item.label}
                 {isActive && (
                   <motion.div
                     layoutId="nav-pill"
-                    className="absolute inset-0 bg-background-card border border-border rounded-pill -z-10"
+                    className="absolute inset-0 bg-foreground rounded-full -z-10"
                     transition={{ type: "spring", bounce: 0.25 }}
                   />
                 )}
-              </>
-            )}
-          </NavLink>
-          <NavLink
-            to="/work"
-            className={({ isActive }) =>
-              `relative px-4 py-2 rounded-pill text-sm font-medium transition-all ${
-                isActive
-                  ? "text-foreground"
-                  : "text-foreground-muted hover:text-foreground"
-              }`
-            }
-          >
-            {({ isActive }) => (
-              <>
-                {t.nav.work}
-                {isActive && (
-                  <motion.div
-                    layoutId="nav-pill"
-                    className="absolute inset-0 bg-background-card border border-border rounded-pill -z-10"
-                    transition={{ type: "spring", bounce: 0.25 }}
-                  />
-                )}
-              </>
-            )}
-          </NavLink>
-          <NavLink
-            to="/about"
-            className={({ isActive }) =>
-              `relative px-4 py-2 rounded-pill text-sm font-medium transition-all ${
-                isActive
-                  ? "text-foreground"
-                  : "text-foreground-muted hover:text-foreground"
-              }`
-            }
-          >
-            {({ isActive }) => (
-              <>
-                {t.nav.about}
-                {isActive && (
-                  <motion.div
-                    layoutId="nav-pill"
-                    className="absolute inset-0 bg-background-card border border-border rounded-pill -z-10"
-                    transition={{ type: "spring", bounce: 0.25 }}
-                  />
-                )}
-              </>
-            )}
-          </NavLink>
-          <NavLink
-            to="/contact"
-            className={({ isActive }) =>
-              `relative px-4 py-2 rounded-pill text-sm font-medium transition-all ${
-                isActive
-                  ? "text-foreground"
-                  : "text-foreground-muted hover:text-foreground"
-              }`
-            }
-          >
-            {({ isActive }) => (
-              <>
-                {t.nav.contact}
-                {isActive && (
-                  <motion.div
-                    layoutId="nav-pill"
-                    className="absolute inset-0 bg-background-card border border-border rounded-pill -z-10"
-                    transition={{ type: "spring", bounce: 0.25 }}
-                  />
-                )}
-              </>
-            )}
-          </NavLink>
+              </NavLink>
+            );
+          })}
 
           <div className="ml-3 flex items-center gap-1">
             <button

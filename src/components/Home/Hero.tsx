@@ -26,6 +26,17 @@ export default function Hero() {
           </span>
         </motion.div>
 
+        <motion.div
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ duration: 0.6, ease: [0.16, 1, 0.3, 1], delay: 0.05 }}
+          className="mb-3 flex items-center gap-4 font-mono text-[10px] text-foreground-subtle/60 select-none pointer-events-none opacity-50"
+        >
+          <span>&lt;hero intent="design-code" /&gt;</span>
+          <span className="hidden sm:inline">--space: 24px</span>
+          <span className="hidden md:inline">component → rendered</span>
+        </motion.div>
+
         <motion.h1
           initial={{ opacity: 0, y: 30 }}
           animate={{ opacity: 1, y: 0 }}
@@ -35,8 +46,13 @@ export default function Hero() {
           <span className="block text-[clamp(2.25rem,12vw,8rem)]">
             {t.hero.line1}
           </span>
-          <span className="block text-[clamp(2.25rem,12vw,8rem)] text-foreground-muted">
-            {t.hero.line2}
+          <span className="block text-[clamp(2.25rem,12vw,8rem)] text-foreground-muted flex items-baseline gap-0">
+            <span
+              style={{ WebkitTextStroke: "1.5px currentColor", color: "transparent" }}
+            >
+              {t.hero.line2}
+            </span>
+            <span className="mx-2 inline-block w-px h-8 md:h-12 bg-gradient-to-b from-pink-500 to-orange-400 self-center flex-shrink-0" />
           </span>
           <span className="block text-[clamp(2.25rem,12vw,8rem)] relative break-words">
             <span className="bg-gradient-to-r from-accent via-blue-400 to-purple-400 bg-clip-text text-transparent">
@@ -51,8 +67,13 @@ export default function Hero() {
               />
             </span>
           </span>
-          <span className="block text-[clamp(2.25rem,12vw,8rem)]">
-            {t.hero.line4}
+          <span className="block text-[clamp(2.25rem,12vw,8rem)] flex items-baseline">
+            <span
+              style={{ WebkitTextStroke: "1.5px currentColor", color: "transparent" }}
+            >
+              {t.hero.line4}
+            </span>
+            <span className="ml-3 inline-block w-px h-8 md:h-12 bg-gradient-to-b from-pink-500 to-orange-400 self-center flex-shrink-0" />
           </span>
         </motion.h1>
 
@@ -86,24 +107,35 @@ export default function Hero() {
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.6, ease: [0.16, 1, 0.3, 1], delay: 0.8 }}
-          className="mt-12 flex flex-wrap items-center gap-4"
+          className="mt-12"
         >
-          <a
-            href="#work"
-            className="group inline-flex items-center gap-2 rounded-button bg-foreground text-background px-6 py-3 font-medium text-sm hover:bg-accent hover:text-foreground transition-all"
-          >
-            {t.hero.ctaWork}
-            <ArrowUpRight
-              size={16}
-              className="transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5"
-            />
-          </a>
-          <a
-            href={`mailto:${site.email}`}
-            className="group inline-flex items-center gap-2 rounded-button border border-border text-foreground px-6 py-3 font-medium text-sm hover:border-accent hover:text-accent transition-all"
-          >
-            {t.hero.ctaContact}
-          </a>
+          <div className="relative inline-block">
+            <div className="absolute inset-0 rounded-2xl bg-gradient-to-r from-pink-500/60 via-orange-400/60 to-purple-500/60 blur-[1px]" />
+            <div className="relative bg-background rounded-2xl border border-border/80 px-5 py-4 flex items-center gap-4">
+              <div className="w-9 h-9 rounded-full bg-foreground text-background flex items-center justify-center text-xs font-bold flex-shrink-0">AI</div>
+              <div className="flex flex-col">
+                <span className="text-sm font-medium">{t.hero.ctaIntro}</span>
+              </div>
+              <div className="flex flex-wrap items-center gap-2 ml-auto">
+                <a
+                  href="#work"
+                  className="group inline-flex items-center gap-2 rounded-button bg-foreground text-background px-5 py-2.5 font-medium text-sm hover:bg-accent hover:text-foreground transition-all"
+                >
+                  {t.hero.ctaWork}
+                  <ArrowUpRight
+                    size={14}
+                    className="transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5"
+                  />
+                </a>
+                <a
+                  href={`mailto:${site.email}`}
+                  className="group inline-flex items-center gap-2 rounded-button border border-border text-foreground px-5 py-2.5 font-medium text-sm hover:border-accent hover:text-accent transition-all"
+                >
+                  {t.hero.ctaContact}
+                </a>
+              </div>
+            </div>
+          </div>
         </motion.div>
 
         <motion.div
