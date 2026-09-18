@@ -59,7 +59,7 @@ export default function AdminProjects() {
     if (!p.slug) p.slug = slugify(p.title || "untitled");
     const exists = projects.find((x) => x.slug === p.slug);
     if (exists && editing?.slug !== p.slug) {
-      alert("项目 slug 已存在，请修改标题");
+      alert("项目链接标识已存在，请修改标题");
       return;
     }
     if (!editing?.slug) {
@@ -74,16 +74,16 @@ export default function AdminProjects() {
     <div>
       <div className="flex items-center justify-between mb-6">
         <div>
-          <h2 className="font-display font-bold text-2xl">Projects</h2>
+          <h2 className="font-display font-bold text-2xl">作品集</h2>
           <p className="text-sm text-foreground-muted">
-            管理你的作品集，点击添加新项目
+            管理你的项目案例，点击添加新项目
           </p>
         </div>
         <button
           onClick={handleNew}
           className="inline-flex items-center gap-2 rounded-button bg-accent hover:bg-accent-hover text-background px-4 py-2.5 text-sm font-medium transition-colors"
         >
-          <Plus size={16} /> New Project
+          <Plus size={16} /> 新建项目
         </button>
       </div>
 
@@ -129,7 +129,7 @@ export default function AdminProjects() {
                 </span>
                 {p.featured && (
                   <span className="font-mono text-[10px] uppercase text-accent">
-                    Featured
+                    精选
                   </span>
                 )}
               </div>
@@ -146,7 +146,7 @@ export default function AdminProjects() {
         {projects.length === 0 && (
           <div className="col-span-full rounded-card border border-dashed border-border p-12 text-center text-foreground-muted">
             <ImageIcon size={32} className="mx-auto mb-3 opacity-50" />
-            <p>No projects yet. Click "New Project" to get started.</p>
+            <p>还没有项目，点击"新建项目"开始吧</p>
           </div>
         )}
       </div>
@@ -187,28 +187,12 @@ function ProjectModal({
     set("cover", url);
   };
 
-  const updateArray = (key: keyof Project, index: number, val: string) => {
-    const arr = [...((form[key] as string[]) || [])];
-    arr[index] = val;
-    set(key, arr as never);
-  };
-
-  const addToArray = (key: keyof Project) => {
-    const arr = [...((form[key] as string[]) || []), ""];
-    set(key, arr as never);
-  };
-
-  const removeFromArray = (key: keyof Project, index: number) => {
-    const arr = ((form[key] as string[]) || []).filter((_, i) => i !== index);
-    set(key, arr as never);
-  };
-
   const gradients = [
-    { label: "AI · Purple", value: "from-blue-600/20 via-purple-600/20 to-pink-600/20" },
-    { label: "Data · Teal", value: "from-emerald-600/20 via-teal-600/20 to-cyan-600/20" },
-    { label: "Design · Amber", value: "from-orange-600/20 via-amber-600/20 to-yellow-600/20" },
-    { label: "Mobile · Rose", value: "from-rose-600/20 via-red-600/20 to-orange-600/20" },
-    { label: "Brand · Violet", value: "from-violet-600/20 via-purple-600/20 to-fuchsia-600/20" },
+    { label: "AI · 紫色", value: "from-blue-600/20 via-purple-600/20 to-pink-600/20" },
+    { label: "数据 · 青色", value: "from-emerald-600/20 via-teal-600/20 to-cyan-600/20" },
+    { label: "设计 · 琥珀", value: "from-orange-600/20 via-amber-600/20 to-yellow-600/20" },
+    { label: "移动 · 玫红", value: "from-rose-600/20 via-red-600/20 to-orange-600/20" },
+    { label: "品牌 · 紫罗兰", value: "from-violet-600/20 via-purple-600/20 to-fuchsia-600/20" },
   ];
 
   return (
@@ -216,7 +200,7 @@ function ProjectModal({
       <div className="w-full max-w-2xl bg-background border border-border rounded-card shadow-2xl my-8">
         <div className="sticky top-0 flex items-center justify-between p-5 border-b border-border bg-background rounded-t-card">
           <h3 className="font-display font-semibold text-lg">
-            {project.slug ? "Edit Project" : "New Project"}
+            {project.slug ? "编辑项目" : "新建项目"}
           </h3>
           <button
             onClick={onClose}
@@ -237,15 +221,15 @@ function ProjectModal({
           />
 
           <div className="grid grid-cols-2 gap-3">
-            <Field label="Title *">
+            <Field label="项目标题 *">
               <input
                 className="w-full rounded-button border border-border bg-background-elevated px-3 py-2 text-sm focus:border-accent focus:outline-none"
                 value={form.title}
                 onChange={(e) => set("title", e.target.value)}
-                placeholder="AI Copilot Platform"
+                placeholder="AI 智能助手平台"
               />
             </Field>
-            <Field label="Slug (auto)">
+            <Field label="链接标识（自动）">
               <input
                 className="w-full rounded-button border border-border bg-background-elevated px-3 py-2 text-sm focus:border-accent focus:outline-none font-mono"
                 value={form.slug}
@@ -255,7 +239,7 @@ function ProjectModal({
             </Field>
           </div>
 
-          <Field label="Subtitle">
+          <Field label="副标题">
             <input
               className="w-full rounded-button border border-border bg-background-elevated px-3 py-2 text-sm focus:border-accent focus:outline-none"
               value={form.subtitle}
@@ -265,7 +249,7 @@ function ProjectModal({
           </Field>
 
           <div className="grid grid-cols-3 gap-3">
-            <Field label="Category">
+            <Field label="分类">
               <select
                 className="w-full rounded-button border border-border bg-background-elevated px-3 py-2 text-sm focus:border-accent focus:outline-none appearance-none cursor-pointer"
                 value={form.category}
@@ -278,7 +262,7 @@ function ProjectModal({
                 ))}
               </select>
             </Field>
-            <Field label="Year">
+            <Field label="年份">
               <input
                 type="number"
                 className="w-full rounded-button border border-border bg-background-elevated px-3 py-2 text-sm focus:border-accent focus:outline-none"
@@ -286,7 +270,7 @@ function ProjectModal({
                 onChange={(e) => set("year", Number(e.target.value))}
               />
             </Field>
-            <Field label="Featured">
+            <Field label="精选项目">
               <label className="flex items-center h-[38px] gap-2 cursor-pointer">
                 <input
                   type="checkbox"
@@ -294,21 +278,21 @@ function ProjectModal({
                   onChange={(e) => set("featured", e.target.checked)}
                   className="w-4 h-4 rounded accent-accent"
                 />
-                <span className="text-sm">Show on home</span>
+                <span className="text-sm">首页展示</span>
               </label>
             </Field>
           </div>
 
           <div className="grid grid-cols-2 gap-3">
-            <Field label="Role">
+            <Field label="你的角色">
               <input
                 className="w-full rounded-button border border-border bg-background-elevated px-3 py-2 text-sm focus:border-accent focus:outline-none"
                 value={form.role}
                 onChange={(e) => set("role", e.target.value)}
-                placeholder="Lead Product Designer"
+                placeholder="首席产品设计师"
               />
             </Field>
-            <Field label="Client (optional)">
+            <Field label="合作方（可选）">
               <input
                 className="w-full rounded-button border border-border bg-background-elevated px-3 py-2 text-sm focus:border-accent focus:outline-none"
                 value={form.client || ""}
@@ -318,7 +302,7 @@ function ProjectModal({
             </Field>
           </div>
 
-          <Field label="Summary (one line)">
+          <Field label="一句话简介">
             <textarea
               rows={2}
               className="w-full rounded-button border border-border bg-background-elevated px-3 py-2 text-sm focus:border-accent focus:outline-none resize-none"
@@ -329,25 +313,25 @@ function ProjectModal({
           </Field>
 
           <div className="grid grid-cols-2 gap-3">
-            <Field label="Team Size">
+            <Field label="团队规模">
               <input
                 className="w-full rounded-button border border-border bg-background-elevated px-3 py-2 text-sm focus:border-accent focus:outline-none"
                 value={form.teamSize || ""}
                 onChange={(e) => set("teamSize", e.target.value)}
-                placeholder="4人设计团队"
+                placeholder="4 人设计团队"
               />
             </Field>
-            <Field label="Duration">
+            <Field label="项目时长">
               <input
                 className="w-full rounded-button border border-border bg-background-elevated px-3 py-2 text-sm focus:border-accent focus:outline-none"
                 value={form.duration || ""}
                 onChange={(e) => set("duration", e.target.value)}
-                placeholder="6个月"
+                placeholder="6 个月"
               />
             </Field>
           </div>
 
-          <Field label="Challenge">
+          <Field label="挑战背景">
             <textarea
               rows={3}
               className="w-full rounded-button border border-border bg-background-elevated px-3 py-2 text-sm focus:border-accent focus:outline-none resize-none"
@@ -358,27 +342,27 @@ function ProjectModal({
           </Field>
 
           <DynamicList
-            label="Process Steps"
+            label="设计流程"
             items={form.process || []}
             onChange={(arr) => set("process", arr)}
             placeholder="设计流程的每一步"
           />
 
           <DynamicList
-            label="Highlights"
+            label="项目亮点"
             items={form.highlights || []}
             onChange={(arr) => set("highlights", arr)}
             placeholder="2-3 个核心亮点标签"
           />
 
           <DynamicList
-            label="Tools"
+            label="使用工具"
             items={form.tools || []}
             onChange={(arr) => set("tools", arr)}
             placeholder="Figma, React, Framer..."
           />
 
-          <Field label="Outcome">
+          <Field label="项目成果">
             <textarea
               rows={3}
               className="w-full rounded-button border border-border bg-background-elevated px-3 py-2 text-sm focus:border-accent focus:outline-none resize-none"
@@ -388,7 +372,7 @@ function ProjectModal({
             />
           </Field>
 
-          <Field label="Your Role Detail">
+          <Field label="我的职责详情">
             <textarea
               rows={2}
               className="w-full rounded-button border border-border bg-background-elevated px-3 py-2 text-sm focus:border-accent focus:outline-none resize-none"
@@ -416,7 +400,7 @@ function ProjectModal({
             onClick={onClose}
             className="rounded-button border border-border px-4 py-2 text-sm hover:bg-background-card"
           >
-            Cancel
+            取消
           </button>
           <button
             onClick={() => {
@@ -429,7 +413,7 @@ function ProjectModal({
             }}
             className="rounded-button bg-accent hover:bg-accent-hover text-background px-5 py-2 text-sm font-medium"
           >
-            Save Project
+            保存项目
           </button>
         </div>
       </div>
@@ -495,7 +479,7 @@ function DynamicList({
           onClick={() => onChange([...items, ""])}
           className="text-xs text-accent hover:text-accent-hover flex items-center gap-1 py-1"
         >
-          <Plus size={12} /> Add item
+          <Plus size={12} /> 添加一项
         </button>
       </div>
     </div>
@@ -521,7 +505,7 @@ function MetricsEditor({
   return (
     <div>
       <label className="block font-mono text-[10px] uppercase tracking-wider text-foreground-subtle mb-2">
-        Metrics (成果数据)
+        成果数据
       </label>
       <div className="space-y-2">
         {items.map((m, i) => (
@@ -550,7 +534,7 @@ function MetricsEditor({
           onClick={add}
           className="text-xs text-accent hover:text-accent-hover flex items-center gap-1 py-1"
         >
-          <Plus size={12} /> Add metric
+          <Plus size={12} /> 添加数据
         </button>
       </div>
     </div>
@@ -575,7 +559,7 @@ function CoverUploader({
   return (
     <div>
       <label className="block font-mono text-[10px] uppercase tracking-wider text-foreground-subtle mb-2">
-        Cover Image
+        封面图
       </label>
       <div
         className={`relative h-40 rounded-button bg-gradient-to-br ${gradient} border border-border flex items-center justify-center overflow-hidden`}
@@ -593,7 +577,7 @@ function CoverUploader({
         ) : (
           <label className="cursor-pointer flex flex-col items-center gap-2 text-foreground-muted hover:text-foreground">
             <ImageIcon size={28} />
-            <span className="text-xs">Click to upload cover image</span>
+            <span className="text-xs">点击上传封面图</span>
             <input
               type="file"
               accept="image/*"
@@ -605,7 +589,7 @@ function CoverUploader({
       </div>
       <div className="mt-2">
         <p className="text-[10px] font-mono uppercase text-foreground-subtle mb-1.5">
-          Or pick a gradient background
+          或选择渐变背景
         </p>
         <div className="flex gap-2 flex-wrap">
           {gradients.map((g) => (
@@ -679,22 +663,22 @@ function FigmaMediaField({
   return (
     <div className="border-t border-border pt-5 space-y-5">
       <label className="flex items-center gap-2 font-mono text-[10px] uppercase tracking-wider text-foreground-subtle">
-        <Figma size={12} /> Figma Design — URL + Import + Screenshots
+        <Figma size={12} /> Figma 设计 — 链接 + 导入 + 截图
       </label>
 
       {!token ? (
         <div className="rounded-button border border-border bg-background-card p-4">
           <p className="text-sm mb-3">
-            <strong className="text-foreground">Enable Figma import</strong>
+            <strong className="text-foreground">开启 Figma 一键导入</strong>
             <span className="text-foreground-muted ml-2">
-              Generate a Personal Access Token at{" "}
+              在 Figma 开发者设置中生成个人访问 Token{" "}
               <a
                 href="https://www.figma.com/settings/developers#personal-access-tokens"
                 target="_blank"
                 rel="noreferrer"
                 className="text-accent hover:underline font-mono text-xs"
               >
-                figma.com/settings/developers
+                前往设置
               </a>
             </span>
           </p>
@@ -711,28 +695,28 @@ function FigmaMediaField({
               onClick={() => setShowToken(!showToken)}
               className="px-3 text-xs text-foreground-muted hover:text-foreground"
             >
-              {showToken ? "Hide" : "Show"}
+              {showToken ? "隐藏" : "显示"}
             </button>
           </div>
         </div>
       ) : (
         <div className="flex items-center justify-between rounded-button border border-green-500/30 bg-green-500/5 px-3 py-2">
           <span className="text-xs font-mono text-green-400">
-            ✓ Figma token saved locally
+            ✓ Figma Token 已保存
           </span>
           <button
             type="button"
             onClick={() => saveToken("")}
             className="text-xs text-foreground-muted hover:text-red-400"
           >
-            Clear
+            清除
           </button>
         </div>
       )}
 
       <div>
         <p className="text-[11px] text-foreground-subtle mb-2">
-          Figma file link
+          Figma 文件链接
         </p>
         <div className="flex gap-2">
           <input
@@ -753,7 +737,7 @@ function FigmaMediaField({
               onClick={() => setImportOpen(true)}
               className="rounded-button bg-accent hover:bg-accent-hover text-background px-4 py-2 text-sm font-medium whitespace-nowrap inline-flex items-center gap-1.5"
             >
-              <Figma size={14} /> Import
+              <Figma size={14} /> 导入
             </button>
           )}
         </div>
@@ -761,14 +745,14 @@ function FigmaMediaField({
           <div className="mt-2 text-xs flex items-center gap-2 text-green-400 font-mono">
             <Figma size={12} />
             {parsed.fileKey}
-            {parsed.nodeId && ` · node ${parsed.nodeId}`}
+            {parsed.nodeId && ` · 节点 ${parsed.nodeId}`}
             <a
               href={url}
               target="_blank"
               rel="noreferrer"
               className="text-accent hover:underline ml-2"
             >
-              Open ↗
+              在 Figma 中打开 ↗
             </a>
           </div>
         )}
@@ -776,7 +760,7 @@ function FigmaMediaField({
 
       <div>
         <p className="text-[11px] text-foreground-subtle mb-2">
-          Or upload exported screenshots manually (PNG / JPG)
+          或手动上传导出的截图（PNG / JPG）
         </p>
 
         {images.length > 0 && (
@@ -826,7 +810,7 @@ function FigmaMediaField({
 
         <label className="flex items-center justify-center gap-2 rounded-button border border-dashed border-border bg-background-elevated hover:border-accent hover:text-accent transition-colors cursor-pointer py-4 text-sm text-foreground-muted">
           <Plus size={14} />
-          <span>Upload screenshots</span>
+          <span>上传截图</span>
           <input
             type="file"
             accept="image/png,image/jpeg,image/webp"
@@ -883,7 +867,7 @@ function FigmaImportModal({
       .then((info) => {
         setFrames(info?.frames || []);
       })
-      .catch((e) => setError(e.message || "Failed to load Figma file"))
+      .catch((e) => setError(e.message || "加载 Figma 文件失败"))
       .finally(() => setLoading(false));
   }, [fileKey, initialNodeId, token]);
 
@@ -905,7 +889,7 @@ function FigmaImportModal({
     const ids = Array.from(selected);
     if (ids.length === 0) return;
     setFetching(true);
-    setProgress(`Fetching ${ids.length} frame${ids.length > 1 ? "s" : ""}...`);
+    setProgress(`正在获取 ${ids.length} 个画板...`);
     try {
       const imageMap = await fetchFigmaImages(fileKey, ids, token);
       const result: string[] = [];
@@ -913,7 +897,7 @@ function FigmaImportModal({
       for (let i = 0; i < entries.length; i++) {
         const [, figmaUrl] = entries[i];
         if (!figmaUrl) continue;
-        setProgress(`Loading image ${i + 1}/${entries.length}`);
+        setProgress(`正在加载图片 ${i + 1}/${entries.length}`);
         try {
           const dataUrl = await proxyImageToDataUrl(figmaUrl);
           result.push(dataUrl);
@@ -923,7 +907,7 @@ function FigmaImportModal({
       }
       onImport(result);
     } catch (e) {
-      setError(e.message || "Import failed");
+      setError(e.message || "导入失败");
     } finally {
       setFetching(false);
       setProgress("");
@@ -936,7 +920,7 @@ function FigmaImportModal({
         <div className="flex items-center justify-between p-4 border-b border-border">
           <div className="flex items-center gap-2">
             <Figma size={18} className="text-accent" />
-            <h3 className="font-display font-semibold">Import from Figma</h3>
+            <h3 className="font-display font-semibold">从 Figma 导入画板</h3>
           </div>
           <button
             type="button"
@@ -950,7 +934,7 @@ function FigmaImportModal({
         <div className="flex-1 overflow-y-auto p-4">
           {loading && (
             <div className="text-center py-12 text-foreground-muted">
-              Loading Figma file...
+              正在加载 Figma 文件...
             </div>
           )}
 
@@ -958,14 +942,14 @@ function FigmaImportModal({
             <div className="rounded-button border border-red-500/50 bg-red-500/10 px-4 py-3 text-sm text-red-400">
               {error}
               <p className="text-xs mt-2 opacity-80">
-                Make sure your token has file read access and the file link is correct.
+                请确认 Token 有文件读取权限，且文件链接正确。
               </p>
             </div>
           )}
 
           {!loading && !error && frames.length === 0 && (
             <div className="text-center py-12 text-foreground-muted text-sm">
-              No frames found. Try adding a specific node-id to your Figma URL.
+              没有找到画板，试试在 Figma 链接里加上具体的 node-id。
             </div>
           )}
 
@@ -973,15 +957,14 @@ function FigmaImportModal({
             <>
               <div className="flex items-center justify-between mb-3">
                 <p className="text-xs text-foreground-muted">
-                  {frames.length} frame{frames.length > 1 ? "s" : ""} found ·{" "}
-                  {selected.size} selected
+                  找到 {frames.length} 个画板 · 已选 {selected.size} 个
                 </p>
                 <button
                   type="button"
                   onClick={toggleAll}
                   className="text-xs text-accent hover:underline"
                 >
-                  {selected.size === frames.length ? "Deselect all" : "Select all"}
+                  {selected.size === frames.length ? "取消全选" : "全选"}
                 </button>
               </div>
               <div className="space-y-1">
@@ -1023,7 +1006,7 @@ function FigmaImportModal({
               disabled={fetching}
               className="rounded-button border border-border px-4 py-2 text-sm hover:bg-background-card disabled:opacity-50"
             >
-              Cancel
+              取消
             </button>
             <button
               type="button"
@@ -1032,8 +1015,8 @@ function FigmaImportModal({
               className="rounded-button bg-accent hover:bg-accent-hover disabled:opacity-50 disabled:hover:bg-accent text-background px-4 py-2 text-sm font-medium"
             >
               {fetching
-                ? "Importing..."
-                : `Import ${selected.size} frame${selected.size !== 1 ? "s" : ""}`}
+                ? "正在导入..."
+                : `导入 ${selected.size} 个画板`}
             </button>
           </div>
         </div>
