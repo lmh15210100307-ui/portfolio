@@ -1,10 +1,11 @@
 import { useState } from "react";
 import { useAdminStore } from "@/store/admin";
 import { Save, Plus, Trash2 } from "lucide-react";
-import { SiteConfig } from "@/data/site";
+import { useI18n } from "@/hooks/useI18n";
 
 export default function AdminProfile() {
   const { site, updateSite, persist } = useAdminStore();
+  const { t } = useI18n();
   const [saving, setSaving] = useState(false);
   const [toast, setToast] = useState(false);
 
@@ -20,94 +21,62 @@ export default function AdminProfile() {
     <div className="max-w-3xl space-y-8">
       <div className="flex items-center justify-between">
         <div>
-          <h2 className="font-display font-bold text-2xl">个人资料 &amp; 信息</h2>
-          <p className="text-sm text-foreground-muted">
-            编辑你的个人信息、技能和经历
-          </p>
+          <h2 className="font-display font-bold text-2xl">{t.admin.profileTitle}</h2>
+          <p className="text-sm text-foreground-muted">{t.admin.profileSub}</p>
         </div>
         <button
           onClick={handleSave}
           disabled={saving}
           className="inline-flex items-center gap-2 rounded-button bg-foreground text-background px-4 py-2.5 text-sm font-medium hover:bg-accent transition-colors disabled:opacity-50"
         >
-          <Save size={14} /> {saving ? "保存中..." : "保存"}
+          <Save size={14} /> {saving ? t.admin.saving : t.admin.save}
         </button>
       </div>
 
       <section className="rounded-card border border-border bg-background-card p-6 space-y-5">
         <h3 className="font-display font-semibold text-lg border-b border-border pb-3">
-            基本信息
-          </h3>
+          {t.admin.basic}
+        </h3>
         <div className="grid grid-cols-2 gap-3">
-          <Input label="姓名" value={site.name} onChange={(v) => updateSite({ name: v })} />
-          <Input label="缩写" value={site.initials} onChange={(v) => updateSite({ initials: v })} />
+          <Input label={t.admin.name} value={site.name} onChange={(v) => updateSite({ name: v })} />
+          <Input label={t.admin.initials} value={site.initials} onChange={(v) => updateSite({ initials: v })} />
         </div>
-        <Input label="标题 / 角色" value={site.title} onChange={(v) => updateSite({ title: v })} />
-        <Input label="一句话介绍" value={site.tagline} onChange={(v) => updateSite({ tagline: v })} />
-        <Input label="所在地" value={site.location} onChange={(v) => updateSite({ location: v })} />
-        <Input label="邮箱" value={site.email} onChange={(v) => updateSite({ email: v })} />
-        <Textarea
-          label="个人简介"
-          rows={4}
-          value={site.bio}
-          onChange={(v) => updateSite({ bio: v })}
-        />
-        <Textarea
-          label="设计哲学"
-          rows={3}
-          value={site.philosophy}
-          onChange={(v) => updateSite({ philosophy: v })}
-        />
-        <Input
-          label="哲学金句"
-          value={site.philosophyHighlight}
-          onChange={(v) => updateSite({ philosophyHighlight: v })}
-        />
+        <Input label={t.admin.titleRole} value={site.title} onChange={(v) => updateSite({ title: v })} />
+        <Input label={t.admin.tagline} value={site.tagline} onChange={(v) => updateSite({ tagline: v })} />
+        <Input label={t.admin.location} value={site.location} onChange={(v) => updateSite({ location: v })} />
+        <Input label={t.admin.email} value={site.email} onChange={(v) => updateSite({ email: v })} />
+        <Textarea label={t.admin.bio} rows={4} value={site.bio} onChange={(v) => updateSite({ bio: v })} />
+        <Textarea label={t.admin.philosophy} rows={3} value={site.philosophy} onChange={(v) => updateSite({ philosophy: v })} />
+        <Input label={t.admin.philosophyHighlight} value={site.philosophyHighlight} onChange={(v) => updateSite({ philosophyHighlight: v })} />
       </section>
 
       <section className="rounded-card border border-border bg-background-card p-6 space-y-5">
         <h3 className="font-display font-semibold text-lg border-b border-border pb-3">
-            社交链接
-          </h3>
+          {t.admin.social}
+        </h3>
         <div className="grid grid-cols-2 gap-3">
-          <Input
-            label="LinkedIn"
-            value={site.social.linkedin}
-            onChange={(v) => updateSite({ social: { ...site.social, linkedin: v } })}
-          />
-          <Input
-            label="Dribbble"
-            value={site.social.dribbble}
-            onChange={(v) => updateSite({ social: { ...site.social, dribbble: v } })}
-          />
-          <Input
-            label="GitHub"
-            value={site.social.github}
-            onChange={(v) => updateSite({ social: { ...site.social, github: v } })}
-          />
-          <Input
-            label="Twitter"
-            value={site.social.twitter}
-            onChange={(v) => updateSite({ social: { ...site.social, twitter: v } })}
-          />
+          <Input label="LinkedIn" value={site.social.linkedin} onChange={(v) => updateSite({ social: { ...site.social, linkedin: v } })} />
+          <Input label="Dribbble" value={site.social.dribbble} onChange={(v) => updateSite({ social: { ...site.social, dribbble: v } })} />
+          <Input label="GitHub" value={site.social.github} onChange={(v) => updateSite({ social: { ...site.social, github: v } })} />
+          <Input label="Twitter" value={site.social.twitter} onChange={(v) => updateSite({ social: { ...site.social, twitter: v } })} />
         </div>
       </section>
 
       <section className="rounded-card border border-border bg-background-card p-6 space-y-5">
         <div className="flex items-center justify-between border-b border-border pb-3">
-          <h3 className="font-display font-semibold text-lg">技能</h3>
+          <h3 className="font-display font-semibold text-lg">{t.admin.skills}</h3>
           <button
             onClick={() =>
               updateSite({
                 skills: [
                   ...site.skills,
-                  { category: "新分组", icon: "LayoutGrid", items: [] },
+                  { category: t.admin.newGroup, icon: "LayoutGrid", items: [] },
                 ],
               })
             }
             className="text-xs text-accent flex items-center gap-1"
           >
-            <Plus size={12} /> 添加分组
+            <Plus size={12} /> {t.admin.addGroup}
           </button>
         </div>
         {site.skills.map((s, i) => (
@@ -126,11 +95,7 @@ export default function AdminProfile() {
                 }}
               />
               <button
-                onClick={() =>
-                  updateSite({
-                    skills: site.skills.filter((_, j) => j !== i),
-                  })
-                }
+                onClick={() => updateSite({ skills: site.skills.filter((_, j) => j !== i) })}
                 className="px-2 text-foreground-muted hover:text-red-400"
               >
                 <Trash2 size={16} />
@@ -154,9 +119,7 @@ export default function AdminProfile() {
                   <button
                     onClick={() => {
                       const skills = [...site.skills];
-                      skills[i].items = skills[i].items.filter(
-                        (_, k) => k !== j
-                      );
+                      skills[i].items = skills[i].items.filter((_, k) => k !== j);
                       updateSite({ skills });
                     }}
                     className="text-foreground-muted hover:text-red-400"
@@ -166,7 +129,7 @@ export default function AdminProfile() {
                 </span>
               ))}
               <input
-                placeholder="+ 添加技能"
+                placeholder={t.admin.addSkillPH}
                 className="text-xs bg-transparent outline-none w-20 text-foreground-muted placeholder:text-foreground-subtle"
                 onKeyDown={(e) => {
                   if (e.key === "Enter") {
@@ -187,7 +150,7 @@ export default function AdminProfile() {
 
       <section className="rounded-card border border-border bg-background-card p-6 space-y-5">
         <div className="flex items-center justify-between border-b border-border pb-3">
-          <h3 className="font-display font-semibold text-lg">工作经历</h3>
+          <h3 className="font-display font-semibold text-lg">{t.admin.experience}</h3>
           <button
             onClick={() =>
               updateSite({
@@ -199,7 +162,7 @@ export default function AdminProfile() {
             }
             className="text-xs text-accent flex items-center gap-1"
           >
-            <Plus size={12} /> 添加经历
+            <Plus size={12} /> {t.admin.addExp}
           </button>
         </div>
         {site.experience.map((exp, i) => (
@@ -210,7 +173,7 @@ export default function AdminProfile() {
             <div className="flex gap-2 items-center">
               <input
                 className="w-32 rounded-button border border-border bg-background px-3 py-2 text-sm font-mono focus:border-accent focus:outline-none"
-                placeholder="2023 — Now"
+                placeholder={t.admin.yearPH}
                 value={exp.year}
                 onChange={(e) => {
                   const arr = [...site.experience];
@@ -219,11 +182,7 @@ export default function AdminProfile() {
                 }}
               />
               <button
-                onClick={() =>
-                  updateSite({
-                    experience: site.experience.filter((_, j) => j !== i),
-                  })
-                }
+                onClick={() => updateSite({ experience: site.experience.filter((_, j) => j !== i) })}
                 className="ml-auto text-foreground-muted hover:text-red-400"
               >
                 <Trash2 size={16} />
@@ -232,7 +191,7 @@ export default function AdminProfile() {
             <div className="grid grid-cols-2 gap-2">
               <input
                 className="rounded-button border border-border bg-background px-3 py-2 text-sm font-medium focus:border-accent focus:outline-none"
-                placeholder="角色"
+                placeholder={t.admin.rolePH}
                 value={exp.role}
                 onChange={(e) => {
                   const arr = [...site.experience];
@@ -242,7 +201,7 @@ export default function AdminProfile() {
               />
               <input
                 className="rounded-button border border-border bg-background px-3 py-2 text-sm focus:border-accent focus:outline-none"
-                placeholder="公司"
+                placeholder={t.admin.companyPH}
                 value={exp.company}
                 onChange={(e) => {
                   const arr = [...site.experience];
@@ -254,7 +213,7 @@ export default function AdminProfile() {
             <textarea
               rows={2}
               className="w-full rounded-button border border-border bg-background px-3 py-2 text-sm focus:border-accent focus:outline-none resize-none"
-              placeholder="描述"
+              placeholder={t.admin.descPH}
               value={exp.desc}
               onChange={(e) => {
                 const arr = [...site.experience];
@@ -268,22 +227,14 @@ export default function AdminProfile() {
 
       {toast && (
         <div className="fixed bottom-6 right-6 bg-accent text-background px-4 py-2 rounded-button text-sm z-50 shadow-lg">
-          ✓ 已保存
+          {t.admin.saved}
         </div>
       )}
     </div>
   );
 }
 
-function Input({
-  label,
-  value,
-  onChange,
-}: {
-  label: string;
-  value: string;
-  onChange: (v: string) => void;
-}) {
+function Input({ label, value, onChange }: { label: string; value: string; onChange: (v: string) => void }) {
   return (
     <div>
       <label className="block font-mono text-[10px] uppercase tracking-wider text-foreground-subtle mb-1.5">
@@ -298,17 +249,7 @@ function Input({
   );
 }
 
-function Textarea({
-  label,
-  value,
-  onChange,
-  rows = 3,
-}: {
-  label: string;
-  value: string;
-  onChange: (v: string) => void;
-  rows?: number;
-}) {
+function Textarea({ label, value, onChange, rows = 3 }: { label: string; value: string; onChange: (v: string) => void; rows?: number }) {
   return (
     <div>
       <label className="block font-mono text-[10px] uppercase tracking-wider text-foreground-subtle mb-1.5">

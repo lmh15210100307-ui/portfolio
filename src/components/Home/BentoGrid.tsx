@@ -5,6 +5,7 @@ import { useAdminStore } from "@/store/admin";
 import { Project } from "@/data/projects";
 import Badge from "@/components/UI/Badge";
 import { useReveal } from "@/hooks/useReveal";
+import { useI18n } from "@/hooks/useI18n";
 
 function BentoCard({
   project,
@@ -14,6 +15,7 @@ function BentoCard({
   variant?: "default" | "large" | "tall" | "wide";
 }) {
   const ref = useReveal<HTMLDivElement>();
+  const { t } = useI18n();
 
   const gridClasses = {
     default: "col-span-1 md:col-span-2 lg:col-span-3 lg:row-span-1",
@@ -62,7 +64,7 @@ function BentoCard({
 
           <div className="mt-4 flex items-center gap-2 text-foreground-muted group-hover:text-foreground transition-colors">
             <span className="font-mono text-xs uppercase tracking-wider">
-            查看案例详情
+            {t.bento.viewCase}
             </span>
             <motion.span
               initial={{ x: 0, y: 0 }}
@@ -80,6 +82,7 @@ function BentoCard({
 
 export default function BentoGrid() {
   const projects = useAdminStore((s) => s.projects);
+  const { t } = useI18n();
   const featured = projects.filter((p) => p.featured);
   const others = projects.filter((p) => !p.featured);
 
@@ -89,18 +92,17 @@ export default function BentoGrid() {
         <div className="flex items-end justify-between mb-12 lg:mb-16">
           <div>
             <p className="font-mono text-xs uppercase tracking-[0.2em] text-accent mb-3">
-              精选作品
+              {t.bento.tag}
             </p>
             <h2 className="font-display font-bold text-3xl md:text-5xl leading-tight">
-              近期项目 &amp; <br className="hidden md:block" />
-              设计探索。
+              {t.bento.title}
             </h2>
           </div>
           <Link
             to="/work"
             className="hidden md:inline-flex items-center gap-2 text-sm text-foreground-muted hover:text-foreground transition-colors group"
           >
-            查看全部
+            {t.bento.viewAll}
             <ArrowUpRight
               size={16}
               className="transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5"
@@ -121,7 +123,7 @@ export default function BentoGrid() {
             to="/work"
             className="inline-flex items-center gap-2 text-sm text-foreground-muted hover:text-foreground transition-colors"
           >
-            查看全部作品
+            {t.bento.viewAllMobile}
             <ArrowUpRight size={16} />
           </Link>
         </div>

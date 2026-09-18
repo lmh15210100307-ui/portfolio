@@ -4,6 +4,7 @@ import Header from "@/components/Layout/Header";
 import Footer from "@/components/Layout/Footer";
 import { useAdminStore } from "@/store/admin";
 import { useReveal } from "@/hooks/useReveal";
+import { useI18n } from "@/hooks/useI18n";
 
 const iconMap: Record<string, React.ReactNode> = {
   LayoutGrid: <LayoutGrid size={20} />,
@@ -14,6 +15,7 @@ const iconMap: Record<string, React.ReactNode> = {
 
 export default function About() {
   const site = useAdminStore((s) => s.site);
+  const { t } = useI18n();
   return (
     <div className="relative">
       <div className="noise-bg" />
@@ -36,13 +38,13 @@ export default function About() {
             </div>
             <div className="lg:col-span-7 flex flex-col justify-center">
               <p className="font-mono text-xs uppercase tracking-[0.2em] text-accent mb-3">
-                关于我
+                {t.about.tag}
               </p>
               <h1 className="font-display font-bold text-4xl md:text-5xl lg:text-6xl leading-tight mb-6">
-                你好，我是 {site.name}。 <br />
-                <span className="text-foreground-muted">设计追求 </span>
+                {t.about.greeting} {site.name}。 <br />
+                <span className="text-foreground-muted">{t.about.bioLead} </span>
                 <span className="bg-gradient-to-r from-accent via-blue-400 to-purple-400 bg-clip-text text-transparent">
-                  清晰 &amp; 价值
+                  {t.about.bioHighlight}
                 </span>
                 。
               </h1>
@@ -63,7 +65,7 @@ export default function About() {
           </motion.div>
 
           <div className="mb-24 lg:mb-32">
-            <SectionTitle label="方法论" title="我的设计方法" />
+            <SectionTitle label={t.about.methodTag} title={t.about.methodTitle} />
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-4">
               {site.methodology.map((m, i) => (
                 <MethodCard key={m.step} item={m} index={i} />
@@ -72,7 +74,7 @@ export default function About() {
           </div>
 
           <div className="mb-24 lg:mb-32">
-            <SectionTitle label="技能" title="工具 &amp; 能力" />
+            <SectionTitle label={t.about.skillTag} title={t.about.skillTitle} />
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
               {site.skills.map((s, i) => (
                 <SkillCard key={s.category} skill={s} index={i} />
@@ -81,7 +83,7 @@ export default function About() {
           </div>
 
           <div>
-            <SectionTitle label="经历" title="职业历程" />
+            <SectionTitle label={t.about.expTag} title={t.about.expTitle} />
             <div className="relative">
               <div className="absolute left-4 lg:left-5 top-0 bottom-0 w-px bg-border" />
               <div className="space-y-8 lg:space-y-10">

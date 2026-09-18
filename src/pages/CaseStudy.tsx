@@ -15,21 +15,23 @@ import Footer from "@/components/Layout/Footer";
 import { useAdminStore } from "@/store/admin";
 import Badge from "@/components/UI/Badge";
 import { buildFigmaEmbedUrl, parseFigmaUrl } from "@/utils/figma";
+import { useI18n } from "@/hooks/useI18n";
 
 export default function CaseStudy() {
   const projects = useAdminStore((s) => s.projects);
+  const { t } = useI18n();
   const { slug } = useParams<{ slug: string }>();
   const project = slug ? projects.find((p) => p.slug === slug) : undefined;
 
   if (!project) {
     return (
       <div className="min-h-screen flex flex-col items-center justify-center bg-background">
-        <h1 className="font-display text-3xl mb-4">未找到该作品</h1>
+        <h1 className="font-display text-3xl mb-4">{t.caseStudy.notFound}</h1>
         <Link
           to="/work"
           className="inline-flex items-center gap-2 text-accent hover:underline"
         >
-          <ArrowLeft size={16} /> 返回作品集
+          <ArrowLeft size={16} /> {t.caseStudy.back}
         </Link>
       </div>
     );
@@ -59,7 +61,7 @@ export default function CaseStudy() {
                 to="/work"
                 className="inline-flex items-center gap-2 text-sm text-foreground-muted hover:text-foreground mb-8 transition-colors"
               >
-                <ArrowLeft size={16} /> 全部作品
+                <ArrowLeft size={16} /> {t.caseStudy.all}
               </Link>
               <div className="flex flex-wrap gap-2 mb-6">
                 <Badge variant="accent">{project.category}</Badge>
@@ -81,21 +83,21 @@ export default function CaseStudy() {
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-16">
             <aside className="lg:col-span-4">
               <div className="space-y-8 lg:sticky lg:top-28">
-                <InfoRow label="角色" value={project.role} />
+                <InfoRow label={t.caseStudy.role} value={project.role} />
                 <InfoRow
-                  label="合作方"
-                  value={project.client || "内部项目"}
+                  label={t.caseStudy.client}
+                  value={project.client || t.caseStudy.internal}
                 />
-                <InfoRow label="时长" value={project.duration || "—"} />
-                <InfoRow label="团队" value={project.teamSize || "—"} />
+                <InfoRow label={t.caseStudy.duration} value={project.duration || "—"} />
+                <InfoRow label={t.caseStudy.team} value={project.teamSize || "—"} />
                 <div className="pt-6 border-t border-border">
                   <p className="font-mono text-xs uppercase tracking-wider text-foreground-subtle mb-3">
-                    工具
+                    {t.caseStudy.tools}
                   </p>
                   <div className="flex flex-wrap gap-1.5">
-                    {(project.tools || []).map((t) => (
-                      <Badge key={t} variant="outline" size="sm">
-                        {t}
+                    {(project.tools || []).map((tool) => (
+                      <Badge key={tool} variant="outline" size="sm">
+                        {tool}
                       </Badge>
                     ))}
                   </div>
@@ -108,7 +110,7 @@ export default function CaseStudy() {
                     className="flex items-center gap-2 rounded-button border border-border bg-background-card hover:border-accent hover:bg-accent/5 px-3 py-2.5 transition-all group"
                   >
                     <Figma size={16} className="text-accent" />
-                    <span className="text-sm font-medium">在 Figma 中查看</span>
+                    <span className="text-sm font-medium">{t.caseStudy.viewInFigma}</span>
                     <ArrowUpRight
                       size={14}
                       className="ml-auto text-foreground-muted group-hover:text-accent transition-colors"
@@ -151,8 +153,8 @@ export default function CaseStudy() {
               <section>
                 <SectionHeader
                   icon={<Target size={18} className="text-accent" />}
-                  label="挑战"
-                  title="问题背景"
+                  label={t.caseStudy.challenge}
+                  title={t.caseStudy.challengeTitle}
                 />
                 <p className="text-lg lg:text-xl leading-relaxed text-foreground/90">
                   {project.challenge || project.summary}
@@ -162,11 +164,11 @@ export default function CaseStudy() {
               <section>
                 <SectionHeader
                   icon={<Sparkles size={18} className="text-accent" />}
-                  label="过程"
-                  title="如何解决"
+                  label={t.caseStudy.process}
+                  title={t.caseStudy.processTitle}
                 />
                 <div className="space-y-4">
-                  {(project.process || ["研究", "设计", "原型", "上线"]).map(
+                  {(project.process || t.caseStudy.defaultProcess).map(
                     (step, i) => (
                       <div
                         key={i}
@@ -187,16 +189,16 @@ export default function CaseStudy() {
               <section>
                 <SectionHeader
                   icon={<CheckCircle2 size={18} className="text-accent" />}
-                  label="成果"
-                  title="项目结果"
+                  label={t.caseStudy.outcome}
+                  title={t.caseStudy.outcomeTitle}
                 />
                 <p className="text-lg lg:text-xl leading-relaxed text-foreground/90">
-                  {project.outcome || "成功上线并在核心指标上取得了可衡量的效果。"}
+                  {project.outcome || t.caseStudy.outcomeFallback}
                 </p>
               </section>
 
               <section>
-                <SectionHeader label="角色" title="我的职责" />
+                <SectionHeader label={t.caseStudy.roleLabel} title={t.caseStudy.roleTitle} />
                 <p className="text-lg leading-relaxed text-foreground/90">
                   {project.roleDetail || project.role}
                 </p>
@@ -206,15 +208,15 @@ export default function CaseStudy() {
                 <section>
                   <SectionHeader
                     icon={<Figma size={18} className="text-accent" />}
-                    label="设计"
-                    title="在 Figma 中查看"
+                    label={t.caseStudy.design}
+                    title={t.caseStudy.designTitle}
                   />
                   <div className="rounded-card border border-border overflow-hidden bg-background-card">
                     <div className="flex items-center justify-between px-4 py-3 border-b border-border">
                       <div className="flex items-center gap-2">
                         <Figma size={16} className="text-accent" />
                         <span className="text-sm font-medium">
-                          {parseFigmaUrl(project.figmaUrl)?.fileName || "Figma 文件"}
+                          {parseFigmaUrl(project.figmaUrl)?.fileName || t.caseStudy.figmaFile}
                         </span>
                       </div>
                       <a
@@ -223,7 +225,7 @@ export default function CaseStudy() {
                         rel="noreferrer"
                         className="flex items-center gap-1.5 text-xs text-accent hover:underline"
                       >
-                        在新标签页打开 <ArrowUpRight size={12} />
+                        {t.caseStudy.openNewTab} <ArrowUpRight size={12} />
                       </a>
                     </div>
                     <div className="aspect-video w-full bg-black/20">
@@ -247,8 +249,8 @@ export default function CaseStudy() {
                 <section>
                   <SectionHeader
                     icon={<ImageIcon size={18} className="text-accent" />}
-                    label="界面"
-                    title="设计截图"
+                    label={t.caseStudy.screens}
+                    title={t.caseStudy.screensTitle}
                   />
                   <div className="space-y-4">
                     {project.figmaImages.map((img, i) => (
@@ -258,13 +260,13 @@ export default function CaseStudy() {
                       >
                         <img
                           src={img}
-                          alt={`界面 ${i + 1}`}
+                          alt={`${t.caseStudy.screens} ${i + 1}`}
                           className="w-full h-auto select-none"
                           loading="lazy"
                           draggable={false}
                         />
                         <figcaption className="px-4 py-2 border-t border-border text-xs font-mono text-foreground-subtle">
-                          界面 {i + 1}
+                          {t.caseStudy.screens} {i + 1}
                         </figcaption>
                       </figure>
                     ))}
@@ -279,7 +281,7 @@ export default function CaseStudy() {
           <section className="border-t border-border/50 py-20 lg:py-28">
             <div className="container">
               <h2 className="font-display font-bold text-3xl md:text-4xl mb-10">
-                  同类作品 · {project.category}
+                  {t.caseStudy.moreInCategory} · {project.category}
                 </h2>
               <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
                 {related.slice(0, 3).map((r) => (

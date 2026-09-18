@@ -1,42 +1,25 @@
 import { useReveal } from "@/hooks/useReveal";
-
-const strengths = [
-  {
-    title: "AI 原生设计",
-    desc: "深度参与 AI 产品从 0 到 1，熟悉 Prompt 设计、Agent 交互、人机协作等新模式。",
-    metric: "6+",
-    metricLabel: "AI 产品",
-  },
-  {
-    title: "复杂问题拆解",
-    desc: "擅长把复杂业务拆解为清晰的信息架构与流畅的用户路径，让 B 端产品不再难用。",
-    metric: "12",
-    metricLabel: "重构项目",
-  },
-  {
-    title: "规模化设计",
-    desc: "设计系统建设经验，推动 8 条业务线统一规范，让设计效率提升 5 倍。",
-    metric: "8",
-    metricLabel: "业务接入",
-  },
-];
+import { useI18n } from "@/hooks/useI18n";
 
 export default function Strengths() {
+  const { t } = useI18n();
+  const strengths = t.strengths.items;
+
   return (
     <section className="relative py-24 lg:py-32 border-t border-border/50">
       <div className="container">
         <div className="max-w-2xl mb-16 lg:mb-20">
           <p className="font-mono text-xs uppercase tracking-[0.2em] text-accent mb-3">
-            我的优势
+            {t.strengths.tag}
           </p>
           <h2 className="font-display font-bold text-3xl md:text-5xl leading-tight">
-            三件我最擅长的事。
+            {t.strengths.title}
           </h2>
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6 lg:gap-8">
           {strengths.map((s, i) => (
-            <StrengthCard key={s.title} strength={s} index={i} />
+            <StrengthCard key={i} strength={s} index={i} />
           ))}
         </div>
       </div>
@@ -48,10 +31,15 @@ function StrengthCard({
   strength,
   index,
 }: {
-  strength: (typeof strengths)[number];
+  strength: { title: string; desc: string };
   index: number;
 }) {
   const ref = useReveal<HTMLDivElement>();
+  const metrics = ["6+", "12", "8"];
+  const labelsZh = ["AI 产品", "重构项目", "业务接入"];
+  const labelsEn = ["AI 产品", "Refactors", "Adoptions"];
+  const { isZh } = useI18n();
+  const labels = isZh ? labelsZh : labelsEn;
 
   return (
     <div
@@ -64,9 +52,9 @@ function StrengthCard({
           0{index + 1}
         </span>
         <span className="font-display font-bold text-5xl lg:text-6xl text-accent">
-          {strength.metric}
+          {metrics[index]}
           <span className="text-sm font-mono text-foreground-muted ml-1 font-normal">
-            {strength.metricLabel}
+            {labels[index]}
           </span>
         </span>
       </div>

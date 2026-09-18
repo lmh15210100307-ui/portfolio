@@ -7,12 +7,14 @@ import Footer from "@/components/Layout/Footer";
 import { useAdminStore } from "@/store/admin";
 import { categories, Project } from "@/data/projects";
 import { useReveal } from "@/hooks/useReveal";
+import { useI18n } from "@/hooks/useI18n";
 
 export default function Work() {
   const projects = useAdminStore((s) => s.projects);
-  const [filter, setFilter] = useState<string>("全部");
+  const { t } = useI18n();
+  const [filter, setFilter] = useState<string>("all");
   const filtered =
-    filter === "全部"
+    filter === "all"
       ? projects
       : projects.filter((p) => p.category === filter);
 
@@ -29,22 +31,22 @@ export default function Work() {
             className="mb-16 lg:mb-20"
           >
             <p className="font-mono text-xs uppercase tracking-[0.2em] text-accent mb-3">
-              作品集
+              {t.work.tag}
             </p>
             <h1 className="font-display font-bold text-4xl md:text-6xl lg:text-7xl leading-tight">
-              全部作品
+              {t.work.title}
             </h1>
             <p className="mt-6 text-foreground-muted max-w-xl">
-              精选产品设计作品 — 从 AI Agent 与企业 SaaS，到设计系统与移动端体验。
+              {t.work.subtitle}
             </p>
           </motion.div>
 
           <div className="flex flex-wrap gap-2 mb-10 lg:mb-12">
             <FilterButton
-              active={filter === "全部"}
-              onClick={() => setFilter("全部")}
+              active={filter === "all"}
+              onClick={() => setFilter("all")}
             >
-              全部
+              {t.work.all}
             </FilterButton>
             {categories.map((c) => (
               <FilterButton
@@ -94,6 +96,7 @@ function FilterButton({
 
 function ProjectCard({ project }: { project: Project }) {
   const ref = useReveal<HTMLAnchorElement>();
+  const { t } = useI18n();
   return (
     <Link
       ref={ref}
@@ -124,7 +127,7 @@ function ProjectCard({ project }: { project: Project }) {
           {project.summary}
         </p>
         <div className="mt-4 flex items-center gap-1 text-xs font-mono text-foreground-muted group-hover:text-accent transition-colors">
-          查看案例详情
+          {t.work.viewCase}
           <ArrowUpRight size={14} />
         </div>
       </div>
