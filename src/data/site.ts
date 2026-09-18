@@ -1,5 +1,39 @@
 import { TextValue } from "@/config/i18n";
 
+export interface LifecycleItem {
+  id: string;
+  title: TextValue;
+  content: TextValue;
+  image?: string;
+  pinned?: boolean;
+  createdAt: number;
+}
+
+export interface ArticleItem {
+  id: string;
+  title: TextValue;
+  slug: string;
+  excerpt: TextValue;
+  content: string;
+  category: string;
+  cover?: string;
+  tags: TextValue[];
+  publishedAt: number;
+  hidden?: boolean;
+}
+
+export interface SeoConfig {
+  title: TextValue;
+  description: TextValue;
+}
+
+export interface NavVisibility {
+  home: boolean;
+  work: boolean;
+  about: boolean;
+  contact: boolean;
+}
+
 export interface SiteConfig {
   name: TextValue;
   initials: TextValue;
@@ -32,6 +66,10 @@ export interface SiteConfig {
     company: TextValue;
     desc: TextValue;
   }[];
+  lifecycle: LifecycleItem[];
+  articles: ArticleItem[];
+  seo: SeoConfig;
+  navVisibility: NavVisibility;
 }
 
 export const siteConfig: SiteConfig = {
@@ -162,4 +200,19 @@ export const siteConfig: SiteConfig = {
       desc: { zh: "B 端 SaaS 产品设计师，完整参与一个产品从 MVP 到付费的全过程。", en: "B2B SaaS product designer, full lifecycle from MVP to paid product." },
     },
   ],
+  lifecycle: [],
+  articles: [],
+  seo: {
+    title: { zh: "NAVI · B 端 AI & Interaction Designer", en: "NAVI · B2B AI & Interaction Designer" },
+    description: {
+      zh: "B 端 AI & 交互设计师作品集网站。聚焦 AI 产品、企业级 SaaS、设计系统与复杂产品体验。",
+      en: "Portfolio of a B2B AI & Interaction Designer. Focused on AI products, enterprise SaaS, design systems, and complex product experiences.",
+    },
+  },
+  navVisibility: {
+    home: true,
+    work: true,
+    about: true,
+    contact: true,
+  },
 };

@@ -51,6 +51,23 @@ export interface Dict {
     skillTitle: string;
     expTag: string;
     expTitle: string;
+    resume: string;
+    life: string;
+    lifeEmpty: string;
+    lifeNew: string;
+    lifeEdit: string;
+    lifePin: string;
+    lifeUnpin: string;
+    lifeDelete: string;
+    lifeCover: string;
+    lifeCoverPH: string;
+    lifeTitlePH: string;
+    lifeContentPH: string;
+    lifeDaysAgo: string;
+    lifeToday: string;
+    lifeYesterday: string;
+    save: string;
+    cancel: string;
   };
   board: {
     tag: string;
@@ -109,6 +126,9 @@ export interface Dict {
     overview: string;
     projects: string;
     profile: string;
+    articles: string;
+    messages: string;
+    siteSettings: string;
     panel: string;
     save: string;
     saving: string;
@@ -236,6 +256,60 @@ export interface Dict {
       importN: string;
     };
   };
+  adminArticles: {
+    title: string;
+    subtitle: string;
+    newArticle: string;
+    editArticle: string;
+    emptyHint: string;
+    titlePH: string;
+    slugPH: string;
+    excerptPH: string;
+    categoryPH: string;
+    cancel: string;
+    save: string;
+    delete: string;
+    slug: string;
+    excerpt: string;
+    content: string;
+    category: string;
+    cover: string;
+    tags: string;
+    publishedAt: string;
+    hidden: string;
+    hiddenHint: string;
+    hiddenShow: string;
+    hiddenHide: string;
+    confirmDelete: string;
+  };
+  adminMessages: {
+    title: string;
+    subtitle: string;
+    emptyHint: string;
+    replies: string;
+    delete: string;
+    hidden: string;
+    show: string;
+    confirmDelete: string;
+  };
+  adminSiteSettings: {
+    title: string;
+    subtitle: string;
+    themeColor: string;
+    themeColorHint: string;
+    apply: string;
+    themePresets: { key: string; name: string; accent: string; bg: string }[];
+    navVisibility: string;
+    navVisibilityHint: string;
+    seo: string;
+    seoTitle: string;
+    seoTitlePH: string;
+    seoDesc: string;
+    seoDescPH: string;
+    social: string;
+    tagline: string;
+    taglinePH: string;
+  };
 }
 
 export const translations: Record<Lang, Dict> = {
@@ -292,6 +366,23 @@ export const translations: Record<Lang, Dict> = {
       skillTitle: "工具 & 能力",
       expTag: "经历",
       expTitle: "职业历程",
+      resume: "简历",
+      life: "生活",
+      lifeEmpty: "还没有生活动态，发布第一条吧",
+      lifeNew: "新动态",
+      lifeEdit: "编辑动态",
+      lifePin: "置顶",
+      lifeUnpin: "取消置顶",
+      lifeDelete: "删除",
+      lifeCover: "封面图",
+      lifeCoverPH: "点击上传封面图",
+      lifeTitlePH: "标题...",
+      lifeContentPH: "说点什么...",
+      lifeDaysAgo: "{n} 天前",
+      lifeToday: "今天",
+      lifeYesterday: "昨天",
+      save: "保存",
+      cancel: "取消",
     },
 
     board: {
@@ -358,6 +449,9 @@ export const translations: Record<Lang, Dict> = {
       overview: "概览",
       projects: "作品集",
       profile: "个人资料",
+      articles: "文章管理",
+      messages: "留言墙",
+      siteSettings: "网站设置",
       panel: "管理后台",
       save: "保存",
       saving: "保存中...",
@@ -491,6 +585,69 @@ export const translations: Record<Lang, Dict> = {
         importN: "导入 {n} 个画板",
       },
     },
+
+    adminArticles: {
+      title: "文章管理",
+      subtitle: "发布设计思考、案例复盘和随笔",
+      newArticle: "新建文章",
+      editArticle: "编辑文章",
+      emptyHint: "还没有文章，点击「新建文章」开始",
+      titlePH: "文章标题",
+      slugPH: "slug-auto",
+      excerptPH: "一句话摘要...",
+      categoryPH: "分类",
+      cancel: "取消",
+      save: "保存文章",
+      delete: "删除",
+      slug: "链接标识",
+      excerpt: "摘要",
+      content: "正文",
+      category: "分类",
+      cover: "封面",
+      tags: "标签",
+      publishedAt: "发布时间",
+      hidden: "隐藏",
+      hiddenHint: "前端不展示",
+      hiddenShow: "显示",
+      hiddenHide: "隐藏",
+      confirmDelete: "确定删除这篇文章？",
+    },
+
+    adminMessages: {
+      title: "留言墙",
+      subtitle: "查看访客留言、审核和删除",
+      emptyHint: "还没有留言",
+      replies: "{n} 条回复",
+      delete: "删除",
+      hidden: "隐藏",
+      show: "显示",
+      confirmDelete: "确定删除这条留言？",
+    },
+
+    adminSiteSettings: {
+      title: "网站设置",
+      subtitle: "主题色、导航显隐、SEO 和社交链接",
+      themeColor: "主题色",
+      themeColorHint: "选择一套预设色板，点击应用立即生效",
+      apply: "应用",
+      themePresets: [
+        { key: "midnight", name: "午夜", accent: "#6C8CFF", bg: "#0A0E1A" },
+        { key: "obsidian", name: "黑曜", accent: "#E879F9", bg: "#0B0B12" },
+        { key: "jade", name: "翡翠", accent: "#2DD4BF", bg: "#08140F" },
+        { key: "aurora", name: "极光", accent: "#FB7185", bg: "#120A14" },
+        { key: "arctic", name: "极地", accent: "#F59E0B", bg: "#0D1016" },
+      ],
+      navVisibility: "导航显隐",
+      navVisibilityHint: "控制顶部导航栏每个 tab 是否显示",
+      seo: "SEO",
+      seoTitle: "页面标题",
+      seoTitlePH: "浏览器标签页显示的标题",
+      seoDesc: "页面描述",
+      seoDescPH: "搜索引擎结果摘要",
+      social: "社交链接",
+      tagline: "站点 Slogan",
+      taglinePH: "一句话介绍自己...",
+    },
   },
 
   en: {
@@ -546,6 +703,23 @@ export const translations: Record<Lang, Dict> = {
       skillTitle: "Toolbox & capabilities",
       expTag: "Experience",
       expTitle: "Career path",
+      resume: "Resume",
+      life: "Life",
+      lifeEmpty: "No moments yet. Post the first one!",
+      lifeNew: "New Moment",
+      lifeEdit: "Edit Moment",
+      lifePin: "Pin",
+      lifeUnpin: "Unpin",
+      lifeDelete: "Delete",
+      lifeCover: "Cover Image",
+      lifeCoverPH: "Click to upload cover",
+      lifeTitlePH: "Title...",
+      lifeContentPH: "Say something...",
+      lifeDaysAgo: "{n} days ago",
+      lifeToday: "Today",
+      lifeYesterday: "Yesterday",
+      save: "Save",
+      cancel: "Cancel",
     },
 
     board: {
@@ -612,6 +786,9 @@ export const translations: Record<Lang, Dict> = {
       overview: "Overview",
       projects: "Projects",
       profile: "Profile",
+      articles: "Articles",
+      messages: "Messages",
+      siteSettings: "Site Settings",
       panel: "Admin Panel",
       save: "Save",
       saving: "Saving...",
@@ -744,6 +921,69 @@ export const translations: Record<Lang, Dict> = {
         importFailed: "Import failed",
         importN: "Import {n} frames",
       },
+    },
+
+    adminArticles: {
+      title: "Articles",
+      subtitle: "Publish design thoughts, case retrospectives, and notes",
+      newArticle: "New Article",
+      editArticle: "Edit Article",
+      emptyHint: "No articles yet. Click \"New Article\" to get started.",
+      titlePH: "Article title",
+      slugPH: "slug-auto",
+      excerptPH: "One-line summary...",
+      categoryPH: "Category",
+      cancel: "Cancel",
+      save: "Save Article",
+      delete: "Delete",
+      slug: "Slug",
+      excerpt: "Excerpt",
+      content: "Content",
+      category: "Category",
+      cover: "Cover",
+      tags: "Tags",
+      publishedAt: "Published at",
+      hidden: "Hidden",
+      hiddenHint: "Not visible on frontend",
+      hiddenShow: "Show",
+      hiddenHide: "Hide",
+      confirmDelete: "Delete this article?",
+    },
+
+    adminMessages: {
+      title: "Messages",
+      subtitle: "View visitor messages, moderate and delete",
+      emptyHint: "No messages yet",
+      replies: "{n} replies",
+      delete: "Delete",
+      hidden: "Hide",
+      show: "Show",
+      confirmDelete: "Delete this message?",
+    },
+
+    adminSiteSettings: {
+      title: "Site Settings",
+      subtitle: "Theme color, nav visibility, SEO, and social links",
+      themeColor: "Theme Color",
+      themeColorHint: "Pick a preset palette. Click apply to take effect immediately.",
+      apply: "Apply",
+      themePresets: [
+        { key: "midnight", name: "Midnight", accent: "#6C8CFF", bg: "#0A0E1A" },
+        { key: "obsidian", name: "Obsidian", accent: "#E879F9", bg: "#0B0B12" },
+        { key: "jade", name: "Jade", accent: "#2DD4BF", bg: "#08140F" },
+        { key: "aurora", name: "Aurora", accent: "#FB7185", bg: "#120A14" },
+        { key: "arctic", name: "Arctic", accent: "#F59E0B", bg: "#0D1016" },
+      ],
+      navVisibility: "Nav Visibility",
+      navVisibilityHint: "Control which tabs show in the top navigation",
+      seo: "SEO",
+      seoTitle: "Title",
+      seoTitlePH: "Browser tab title",
+      seoDesc: "Description",
+      seoDescPH: "Search engine summary",
+      social: "Social Links",
+      tagline: "Tagline",
+      taglinePH: "One-liner about you...",
     },
   },
 };

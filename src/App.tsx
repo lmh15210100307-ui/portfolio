@@ -9,6 +9,9 @@ import AdminLayout from "@/admin/AdminLayout";
 import AdminOverview from "@/admin/AdminOverview";
 import AdminProjects from "@/admin/AdminProjects";
 import AdminProfile from "@/admin/AdminProfile";
+import AdminArticles from "@/admin/AdminArticles";
+import AdminMessages from "@/admin/AdminMessages";
+import AdminSiteSettings from "@/admin/AdminSiteSettings";
 import { useAdminStore } from "@/store/admin";
 import { useSiteProtection } from "@/hooks/useSiteProtection";
 import { useTheme } from "@/hooks/useTheme";
@@ -34,6 +37,9 @@ export default function App() {
           <Route index element={<AdminOverview />} />
           <Route path="projects" element={<AdminProjects />} />
           <Route path="profile" element={<AdminProfile />} />
+          <Route path="articles" element={<AdminArticles />} />
+          <Route path="messages" element={<AdminMessages />} />
+          <Route path="site-settings" element={<AdminSiteSettings />} />
         </Route>
       </Routes>
     </Router>

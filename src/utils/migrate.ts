@@ -1,6 +1,6 @@
 import { TextValue } from "@/config/i18n";
 import { Project, ProjectMetric } from "@/data/projects";
-import { SiteConfig } from "@/data/site";
+import { SiteConfig, LifecycleItem, ArticleItem, SeoConfig, NavVisibility } from "@/data/site";
 
 function toBilingual(v: unknown): TextValue {
   if (v == null) return { zh: "", en: "" };
@@ -98,6 +98,60 @@ function migrateSite(s: unknown): SiteConfig {
         };
       })
     : [];
+
+  const lifecycle: LifecycleItem[] = Array.isArray(src.lifecycle)
+    ? src.lifecycle.map((it: unknown): LifecycleItem => {
+        const o = (it || {}) as Record<string, unknown>;
+        return {
+          id: typeof o.id === "string" ? o.id : crypto.randomUUID(),
+          title: toBilingual(o.title),
+          content: toBilingual(o.content),
+          image: typeof o.image === "string" ? o.image : undefined,
+          pinned: !!o.pinned,
+          createdAt: typeof o.createdAt === "number" ? o.createdAt : Date.now(),
+        };
+      })
+    : [];
+
+  const articles: ArticleItem[] = Array.isArray(src.articles)
+    ? src.articles.map((a: unknown): ArticleItem => {
+        const o = (a || {}) as Record<string, unknown>;
+        return {
+          id: typeof o.id === "string" ? o.id : crypto.randomUUID(),
+          title: toBilingual(o.title),
+          slug: typeof o.slug === "string" ? o.slug : "",
+          excerpt: toBilingual(o.excerpt),
+          content: typeof o.content === "string" ? o.content : "",
+          category: typeof o.category === "string" ? o.category : "",
+          cover: typeof o.cover === "string" ? o.cover : undefined,
+          tags: toBilingualArr(o.tags),
+          publishedAt: typeof o.publishedAt === "number" ? o.publishedAt : Date.now(),
+          hidden: !!o.hidden,
+        };
+      })
+    : [];
+
+  const seo: SeoConfig = (() => {
+    if (src.seo && typeof src.seo === "object") {
+      const s = src.seo as Record<string, unknown>;
+      return { title: toBilingual(s.title), description: toBilingual(s.description) };
+    }
+    return { title: toBilingual(src.name), description: toBilingual(src.bio) };
+  })();
+
+  const navVisibility: NavVisibility = (() => {
+    if (src.navVisibility && typeof src.navVisibility === "object") {
+      const n = src.navVisibility as Record<string, unknown>;
+      return {
+        home: n.home !== false,
+        work: n.work !== false,
+        about: n.about !== false,
+        contact: n.contact !== false,
+      };
+    }
+    return { home: true, work: true, about: true, contact: true };
+  })();
+
   return {
     name: toBilingual(src.name),
     initials: toBilingual(src.initials),
@@ -117,6 +171,10 @@ function migrateSite(s: unknown): SiteConfig {
     skills,
     methodology,
     experience,
+    lifecycle,
+    articles,
+    seo,
+    navVisibility,
   } as SiteConfig;
 }
 
