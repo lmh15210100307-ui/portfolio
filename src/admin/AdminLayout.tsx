@@ -7,6 +7,9 @@ import {
   Upload,
   Eye,
   Save,
+  FileText,
+  MessageSquare,
+  Settings,
 } from "lucide-react";
 import { useAdminStore } from "@/store/admin";
 import { useState, useEffect } from "react";
@@ -18,6 +21,9 @@ export default function AdminLayout() {
     { to: "/admin", label: t.admin.overview, icon: LayoutDashboard, end: true },
     { to: "/admin/projects", label: t.admin.projects, icon: FolderKanban },
     { to: "/admin/profile", label: t.admin.profile, icon: UserCog },
+    { to: "/admin/articles", label: t.admin.articles, icon: FileText },
+    { to: "/admin/messages", label: t.admin.messages, icon: MessageSquare },
+    { to: "/admin/site-settings", label: t.admin.siteSettings, icon: Settings },
   ];
   const { projects, persist, load, loaded, export: exportData, importJSON, reset } = useAdminStore();
   const [saving, setSaving] = useState(false);
