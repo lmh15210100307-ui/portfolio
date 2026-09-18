@@ -9,24 +9,16 @@
     <script>
       (function () {
         try {
-          var saved = localStorage.getItem("navi_portfolio_theme") || "midnight";
-          var root = document.documentElement;
-          root.setAttribute("data-theme", saved);
-          if (saved === "arctic") {
-            root.classList.add("light");
-          } else {
-            root.classList.add("dark");
+          var theme = localStorage.getItem("navi_portfolio_theme");
+          if (theme !== "dark" && theme !== "light") {
+            theme = window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light";
           }
-          var map = {
-            midnight:  { "--background": "#0a0e1a", "--background-card": "#141b2d", "--background-elevated": "#1e2740", "--foreground": "#f0f2f8", "--foreground-muted": "#7b85a0", "--foreground-subtle": "#3d4560", "--accent": "#6c8cff", "--accent-hover": "#8fa8ff", "--border": "#222c44", "--border-light": "#2e3a58", "--selection-bg": "#6c8cff", "--scrollbar-thumb": "#222c44", "--scrollbar-track": "#0a0e1a", "--glow": "rgba(108, 140, 255, 0.15)", "--mask-opacity": "0.04" },
-            obsidian:  { "--background": "#0b0b10", "--background-card": "#181820", "--background-elevated": "#25252e", "--foreground": "#f2f1f7", "--foreground-muted": "#767580", "--foreground-subtle": "#3c3b44", "--accent": "#a78bfa", "--accent-hover": "#c4b5fd", "--border": "#26262f", "--border-light": "#33333d", "--selection-bg": "#a78bfa", "--scrollbar-thumb": "#26262f", "--scrollbar-track": "#0b0b10", "--glow": "rgba(167, 139, 250, 0.15)", "--mask-opacity": "0.04" },
-            jade:      { "--background": "#0c1212", "--background-card": "#151f1f", "--background-elevated": "#1e2c2c", "--foreground": "#eaf2f0", "--foreground-muted": "#708884", "--foreground-subtle": "#384846", "--accent": "#4ade80", "--accent-hover": "#86efac", "--border": "#20302f", "--border-light": "#2c3e3d", "--selection-bg": "#4ade80", "--scrollbar-thumb": "#20302f", "--scrollbar-track": "#0c1212", "--glow": "rgba(74, 222, 128, 0.13)", "--mask-opacity": "0.04" },
-            aurora:    { "--background": "#141012", "--background-card": "#1e191b", "--background-elevated": "#2a2426", "--foreground": "#f5efea", "--foreground-muted": "#9c8880", "--foreground-subtle": "#4a3f3a", "--accent": "#fb923c", "--accent-hover": "#fdba74", "--border": "#2e2629", "--border-light": "#3d3437", "--selection-bg": "#fb923c", "--scrollbar-thumb": "#2e2629", "--scrollbar-track": "#141012", "--glow": "rgba(251, 146, 60, 0.14)", "--mask-opacity": "0.04" },
-            arctic:    { "--background": "#f7f7f8", "--background-card": "#ffffff", "--background-elevated": "#ffffff", "--foreground": "#0d0d12", "--foreground-muted": "#6b6b72", "--foreground-subtle": "#c4c4ca", "--accent": "#2563eb", "--accent-hover": "#3b82f6", "--border": "#e5e5ea", "--border-light": "#d1d1d6", "--selection-bg": "#2563eb", "--scrollbar-thumb": "#d1d1d6", "--scrollbar-track": "#f7f7f8", "--glow": "rgba(37, 99, 235, 0.10)", "--mask-opacity": "0.06" }
-          };
-          var vars = map[saved] || map.midnight;
-          Object.keys(vars).forEach(function(k) { root.style.setProperty(k, vars[k]); });
-        } catch (e) {}
+          var root = document.documentElement;
+          root.classList.add(theme);
+          root.lang = (localStorage.getItem("navi_portfolio_lang") === "en") ? "en" : "zh-CN";
+        } catch (e) {
+          document.documentElement.classList.add("dark");
+        }
       })();
     </script>
     <script type="module">

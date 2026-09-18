@@ -1,123 +1,15 @@
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect } from "react";
 import { Link, NavLink } from "react-router-dom";
 import { motion, AnimatePresence } from "framer-motion";
-import { Menu, X, Palette, Check } from "lucide-react";
+import { Menu, X, Sun, Moon, Globe } from "lucide-react";
 import { useAdminStore } from "@/store/admin";
 import { useTheme } from "@/hooks/useTheme";
-
-const navItems = [
-  { to: "/", label: "首页" },
-  { to: "/work", label: "作品" },
-  { to: "/about", label: "关于" },
-  { to: "/contact", label: "联系" },
-];
-
-function ThemeSwitcher() {
-  const { themeId, setTheme, themes } = useTheme();
-  const [open, setOpen] = useState(false);
-  const ref = useRef<HTMLDivElement>(null);
-
-  useEffect(() => {
-    function onDocClick(e: MouseEvent) {
-      if (ref.current && !ref.current.contains(e.target as Node)) {
-        setOpen(false);
-      }
-    }
-    document.addEventListener("mousedown", onDocClick);
-    return () => document.removeEventListener("mousedown", onDocClick);
-  }, []);
-
-  return (
-    <div className="relative" ref={ref}>
-      <button
-        onClick={() => setOpen((v) => !v)}
-        className="inline-flex items-center gap-1.5 rounded-pill border border-border bg-background-card/60 px-3 py-1.5 text-xs font-medium text-foreground-muted hover:text-foreground hover:border-accent/50 transition-all"
-        aria-label="切换主题"
-      >
-        <Palette size={14} />
-        <span className="hidden sm:inline">主题</span>
-        <span
-          className="w-3 h-3 rounded-full ring-1 ring-border"
-          style={{ backgroundColor: `var(--accent)` }}
-        />
-      </button>
-
-      <AnimatePresence>
-        {open && (
-          <motion.div
-            initial={{ opacity: 0, y: -4, scale: 0.96 }}
-            animate={{ opacity: 1, y: 0, scale: 1 }}
-            exit={{ opacity: 0, y: -4, scale: 0.96 }}
-            transition={{ duration: 0.15, ease: "easeOut" }}
-            className="absolute right-0 mt-2 w-64 rounded-card border border-border bg-background-card p-2 shadow-xl z-50"
-          >
-            <div className="px-2 py-1.5 mb-1">
-              <p className="text-[10px] font-mono uppercase tracking-wider text-foreground-subtle">
-                配色方案
-              </p>
-            </div>
-            <div className="space-y-0.5">
-              {themes.map((t) => {
-                const selected = themeId === t.id;
-                return (
-                  <button
-                    key={t.id}
-                    onClick={() => {
-                      setTheme(t.id);
-                      setOpen(false);
-                    }}
-                    className={`w-full flex items-center gap-3 rounded-button px-2.5 py-2 text-left transition-all ${
-                      selected
-                        ? "bg-accent/10 text-foreground"
-                        : "hover:bg-background-elevated text-foreground-muted hover:text-foreground"
-                    }`}
-                  >
-                    <div className="flex items-center -space-x-1">
-                      <span
-                        className="w-5 h-5 rounded-full border border-border/80"
-                        style={{ backgroundColor: t.colors["--background"] }}
-                      />
-                      <span
-                        className="w-5 h-5 rounded-full border border-border/80"
-                        style={{ backgroundColor: t.colors["--background-card"] }}
-                      />
-                      <span
-                        className="w-5 h-5 rounded-full border border-border/80"
-                        style={{ backgroundColor: t.colors["--accent"] }}
-                      />
-                    </div>
-                    <div className="flex-1 min-w-0">
-                      <div className="flex items-center gap-1.5">
-                        <span className="text-sm font-medium truncate">
-                          {t.name}
-                        </span>
-                        <span className="text-[10px] font-mono text-foreground-subtle uppercase">
-                          {t.mode === "dark" ? "深色" : "浅色"}
-                        </span>
-                      </div>
-                      <p className="text-xs text-foreground-subtle truncate">
-                        {t.description}
-                      </p>
-                    </div>
-                    {selected && (
-                      <Check
-                        size={14}
-                        className="text-accent flex-shrink-0"
-                      />
-                    )}
-                  </button>
-                );
-              })}
-            </div>
-          </motion.div>
-        )}
-      </AnimatePresence>
-    </div>
-  );
-}
+import { useI18n } from "@/hooks/useI18n";
 
 export default function Header() {
   const site = useAdminStore((s) => s.site);
+  const { mode, toggle: toggleTheme, isDark } = useTheme();
+  const { lang, toggle: toggleLang, t } = useI18n();
   const [scrolled, setScrolled] = useState(false);
   const [mobileOpen, setMobileOpen] = useState(false);
 
@@ -149,39 +41,155 @@ export default function Header() {
         </Link>
 
         <nav className="hidden md:flex items-center gap-1">
-          {navItems.map((item) => (
-            <NavLink
-              key={item.to}
-              to={item.to}
-              end={item.to === "/"}
-              className={({ isActive }) =>
-                `relative px-4 py-2 rounded-pill text-sm font-medium transition-all ${
-                  isActive
-                    ? "text-foreground"
-                    : "text-foreground-muted hover:text-foreground"
-                }`
-              }
+          <NavLink
+            to="/"
+            end
+            className={({ isActive }) =>
+              `relative px-4 py-2 rounded-pill text-sm font-medium transition-all ${
+                isActive
+                  ? "text-foreground"
+                  : "text-foreground-muted hover:text-foreground"
+              }`
+            }
+          >
+            {({ isActive }) => (
+              <>
+                {t.nav.home}
+                {isActive && (
+                  <motion.div
+                    layoutId="nav-pill"
+                    className="absolute inset-0 bg-background-card border border-border rounded-pill -z-10"
+                    transition={{ type: "spring", bounce: 0.25 }}
+                  />
+                )}
+              </>
+            )}
+          </NavLink>
+          <NavLink
+            to="/work"
+            className={({ isActive }) =>
+              `relative px-4 py-2 rounded-pill text-sm font-medium transition-all ${
+                isActive
+                  ? "text-foreground"
+                  : "text-foreground-muted hover:text-foreground"
+              }`
+            }
+          >
+            {({ isActive }) => (
+              <>
+                {t.nav.work}
+                {isActive && (
+                  <motion.div
+                    layoutId="nav-pill"
+                    className="absolute inset-0 bg-background-card border border-border rounded-pill -z-10"
+                    transition={{ type: "spring", bounce: 0.25 }}
+                  />
+                )}
+              </>
+            )}
+          </NavLink>
+          <NavLink
+            to="/about"
+            className={({ isActive }) =>
+              `relative px-4 py-2 rounded-pill text-sm font-medium transition-all ${
+                isActive
+                  ? "text-foreground"
+                  : "text-foreground-muted hover:text-foreground"
+              }`
+            }
+          >
+            {({ isActive }) => (
+              <>
+                {t.nav.about}
+                {isActive && (
+                  <motion.div
+                    layoutId="nav-pill"
+                    className="absolute inset-0 bg-background-card border border-border rounded-pill -z-10"
+                    transition={{ type: "spring", bounce: 0.25 }}
+                  />
+                )}
+              </>
+            )}
+          </NavLink>
+          <NavLink
+            to="/contact"
+            className={({ isActive }) =>
+              `relative px-4 py-2 rounded-pill text-sm font-medium transition-all ${
+                isActive
+                  ? "text-foreground"
+                  : "text-foreground-muted hover:text-foreground"
+              }`
+            }
+          >
+            {({ isActive }) => (
+              <>
+                {t.nav.contact}
+                {isActive && (
+                  <motion.div
+                    layoutId="nav-pill"
+                    className="absolute inset-0 bg-background-card border border-border rounded-pill -z-10"
+                    transition={{ type: "spring", bounce: 0.25 }}
+                  />
+                )}
+              </>
+            )}
+          </NavLink>
+
+          <div className="ml-3 flex items-center gap-1">
+            <button
+              onClick={toggleTheme}
+              aria-label={isDark ? "Switch to light mode" : "Switch to dark mode"}
+              title={isDark ? t.header.light : t.header.dark}
+              className="w-9 h-9 flex items-center justify-center rounded-pill border border-border hover:border-accent/50 text-foreground-muted hover:text-accent transition-all"
             >
-              {({ isActive }) => (
-                <>
-                  {item.label}
-                  {isActive && (
-                    <motion.div
-                      layoutId="nav-pill"
-                      className="absolute inset-0 bg-background-card border border-border rounded-pill -z-10"
-                      transition={{ type: "spring", bounce: 0.25 }}
-                    />
-                  )}
-                </>
+              <AnimatePresence mode="wait" initial={false}>
+                <motion.span
+                  key={mode}
+                  initial={{ rotate: -90, opacity: 0, scale: 0.5 }}
+                  animate={{ rotate: 0, opacity: 1, scale: 1 }}
+                  exit={{ rotate: 90, opacity: 0, scale: 0.5 }}
+                  transition={{ duration: 0.2 }}
+                >
+                  {isDark ? <Sun size={16} /> : <Moon size={16} />}
+                </motion.span>
+              </AnimatePresence>
+            </button>
+
+            <button
+              onClick={toggleLang}
+              aria-label="Switch language"
+              title={lang === "zh" ? "English" : "中文"}
+              className="w-9 h-9 flex items-center justify-center rounded-pill border border-border hover:border-accent/50 text-foreground-muted hover:text-accent transition-all font-mono text-xs font-bold"
+            >
+              {lang === "zh" ? "EN" : (
+                <AnimatePresence mode="wait" initial={false}>
+                  <motion.span
+                    key="en-ico"
+                    initial={{ scale: 0.5, opacity: 0 }}
+                    animate={{ scale: 1, opacity: 1 }}
+                    exit={{ scale: 0.5, opacity: 0 }}
+                  >
+                    <Globe size={14} />
+                  </motion.span>
+                </AnimatePresence>
               )}
-            </NavLink>
-          ))}
-          <div className="ml-2">
-            <ThemeSwitcher />
+            </button>
           </div>
         </nav>
 
         <div className="md:hidden flex items-center gap-2">
+          <button
+            onClick={toggleTheme}
+            className="w-9 h-9 flex items-center justify-center rounded-pill border border-border text-foreground-muted"
+          >
+            {isDark ? <Sun size={16} /> : <Moon size={16} />}
+          </button>
+          <button
+            onClick={toggleLang}
+            className="w-9 h-9 flex items-center justify-center rounded-pill border border-border text-foreground-muted font-mono text-xs font-bold"
+          >
+            {lang === "zh" ? "EN" : "中"}
+          </button>
           <button
             onClick={() => setMobileOpen(!mobileOpen)}
             className="p-2 -mr-2 text-foreground-muted hover:text-foreground"
@@ -200,19 +208,10 @@ export default function Header() {
             className="md:hidden overflow-hidden bg-background/95 backdrop-blur-xl border-b border-border"
           >
             <nav className="container py-4 flex flex-col gap-1">
-              {navItems.map((item) => (
-                <Link
-                  key={item.to}
-                  to={item.to}
-                  onClick={() => setMobileOpen(false)}
-                  className="px-4 py-3 rounded-button text-base font-medium text-foreground-muted hover:text-foreground hover:bg-background-card transition-all"
-                >
-                  {item.label}
-                </Link>
-              ))}
-              <div className="px-4 pt-2">
-                <ThemeSwitcher />
-              </div>
+              <Link to="/" onClick={() => setMobileOpen(false)} className="px-4 py-3 rounded-button text-base font-medium text-foreground-muted hover:text-foreground hover:bg-background-card transition-all">{t.nav.home}</Link>
+              <Link to="/work" onClick={() => setMobileOpen(false)} className="px-4 py-3 rounded-button text-base font-medium text-foreground-muted hover:text-foreground hover:bg-background-card transition-all">{t.nav.work}</Link>
+              <Link to="/about" onClick={() => setMobileOpen(false)} className="px-4 py-3 rounded-button text-base font-medium text-foreground-muted hover:text-foreground hover:bg-background-card transition-all">{t.nav.about}</Link>
+              <Link to="/contact" onClick={() => setMobileOpen(false)} className="px-4 py-3 rounded-button text-base font-medium text-foreground-muted hover:text-foreground hover:bg-background-card transition-all">{t.nav.contact}</Link>
             </nav>
           </motion.div>
         )}

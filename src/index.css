@@ -14,7 +14,8 @@
 @tailwind components;
 @tailwind utilities;
 
-html[data-theme="midnight"] {
+:root,
+html.dark {
   --background: #0a0e1a;
   --background-card: #141b2d;
   --background-elevated: #1e2740;
@@ -32,61 +33,7 @@ html[data-theme="midnight"] {
   --mask-opacity: 0.04;
 }
 
-html[data-theme="obsidian"] {
-  --background: #0b0b10;
-  --background-card: #181820;
-  --background-elevated: #25252e;
-  --foreground: #f2f1f7;
-  --foreground-muted: #767580;
-  --foreground-subtle: #3c3b44;
-  --accent: #a78bfa;
-  --accent-hover: #c4b5fd;
-  --border: #26262f;
-  --border-light: #33333d;
-  --selection-bg: #a78bfa;
-  --scrollbar-thumb: #26262f;
-  --scrollbar-track: #0b0b10;
-  --glow: rgba(167, 139, 250, 0.15);
-  --mask-opacity: 0.04;
-}
-
-html[data-theme="jade"] {
-  --background: #0c1212;
-  --background-card: #151f1f;
-  --background-elevated: #1e2c2c;
-  --foreground: #eaf2f0;
-  --foreground-muted: #708884;
-  --foreground-subtle: #384846;
-  --accent: #4ade80;
-  --accent-hover: #86efac;
-  --border: #20302f;
-  --border-light: #2c3e3d;
-  --selection-bg: #4ade80;
-  --scrollbar-thumb: #20302f;
-  --scrollbar-track: #0c1212;
-  --glow: rgba(74, 222, 128, 0.13);
-  --mask-opacity: 0.04;
-}
-
-html[data-theme="aurora"] {
-  --background: #141012;
-  --background-card: #1e191b;
-  --background-elevated: #2a2426;
-  --foreground: #f5efea;
-  --foreground-muted: #9c8880;
-  --foreground-subtle: #4a3f3a;
-  --accent: #fb923c;
-  --accent-hover: #fdba74;
-  --border: #2e2629;
-  --border-light: #3d3437;
-  --selection-bg: #fb923c;
-  --scrollbar-thumb: #2e2629;
-  --scrollbar-track: #141012;
-  --glow: rgba(251, 146, 60, 0.14);
-  --mask-opacity: 0.04;
-}
-
-html[data-theme="arctic"] {
+html.light {
   --background: #f7f7f8;
   --background-card: #ffffff;
   --background-elevated: #ffffff;
@@ -100,7 +47,7 @@ html[data-theme="arctic"] {
   --selection-bg: #2563eb;
   --scrollbar-thumb: #d1d1d6;
   --scrollbar-track: #f7f7f8;
-  --glow: rgba(37, 99, 235, 0.10);
+  --glow: rgba(37, 99, 235, 0.1);
   --mask-opacity: 0.06;
 }
 
