@@ -1,7 +1,3 @@
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
-
 @import "@fontsource/space-grotesk";
 @import "@fontsource/space-grotesk/500.css";
 @import "@fontsource/space-grotesk/600.css";
@@ -13,6 +9,10 @@
 @import "@fontsource/inter/700.css";
 @import "@fontsource/jetbrains-mono";
 @import "@fontsource/jetbrains-mono/500.css";
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
 
 html[data-theme="midnight"] {
   --background: #0a0e1a;
