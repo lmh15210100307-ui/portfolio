@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { create } from "zustand";
 import { ThemeMode, applyTheme } from "@/config/themes";
 
 const STORAGE_KEY = "navi_portfolio_theme";
@@ -13,20 +13,45 @@ function resolveInitialTheme(): ThemeMode {
     : "light";
 }
 
-export function useTheme() {
-  const [mode, setMode] = useState<ThemeMode>(resolveInitialTheme);
+interface ThemeState {
+  mode: ThemeMode;
+  setMode: (m: ThemeMode) => void;
+  toggle: () => void;
+}
 
-  useEffect(() => {
+export const useThemeStore = create<ThemeState>((set) => ({
+  mode: resolveInitialTheme(),
+  setMode: (mode) => {
     applyTheme(mode);
     try {
       localStorage.setItem(STORAGE_KEY, mode);
     } catch {}
-  }, [mode]);
+    set({ mode });
+  },
+  toggle: () => {
+    set((state) => {
+      const mode = state.mode === "dark" ? "light" : "dark";
+      applyTheme(mode);
+      try {
+        localStorage.setItem(STORAGE_KEY, mode);
+      } catch {}
+      return { mode };
+    });
+  },
+}));
+
+// 初始化时应用主题（在 React 渲染前）
+applyTheme(useThemeStore.getState().mode);
+
+export function useTheme() {
+  const mode = useThemeStore((s) => s.mode);
+  const setMode = useThemeStore((s) => s.setMode);
+  const toggle = useThemeStore((s) => s.toggle);
 
   return {
     mode,
     setMode,
-    toggle: () => setMode((m) => (m === "dark" ? "light" : "dark")),
+    toggle,
     isDark: mode === "dark",
   };
 }
