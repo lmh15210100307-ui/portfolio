@@ -6,6 +6,7 @@ import { Project } from "@/data/projects";
 import Badge from "@/components/UI/Badge";
 import { useReveal } from "@/hooks/useReveal";
 import { useI18n } from "@/hooks/useI18n";
+import { TextValue } from "@/config/i18n";
 
 function BentoCard({
   project,
@@ -15,7 +16,7 @@ function BentoCard({
   variant?: "default" | "large" | "tall" | "wide";
 }) {
   const ref = useReveal<HTMLDivElement>();
-  const { t } = useI18n();
+  const { t, pick } = useI18n();
 
   const gridClasses = {
     default: "col-span-1 md:col-span-2 lg:col-span-3 lg:row-span-1",
@@ -43,9 +44,9 @@ function BentoCard({
       } p-6 md:p-7 flex flex-col justify-between`}>
         <div className="flex items-start justify-between">
           <div className="flex flex-wrap gap-1.5">
-            {project.highlights.slice(0, 2).map((h) => (
-              <Badge key={h} variant="outline" size="sm">
-                {h}
+            {(project.highlights as TextValue[]).slice(0, 2).map((h, idx) => (
+              <Badge key={idx} variant="outline" size="sm">
+                {pick(h)}
               </Badge>
             ))}
           </div>
@@ -56,10 +57,10 @@ function BentoCard({
 
         <div className="mt-auto">
           <h3 className="font-display font-semibold text-xl md:text-2xl lg:text-3xl leading-tight mb-1.5 group-hover:text-accent transition-colors">
-            {project.title}
+            {pick(project.title as TextValue)}
           </h3>
           <p className="text-sm text-foreground-muted line-clamp-2 max-w-md">
-            {project.subtitle} · {project.summary}
+            {pick(project.subtitle as TextValue)} · {pick(project.summary as TextValue)}
           </p>
 
           <div className="mt-4 flex items-center gap-2 text-foreground-muted group-hover:text-foreground transition-colors">

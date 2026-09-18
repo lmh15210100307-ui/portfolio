@@ -5,7 +5,7 @@ import { useI18n } from "@/hooks/useI18n";
 
 export default function Footer() {
   const site = useAdminStore((s) => s.site);
-  const { t } = useI18n();
+  const { t, pick } = useI18n();
   const year = new Date().getFullYear();
   return (
     <footer className="relative z-10 border-t border-border bg-background">
@@ -14,14 +14,14 @@ export default function Footer() {
           <div className="lg:col-span-5">
             <div className="flex items-center gap-3 mb-6">
               <div className="w-9 h-9 rounded-card bg-accent/10 border border-accent/30 flex items-center justify-center font-display font-bold text-accent text-sm">
-                {site.initials}
+                {pick(site.initials)}
               </div>
               <span className="font-display font-semibold text-lg">
-                {site.name}
+                {pick(site.name)}
               </span>
             </div>
             <p className="text-foreground-muted text-sm leading-relaxed max-w-sm mb-8">
-              {site.philosophyHighlight}
+              {pick(site.philosophyHighlight)}
             </p>
             <a
               href={`mailto:${site.email}`}
@@ -90,7 +90,7 @@ export default function Footer() {
 
         <div className="mt-16 pt-8 border-t border-border/50 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
           <div className="text-xs font-mono text-foreground-subtle leading-relaxed">
-            © {year} {site.name}. {t.footer.copyright}
+            © {year} {pick(site.name)}. {t.footer.copyright}
           </div>
           <p className="text-xs font-mono text-foreground-subtle whitespace-nowrap">
             {site.location}

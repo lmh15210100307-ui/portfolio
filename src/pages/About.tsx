@@ -5,6 +5,7 @@ import Footer from "@/components/Layout/Footer";
 import { useAdminStore } from "@/store/admin";
 import { useReveal } from "@/hooks/useReveal";
 import { useI18n } from "@/hooks/useI18n";
+import { TextValue } from "@/config/i18n";
 
 const iconMap: Record<string, React.ReactNode> = {
   LayoutGrid: <LayoutGrid size={20} />,
@@ -15,7 +16,7 @@ const iconMap: Record<string, React.ReactNode> = {
 
 export default function About() {
   const site = useAdminStore((s) => s.site);
-  const { t } = useI18n();
+  const { t, pick } = useI18n();
   return (
     <div className="relative">
       <div className="noise-bg" />
@@ -32,7 +33,7 @@ export default function About() {
               <div className="aspect-square rounded-card bg-gradient-to-br from-accent/30 via-purple-500/20 to-pink-500/20 flex items-center justify-center relative overflow-hidden max-w-sm mx-auto lg:mx-0">
                 <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_40%,rgba(255,255,255,0.1),transparent_60%)]" />
                 <span className="relative font-display font-bold text-6xl sm:text-7xl lg:text-9xl text-foreground/20">
-                  {site.initials}
+                  {pick(site.initials)}
                 </span>
               </div>
             </div>
@@ -41,7 +42,7 @@ export default function About() {
                 {t.about.tag}
               </p>
               <h1 className="font-display font-bold text-4xl md:text-5xl lg:text-6xl leading-tight mb-6">
-                {t.about.greeting} {site.name}。 <br />
+                {t.about.greeting} {pick(site.name)}。 <br />
                 <span className="text-foreground-muted">{t.about.bioLead} </span>
                 <span className="bg-gradient-to-r from-accent via-blue-400 to-purple-400 bg-clip-text text-transparent">
                   {t.about.bioHighlight}
@@ -49,7 +50,7 @@ export default function About() {
                 。
               </h1>
               <p className="text-lg text-foreground-muted leading-relaxed max-w-2xl">
-                {site.bio}
+                {pick(site.bio)}
               </p>
               <div className="mt-8 flex flex-wrap items-center gap-4 text-sm text-foreground-muted">
                 <span className="inline-flex items-center gap-2">
@@ -77,7 +78,7 @@ export default function About() {
             <SectionTitle label={t.about.skillTag} title={t.about.skillTitle} />
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
               {site.skills.map((s, i) => (
-                <SkillCard key={s.category} skill={s} index={i} />
+                <SkillCard key={i} skill={s} index={i} />
               ))}
             </div>
           </div>
@@ -117,10 +118,11 @@ function MethodCard({
   item,
   index,
 }: {
-  item: { step: string; title: string; desc: string };
+  item: { step: string; title: TextValue; desc: TextValue };
   index: number;
 }) {
   const ref = useReveal<HTMLDivElement>();
+  const { pick } = useI18n();
   return (
     <div
       ref={ref}
@@ -129,10 +131,10 @@ function MethodCard({
     >
       <div className="font-mono text-xs text-accent mb-4">{item.step}</div>
       <h3 className="font-display font-semibold text-lg lg:text-xl mb-3">
-        {item.title}
+        {pick(item.title)}
       </h3>
       <p className="text-sm text-foreground-muted leading-relaxed">
-        {item.desc}
+        {pick(item.desc)}
       </p>
     </div>
   );
@@ -142,10 +144,11 @@ function SkillCard({
   skill,
   index,
 }: {
-  skill: { category: string; icon: string; items: string[] };
+  skill: { category: TextValue; icon: string; items: TextValue[] };
   index: number;
 }) {
   const ref = useReveal<HTMLDivElement>();
+  const { pick } = useI18n();
   return (
     <div
       ref={ref}
@@ -156,15 +159,15 @@ function SkillCard({
         <div className="w-9 h-9 rounded-button bg-accent/10 border border-accent/20 flex items-center justify-center text-accent">
           {iconMap[skill.icon]}
         </div>
-        <h3 className="font-display font-semibold text-lg">{skill.category}</h3>
+        <h3 className="font-display font-semibold text-lg">{pick(skill.category)}</h3>
       </div>
       <div className="flex flex-wrap gap-1.5">
-        {skill.items.map((item) => (
+        {skill.items.map((item, j) => (
           <span
-            key={item}
+            key={j}
             className="text-xs font-mono text-foreground-muted rounded-pill border border-border px-2.5 py-1"
           >
-            {item}
+            {pick(item)}
           </span>
         ))}
       </div>
@@ -176,10 +179,11 @@ function ExpItem({
   exp,
   index,
 }: {
-  exp: { year: string; role: string; company: string; desc: string };
+  exp: { year: string; role: TextValue; company: TextValue; desc: TextValue };
   index: number;
 }) {
   const ref = useReveal<HTMLDivElement>();
+  const { pick } = useI18n();
   return (
     <div ref={ref} className="reveal relative pl-12 lg:pl-16">
       <div className="absolute left-2.5 lg:left-3.5 top-2 w-3 h-3 rounded-full bg-accent ring-4 ring-background" />
@@ -187,13 +191,13 @@ function ExpItem({
         {exp.year}
       </span>
       <h3 className="font-display font-semibold text-lg lg:text-xl">
-        {exp.role}
+        {pick(exp.role)}
         <span className="text-foreground-muted font-normal text-base ml-2">
-          @ {exp.company}
+          @ {pick(exp.company)}
         </span>
       </h3>
       <p className="mt-2 text-sm lg:text-base text-foreground-muted leading-relaxed">
-        {exp.desc}
+        {pick(exp.desc)}
       </p>
     </div>
   );
