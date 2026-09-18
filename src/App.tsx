@@ -11,6 +11,7 @@ import AdminProjects from "@/admin/AdminProjects";
 import AdminProfile from "@/admin/AdminProfile";
 import { useAdminStore } from "@/store/admin";
 import { useSiteProtection } from "@/hooks/useSiteProtection";
+import { useTheme } from "@/hooks/useTheme";
 
 export default function App() {
   const load = useAdminStore((s) => s.load);
@@ -18,6 +19,7 @@ export default function App() {
     load();
   }, [load]);
 
+  useTheme();
   useSiteProtection();
 
   return (

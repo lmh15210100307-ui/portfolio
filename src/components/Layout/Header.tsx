@@ -1,8 +1,9 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { Link, NavLink } from "react-router-dom";
 import { motion, AnimatePresence } from "framer-motion";
-import { Menu, X } from "lucide-react";
+import { Menu, X, Palette, Check } from "lucide-react";
 import { useAdminStore } from "@/store/admin";
+import { useTheme } from "@/hooks/useTheme";
 
 const navItems = [
   { to: "/", label: "首页" },
@@ -10,6 +11,110 @@ const navItems = [
   { to: "/about", label: "关于" },
   { to: "/contact", label: "联系" },
 ];
+
+function ThemeSwitcher() {
+  const { themeId, setTheme, themes } = useTheme();
+  const [open, setOpen] = useState(false);
+  const ref = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    function onDocClick(e: MouseEvent) {
+      if (ref.current && !ref.current.contains(e.target as Node)) {
+        setOpen(false);
+      }
+    }
+    document.addEventListener("mousedown", onDocClick);
+    return () => document.removeEventListener("mousedown", onDocClick);
+  }, []);
+
+  return (
+    <div className="relative" ref={ref}>
+      <button
+        onClick={() => setOpen((v) => !v)}
+        className="inline-flex items-center gap-1.5 rounded-pill border border-border bg-background-card/60 px-3 py-1.5 text-xs font-medium text-foreground-muted hover:text-foreground hover:border-accent/50 transition-all"
+        aria-label="切换主题"
+      >
+        <Palette size={14} />
+        <span className="hidden sm:inline">主题</span>
+        <span
+          className="w-3 h-3 rounded-full ring-1 ring-border"
+          style={{ backgroundColor: `var(--accent)` }}
+        />
+      </button>
+
+      <AnimatePresence>
+        {open && (
+          <motion.div
+            initial={{ opacity: 0, y: -4, scale: 0.96 }}
+            animate={{ opacity: 1, y: 0, scale: 1 }}
+            exit={{ opacity: 0, y: -4, scale: 0.96 }}
+            transition={{ duration: 0.15, ease: "easeOut" }}
+            className="absolute right-0 mt-2 w-64 rounded-card border border-border bg-background-card p-2 shadow-xl z-50"
+          >
+            <div className="px-2 py-1.5 mb-1">
+              <p className="text-[10px] font-mono uppercase tracking-wider text-foreground-subtle">
+                配色方案
+              </p>
+            </div>
+            <div className="space-y-0.5">
+              {themes.map((t) => {
+                const selected = themeId === t.id;
+                return (
+                  <button
+                    key={t.id}
+                    onClick={() => {
+                      setTheme(t.id);
+                      setOpen(false);
+                    }}
+                    className={`w-full flex items-center gap-3 rounded-button px-2.5 py-2 text-left transition-all ${
+                      selected
+                        ? "bg-accent/10 text-foreground"
+                        : "hover:bg-background-elevated text-foreground-muted hover:text-foreground"
+                    }`}
+                  >
+                    <div className="flex items-center -space-x-1">
+                      <span
+                        className="w-5 h-5 rounded-full border border-border/80"
+                        style={{ backgroundColor: t.colors["--background"] }}
+                      />
+                      <span
+                        className="w-5 h-5 rounded-full border border-border/80"
+                        style={{ backgroundColor: t.colors["--background-card"] }}
+                      />
+                      <span
+                        className="w-5 h-5 rounded-full border border-border/80"
+                        style={{ backgroundColor: t.colors["--accent"] }}
+                      />
+                    </div>
+                    <div className="flex-1 min-w-0">
+                      <div className="flex items-center gap-1.5">
+                        <span className="text-sm font-medium truncate">
+                          {t.name}
+                        </span>
+                        <span className="text-[10px] font-mono text-foreground-subtle uppercase">
+                          {t.mode === "dark" ? "深色" : "浅色"}
+                        </span>
+                      </div>
+                      <p className="text-xs text-foreground-subtle truncate">
+                        {t.description}
+                      </p>
+                    </div>
+                    {selected && (
+                      <Check
+                        size={14}
+                        className="text-accent flex-shrink-0"
+                      />
+                    )}
+                  </button>
+                );
+              })}
+            </div>
+          </motion.div>
+        )}
+      </AnimatePresence>
+    </div>
+  );
+}
 
 export default function Header() {
   const site = useAdminStore((s) => s.site);
@@ -71,14 +176,19 @@ export default function Header() {
               )}
             </NavLink>
           ))}
+          <div className="ml-2">
+            <ThemeSwitcher />
+          </div>
         </nav>
 
-        <button
-          onClick={() => setMobileOpen(!mobileOpen)}
-          className="md:hidden p-2 -mr-2 text-foreground-muted hover:text-foreground"
-        >
-          {mobileOpen ? <X size={22} /> : <Menu size={22} />}
-        </button>
+        <div className="md:hidden flex items-center gap-2">
+          <button
+            onClick={() => setMobileOpen(!mobileOpen)}
+            className="p-2 -mr-2 text-foreground-muted hover:text-foreground"
+          >
+            {mobileOpen ? <X size={22} /> : <Menu size={22} />}
+          </button>
+        </div>
       </div>
 
       <AnimatePresence>
@@ -100,6 +210,9 @@ export default function Header() {
                   {item.label}
                 </Link>
               ))}
+              <div className="px-4 pt-2">
+                <ThemeSwitcher />
+              </div>
             </nav>
           </motion.div>
         )}
