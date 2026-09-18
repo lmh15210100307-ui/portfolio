@@ -20,7 +20,7 @@ export default function Philosophy() {
           <p className="font-mono text-xs uppercase tracking-[0.2em] text-accent mb-8">
             {t.philosophy.tag}
           </p>
-          <blockquote className="font-display font-semibold text-2xl md:text-4xl lg:text-5xl leading-[1.2] mb-10">
+          <blockquote className="font-display font-bold text-4xl md:text-5xl leading-[1.2] mb-10">
             "{pick(site.philosophy)}"
           </blockquote>
           <Link

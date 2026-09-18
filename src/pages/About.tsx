@@ -285,7 +285,7 @@ function LifeCard({
   const gradient = randGradient(item.id);
 
   return (
-    <div className="rounded-card border border-border bg-background-card overflow-hidden hover:border-accent/40 transition-all group">
+    <div className="rounded-2xl border border-border bg-background-card overflow-hidden hover:border-accent/40 transition-all group">
       <div className="relative">
         {item.image ? (
           <img
