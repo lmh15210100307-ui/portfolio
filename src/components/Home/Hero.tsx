@@ -20,7 +20,7 @@ export default function Hero() {
           transition={{ duration: 0.6, ease: [0.16, 1, 0.3, 1] }}
           className="flex items-center gap-2 mb-6 lg:mb-8"
         >
-          <div className="w-1.5 h-1.5 lg:w-2 lg:h-2 rounded-full bg-green-400 animate-pulse flex-shrink-0" />
+          <div className="w-1.5 h-1.5 lg:w-2 lg:h-2 rounded-full bg-accent animate-pulse flex-shrink-0" />
           <span className="font-mono text-[11px] sm:text-sm text-foreground-muted tracking-wide truncate">
             {t.hero.status} · {site.location}
           </span>

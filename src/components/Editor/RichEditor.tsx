@@ -80,9 +80,9 @@ export default function RichEditor({
 
   if (!editor) return null;
 
-  const btn = "p-1.5 rounded hover:bg-background-elevated text-foreground-muted hover:text-foreground transition-colors disabled:opacity-30 disabled:cursor-not-allowed";
+  const btn = "p-2 rounded hover:bg-background-elevated text-foreground-muted hover:text-foreground transition-colors disabled:opacity-30 disabled:cursor-not-allowed";
   const activeBtn = "bg-accent/15 text-accent";
-  const divider = "w-px h-5 bg-border mx-1";
+  const divider = "w-px h-4 bg-border/60 mx-1";
 
   return (
     <div className="rounded-button border border-border bg-background overflow-hidden">
