@@ -43,7 +43,7 @@ export default {
         },
       },
       fontFamily: {
-        display: ['"Space Grotesk"', "sans-serif"],
+        display: ['"Playfair Display"', "serif"],
         body: ["Inter", "sans-serif"],
         mono: ['"JetBrains Mono"', "monospace"],
       },
