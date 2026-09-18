@@ -363,6 +363,23 @@ export default function Contact() {
   );
 }
 
+const avatarColors = [
+  "from-pink-500 to-rose-500",
+  "from-violet-500 to-purple-500",
+  "from-blue-500 to-cyan-500",
+  "from-amber-500 to-orange-500",
+  "from-emerald-500 to-teal-500",
+  "from-fuchsia-500 to-pink-500",
+  "from-indigo-500 to-violet-500",
+  "from-red-500 to-orange-500",
+];
+
+function avatarFor(name: string) {
+  let h = 0;
+  for (let i = 0; i < name.length; i++) h = (h * 31 + name.charCodeAt(i)) >>> 0;
+  return avatarColors[h % avatarColors.length];
+}
+
 function MessageCard({
   msg,
   lang,
@@ -388,59 +405,71 @@ function MessageCard({
     setExpandReplies(true);
   };
 
+  const avatarGradient = avatarFor(msg.author || "anon");
+
   return (
     <motion.div
       initial={{ opacity: 0, y: 20 }}
       whileInView={{ opacity: 1, y: 0 }}
       viewport={{ once: true }}
       transition={{ duration: 0.5, delay: delay * 0.003 }}
-      className={`group rounded-card border ${msg.isAuthor ? "border-accent/40 bg-accent/[0.04]" : "border-border bg-background-card"} p-5 hover:border-accent/50 transition-colors`}
+      className={`group rounded-2xl p-5 transition-all ${
+        msg.isAuthor
+          ? "rounded-[22px] border border-pink-400/60 bg-background-card"
+          : "border border-transparent bg-background-card hover:border-border/60"
+      }`}
     >
-      <div className="flex items-start gap-3 mb-3">
-        <div className={`w-8 h-8 rounded-full flex items-center justify-center flex-shrink-0 text-xs font-bold ${msg.isAuthor ? "bg-accent text-background" : "bg-background-elevated text-foreground-muted"}`}>
-          {msg.author.charAt(0).toUpperCase()}
+      {/* Header: avatar + name + badge */}
+      <div className="flex items-center gap-2.5 mb-3">
+        <div
+          className={`w-8 h-8 rounded-full flex items-center justify-center flex-shrink-0 text-[13px] font-bold text-white bg-gradient-to-br ${avatarGradient}`}
+        >
+          {msg.author.charAt(0).toUpperCase() || "?"}
         </div>
-        <div className="flex-1 min-w-0">
-          <div className="flex items-center gap-2 flex-wrap">
-            <span className={`font-display font-semibold text-sm truncate ${msg.isAuthor ? "text-accent" : ""}`}>
-              {msg.author}
-            </span>
-            {msg.isAuthor && (
-              <span className="inline-flex items-center gap-0.5 rounded-pill bg-accent/15 border border-accent/30 px-1.5 py-0.5 text-[9px] font-mono uppercase text-accent">
-                ★ {t.board.beAuthor}
-              </span>
-            )}
-          </div>
-          <span className="font-mono text-[10px] text-foreground-subtle">
-            {formatTime(msg.createdAt, lang)}
+        <span
+          className={`text-[13px] leading-none ${
+            msg.isAuthor ? "text-pink-400 font-medium" : "text-foreground"
+          }`}
+        >
+          {msg.author || t.board.anonymous}
+        </span>
+        {msg.isAuthor && (
+          <span className="font-mono text-[9px] text-pink-400/80 border border-pink-400/40 rounded px-1 py-0.5">
+            ★ {t.board.beAuthor}
           </span>
-        </div>
+        )}
       </div>
 
+      {/* Content */}
       {msg.content && (
-        <p className="text-sm leading-relaxed text-foreground/90 whitespace-pre-wrap mb-3">
+        <p className="text-[15px] leading-[1.65] text-foreground/90 whitespace-pre-wrap mb-4">
           {msg.content}
         </p>
       )}
 
+      {/* Replies */}
       {msg.replies.length > 0 && (
-        <div className="space-y-2 mb-3">
+        <div className="space-y-2 mb-4">
           {(expandReplies ? msg.replies : msg.replies.slice(0, 1)).map((r) => (
-            <div key={r.id} className="rounded-button bg-background-elevated border border-border/60 px-3 py-2.5">
+            <div
+              key={r.id}
+              className="rounded-xl bg-background-elevated/70 border border-border/40 px-3.5 py-2.5"
+            >
               <div className="flex items-center gap-2 mb-1">
-                <span className={`text-xs font-semibold ${r.isAuthor ? "text-accent" : "text-foreground/70"}`}>
-                  {r.author}
+                <span
+                  className={`text-[11px] ${
+                    r.isAuthor ? "text-pink-400 font-medium" : "text-foreground/60"
+                  }`}
+                >
+                  {r.author || t.board.anonymous}
                   {r.isAuthor && (
-                    <span className="ml-1 inline-flex rounded-pill bg-accent/15 px-1 text-[9px] font-mono uppercase text-accent">
-                      {t.board.beAuthor}
+                    <span className="ml-1 text-[8px] text-pink-400/70 border border-pink-400/30 rounded px-1">
+                      ★
                     </span>
                   )}
                 </span>
-                <span className="font-mono text-[9px] text-foreground-subtle">
-                  {formatTime(r.createdAt, lang)}
-                </span>
               </div>
-              <p className="text-xs text-foreground/80 leading-relaxed whitespace-pre-wrap">
+              <p className="text-[12px] leading-relaxed text-foreground/80 whitespace-pre-wrap">
                 {r.content}
               </p>
             </div>
@@ -448,36 +477,42 @@ function MessageCard({
           {msg.replies.length > 1 && !expandReplies && (
             <button
               onClick={() => setExpandReplies(true)}
-              className="text-[11px] font-mono text-accent hover:text-accent-hover inline-flex items-center gap-1"
+              className="text-[11px] text-pink-400 hover:text-pink-300 inline-flex items-center gap-1"
             >
-              {lang === "zh" ? `查看全部 ${msg.replies.length} 条回复` : `Show all ${msg.replies.length} replies`}
-              <ChevronDown size={12} />
+              {lang === "zh"
+                ? `查看全部 ${msg.replies.length} 条回复`
+                : `Show all ${msg.replies.length}`}
+              <ChevronDown size={11} />
             </button>
           )}
         </div>
       )}
 
-      <div className="pt-2 border-t border-border/40">
+      {/* Footer: reply button left, time right */}
+      <div className="flex items-center justify-between">
         {!showReply ? (
           <button
             onClick={() => setShowReply(true)}
-            className="inline-flex items-center gap-1 text-xs text-foreground-muted hover:text-accent transition-colors"
+            className="text-[11px] text-foreground-muted hover:text-pink-400 transition-colors flex items-center gap-1"
           >
-            <MessageSquare size={12} />
+            <MessageSquare size={11} />
             {t.board.reply}
           </button>
         ) : (
-          <div className="space-y-2">
+          <div className="flex-1 space-y-2">
             <textarea
               value={replyText}
               onChange={(e) => setReplyText(e.target.value)}
               rows={2}
               placeholder={t.board.writeContentPH}
-              className="w-full rounded-button border border-border bg-background-elevated px-3 py-2 text-xs focus:border-accent focus:outline-none resize-none"
+              className="w-full rounded-xl border border-border bg-background-elevated px-3 py-2 text-xs focus:border-pink-400 focus:outline-none resize-none"
             />
             <div className="flex justify-end gap-2">
               <button
-                onClick={() => { setShowReply(false); setReplyText(""); }}
+                onClick={() => {
+                  setShowReply(false);
+                  setReplyText("");
+                }}
                 className="text-[11px] text-foreground-muted hover:text-foreground px-2 py-1"
               >
                 {t.board.writeCancel}
@@ -485,12 +520,17 @@ function MessageCard({
               <button
                 onClick={submitReply}
                 disabled={!replyText.trim()}
-                className="rounded-button bg-accent hover:bg-accent-hover disabled:opacity-40 text-background px-3 py-1 text-xs font-medium"
+                className="rounded-lg bg-pink-500 hover:bg-pink-400 disabled:opacity-40 text-white px-3 py-1 text-xs font-medium"
               >
                 {lang === "zh" ? "回复" : "Reply"}
               </button>
             </div>
           </div>
+        )}
+        {!showReply && (
+          <span className="font-mono text-[10px] text-foreground-subtle">
+            {formatTime(msg.createdAt, lang)}
+          </span>
         )}
       </div>
     </motion.div>
