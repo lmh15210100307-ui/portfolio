@@ -16,6 +16,7 @@ export interface Dict {
     line2: string;
     line3: string;
     line4: string;
+    ctaIntro: string;
     ctaWork: string;
     ctaContact: string;
     scroll: string;
@@ -322,6 +323,7 @@ export const translations: Record<Lang, Dict> = {
       line2: "面向",
       line3: "智能",
       line4: "企业。",
+      ctaIntro: "正在打造 AI 原生的 B 端产品体验",
       ctaWork: "查看精选作品",
       ctaContact: "联系我",
       scroll: "滚动",
@@ -659,6 +661,7 @@ export const translations: Record<Lang, Dict> = {
       line2: "for the",
       line3: "intelligent",
       line4: "enterprise.",
+      ctaIntro: "Crafting AI-native product experiences",
       ctaWork: "View Selected Work",
       ctaContact: "Get in Touch",
       scroll: "Scroll",
