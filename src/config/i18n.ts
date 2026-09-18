@@ -52,20 +52,27 @@ export interface Dict {
     expTag: string;
     expTitle: string;
   };
-  contact: {
+  board: {
     tag: string;
-    title1: string;
-    title2: string;
+    title: string;
     intro: string;
-    email: string;
-    location: string;
-    elsewhere: string;
-    formTitle: string;
-    subject: string;
-    subjectPH: string;
-    message: string;
-    messagePH: string;
-    send: string;
+    total: string;
+    write: string;
+    writeTitle: string;
+    writeName: string;
+    writeNamePH: string;
+    writeContent: string;
+    writeContentPH: string;
+    writeSubmit: string;
+    writeCancel: string;
+    anonymous: string;
+    reply: string;
+    beAuthor: string;
+    beAuthorHint: string;
+    sendAi: string;
+    aiPlaceholder: string;
+    toastEmpty: string;
+    toastPosted: string;
   };
   caseStudy: {
     notFound: string;
@@ -287,20 +294,27 @@ export const translations: Record<Lang, Dict> = {
       expTitle: "职业历程",
     },
 
-    contact: {
-      tag: "联系我",
-      title1: "一起创造",
-      title2: "有意义的东西。",
-      intro: "我一直乐于有意义的合作、设计伙伴关系和有趣的交流。无论你有项目想法，还是想聊聊设计与 AI — 给我留言吧。",
-      email: "邮箱",
-      location: "所在地",
-      elsewhere: "其他渠道",
-      formTitle: "发送消息",
-      subject: "主题",
-      subjectPH: "项目咨询、合作邀约，或是打个招呼...",
-      message: "内容",
-      messagePH: "聊聊你的项目、目标、时间线...",
-      send: "发送消息",
+    board: {
+      tag: "留言板",
+      title: "说点什么。",
+      intro: "嗨，我是 NAVI，欢迎给我留句话呀 ~ 留言的内容都会展示在这里哦。",
+      total: "墙上有 {n} 条留言",
+      write: "写留言",
+      writeTitle: "写一条留言",
+      writeName: "你的名字",
+      writeNamePH: "留个名字吧（默认匿名朋友）",
+      writeContent: "留言内容",
+      writeContentPH: "随便说点什么...",
+      writeSubmit: "发送留言",
+      writeCancel: "取消",
+      anonymous: "匿名朋友",
+      reply: "回复",
+      beAuthor: "博主",
+      beAuthorHint: "你的留言会展示在这里哦 ~",
+      sendAi: "AI 助手",
+      aiPlaceholder: "试试问点什么...",
+      toastEmpty: "留言内容不能为空",
+      toastPosted: "✓ 留言已发送",
     },
 
     caseStudy: {
@@ -534,20 +548,27 @@ export const translations: Record<Lang, Dict> = {
       expTitle: "Career path",
     },
 
-    contact: {
-      tag: "Get in Touch",
-      title1: "Let's build",
-      title2: "something great.",
-      intro: "I'm always open to meaningful collaborations, design partnerships, and interesting conversations. Whether you have a project in mind or just want to chat about design & AI — drop me a line.",
-      email: "Email",
-      location: "Location",
-      elsewhere: "Elsewhere",
-      formTitle: "Send a message",
-      subject: "Subject",
-      subjectPH: "Project inquiry, collaboration, or just saying hi...",
-      message: "Message",
-      messagePH: "Tell me about your project, goals, timeline...",
-      send: "Send Message",
+    board: {
+      tag: "Guestbook",
+      title: "Say something.",
+      intro: "Hi, I'm NAVI — feel free to leave a message. Everything you write will show up here.",
+      total: "{n} messages on the wall",
+      write: "Write Message",
+      writeTitle: "Leave a message",
+      writeName: "Your name",
+      writeNamePH: "Leave a name (anonymous by default)",
+      writeContent: "Message",
+      writeContentPH: "Say anything...",
+      writeSubmit: "Post",
+      writeCancel: "Cancel",
+      anonymous: "Anonymous",
+      reply: "Reply",
+      beAuthor: "Author",
+      beAuthorHint: "Your messages will show up here ~",
+      sendAi: "AI Assistant",
+      aiPlaceholder: "Ask me anything...",
+      toastEmpty: "Message cannot be empty",
+      toastPosted: "✓ Posted",
     },
 
     caseStudy: {
