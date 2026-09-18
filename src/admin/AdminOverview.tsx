@@ -1,9 +1,11 @@
 import { useAdminStore } from "@/store/admin";
 import { FolderKanban, UserCog, BarChart3 } from "lucide-react";
 import { Link } from "react-router-dom";
+import { useI18n } from "@/hooks/useI18n";
 
 export default function AdminOverview() {
   const { projects, site } = useAdminStore();
+  const { t } = useI18n();
 
   const categories = projects.reduce<Record<string, number>>((acc, p) => {
     acc[p.category] = (acc[p.category] || 0) + 1;
@@ -17,7 +19,7 @@ export default function AdminOverview() {
       <section>
         <div className="rounded-card border border-border bg-gradient-to-br from-accent/10 via-background-card to-background-card p-8">
           <p className="font-mono text-xs uppercase tracking-wider text-accent mb-2">
-            欢迎回来
+            {t.admin.welcome}
           </p>
           <h2 className="font-display font-bold text-3xl mb-2">
             {site.name}
@@ -36,9 +38,9 @@ export default function AdminOverview() {
               <FolderKanban size={18} />
             </div>
             <div>
-              <p className="font-display font-semibold text-lg">作品集</p>
+              <p className="font-display font-semibold text-lg">{t.admin.projects}</p>
               <p className="font-mono text-xs text-foreground-subtle">
-                共 {projects.length} 个
+                {t.admin.projectsCount.replace("{n}", String(projects.length))}
               </p>
             </div>
           </div>
@@ -63,9 +65,11 @@ export default function AdminOverview() {
               <UserCog size={18} />
             </div>
             <div>
-              <p className="font-display font-semibold text-lg">个人资料</p>
+              <p className="font-display font-semibold text-lg">{t.admin.profile}</p>
               <p className="font-mono text-xs text-foreground-subtle">
-                {site.experience.length} 段经历 · {site.skills.length} 组技能
+                {t.admin.profileCount
+                  .replace("{e}", String(site.experience.length))
+                  .replace("{s}", String(site.skills.length))}
               </p>
             </div>
           </div>
@@ -75,7 +79,7 @@ export default function AdminOverview() {
 
       <section>
         <h3 className="font-display font-semibold text-lg mb-4 flex items-center gap-2">
-          <BarChart3 size={16} className="text-accent" /> 作品年份分布
+          <BarChart3 size={16} className="text-accent" /> {t.admin.byYear}
         </h3>
         <div className="space-y-3">
           {years.map((year) => {

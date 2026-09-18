@@ -3,9 +3,11 @@ import { ArrowUpRight, Mail, MapPin, Send } from "lucide-react";
 import Header from "@/components/Layout/Header";
 import Footer from "@/components/Layout/Footer";
 import { useAdminStore } from "@/store/admin";
+import { useI18n } from "@/hooks/useI18n";
 
 export default function Contact() {
   const site = useAdminStore((s) => s.site);
+  const { t } = useI18n();
   return (
     <div className="relative">
       <div className="noise-bg" />
@@ -19,16 +21,15 @@ export default function Contact() {
             className="max-w-3xl mb-16 lg:mb-20"
           >
             <p className="font-mono text-xs uppercase tracking-[0.2em] text-accent mb-3">
-              联系我
+              {t.contact.tag}
             </p>
             <h1 className="font-display font-bold text-4xl md:text-6xl lg:text-7xl leading-tight">
-              一起创造
+              {t.contact.title1}
               <br />
-              有意义的东西。
+              {t.contact.title2}
             </h1>
             <p className="mt-6 text-lg text-foreground-muted leading-relaxed">
-              我一直乐于有意义的合作、设计伙伴关系和有趣的交流。无论你有项目想法，
-              还是想聊聊设计与 AI — 给我留言吧。
+              {t.contact.intro}
             </p>
           </motion.div>
 
@@ -48,8 +49,8 @@ export default function Contact() {
                   />
                 </div>
                 <p className="font-mono text-xs uppercase tracking-wider text-foreground-subtle mb-1">
-                    邮箱
-                  </p>
+                  {t.contact.email}
+                </p>
                 <p className="font-display font-semibold text-xl group-hover:text-accent transition-colors">
                   {site.email}
                 </p>
@@ -60,7 +61,7 @@ export default function Contact() {
                   <MapPin size={18} />
                 </div>
                 <p className="font-mono text-xs uppercase tracking-wider text-foreground-subtle mb-1">
-                  所在地
+                  {t.contact.location}
                 </p>
                 <p className="font-display font-semibold text-xl">
                   {site.location}
@@ -69,7 +70,7 @@ export default function Contact() {
 
               <div className="rounded-card border border-border bg-background-card p-6 lg:p-7">
                 <p className="font-mono text-xs uppercase tracking-wider text-foreground-subtle mb-4">
-                  其他渠道
+                  {t.contact.elsewhere}
                 </p>
                 <div className="grid grid-cols-2 gap-2">
                   {Object.entries(site.social).map(([key, url]) => (
@@ -102,24 +103,24 @@ export default function Contact() {
               className="lg:col-span-7 rounded-card border border-border bg-background-card p-6 lg:p-10"
             >
               <h2 className="font-display font-semibold text-xl lg:text-2xl mb-8">
-                  发送消息
+                  {t.contact.formTitle}
                 </h2>
 
                 <div className="space-y-5">
                   <Field
-                    label="主题"
+                    label={t.contact.subject}
                     name="subject"
-                    placeholder="项目咨询、合作邀约，或是打个招呼..."
+                    placeholder={t.contact.subjectPH}
                   />
                   <div>
                     <label className="block font-mono text-xs uppercase tracking-wider text-foreground-subtle mb-2">
-                      内容
+                      {t.contact.message}
                     </label>
                     <textarea
                       name="message"
                       rows={6}
                       required
-                      placeholder="聊聊你的项目、目标、时间线..."
+                      placeholder={t.contact.messagePH}
                       className="w-full rounded-button border border-border bg-background px-4 py-3 text-sm focus:border-accent focus:outline-none transition-colors placeholder:text-foreground-subtle resize-none"
                   />
                 </div>
@@ -129,7 +130,7 @@ export default function Contact() {
                 type="submit"
                 className="mt-8 group inline-flex items-center gap-2 rounded-button bg-foreground text-background px-6 py-3.5 font-medium text-sm hover:bg-accent hover:text-foreground transition-all"
               >
-                发送消息
+                {t.contact.send}
                 <Send
                   size={16}
                   className="transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5"

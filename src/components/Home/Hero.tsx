@@ -1,11 +1,13 @@
 import { motion } from "framer-motion";
 import { ArrowUpRight } from "lucide-react";
 import { useAdminStore } from "@/store/admin";
+import { useI18n } from "@/hooks/useI18n";
 
-const keywords = ["AI", "B 端 SaaS", "设计系统", "交互", "产品"];
+const keywords = ["AI", "B2B SaaS", "Design Systems", "Interaction", "Product"];
 
 export default function Hero() {
   const site = useAdminStore((s) => s.site);
+  const { t } = useI18n();
   return (
     <section className="relative min-h-screen flex items-center pt-24 lg:pt-32 pb-20 lg:pb-32 overflow-hidden">
       <div className="absolute top-1/4 -left-40 gradient-glow" />
@@ -20,7 +22,7 @@ export default function Hero() {
         >
           <div className="w-1.5 h-1.5 lg:w-2 lg:h-2 rounded-full bg-green-400 animate-pulse flex-shrink-0" />
           <span className="font-mono text-[11px] sm:text-sm text-foreground-muted tracking-wide truncate">
-            接受委托 · {site.location}
+            {t.hero.status} · {site.location}
           </span>
         </motion.div>
 
@@ -31,14 +33,14 @@ export default function Hero() {
           className="font-display font-bold leading-[1.05] tracking-tight"
         >
           <span className="block text-[clamp(2.25rem,12vw,8rem)]">
-            设计
+            {t.hero.line1}
           </span>
           <span className="block text-[clamp(2.25rem,12vw,8rem)] text-foreground-muted">
-            面向
+            {t.hero.line2}
           </span>
           <span className="block text-[clamp(2.25rem,12vw,8rem)] relative break-words">
             <span className="bg-gradient-to-r from-accent via-blue-400 to-purple-400 bg-clip-text text-transparent">
-              智能
+              {t.hero.line3}
             </span>
             <span className="inline-block w-[clamp(2rem,6vw,5rem)] h-[clamp(2rem,6vw,5rem)] align-middle ml-1 sm:ml-3 flex-shrink-0">
               <motion.span
@@ -49,7 +51,9 @@ export default function Hero() {
               />
             </span>
           </span>
-          <span className="block text-[clamp(2.25rem,12vw,8rem)]">企业。</span>
+          <span className="block text-[clamp(2.25rem,12vw,8rem)]">
+            {t.hero.line4}
+          </span>
         </motion.h1>
 
         <motion.p
@@ -88,7 +92,7 @@ export default function Hero() {
             href="#work"
             className="group inline-flex items-center gap-2 rounded-button bg-foreground text-background px-6 py-3 font-medium text-sm hover:bg-accent hover:text-foreground transition-all"
           >
-            查看精选作品
+            {t.hero.ctaWork}
             <ArrowUpRight
               size={16}
               className="transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5"
@@ -98,7 +102,7 @@ export default function Hero() {
             href={`mailto:${site.email}`}
             className="group inline-flex items-center gap-2 rounded-button border border-border text-foreground px-6 py-3 font-medium text-sm hover:border-accent hover:text-accent transition-all"
           >
-            联系我
+            {t.hero.ctaContact}
           </a>
         </motion.div>
 
@@ -109,7 +113,7 @@ export default function Hero() {
           className="absolute bottom-8 left-1/2 -translate-x-1/2 flex flex-col items-center gap-2"
         >
           <span className="font-mono text-[10px] uppercase tracking-[0.3em] text-foreground-subtle">
-            滚动
+            {t.hero.scroll}
           </span>
           <motion.div
             animate={{ y: [0, 6, 0] }}

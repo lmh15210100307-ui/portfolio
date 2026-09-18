@@ -5,21 +5,21 @@ import {
   UserCog,
   Download,
   Upload,
-  Trash2,
   Eye,
   Save,
 } from "lucide-react";
 import { useAdminStore } from "@/store/admin";
 import { useState, useEffect } from "react";
-
-const navItems = [
-  { to: "/admin", label: "概览", icon: LayoutDashboard, end: true },
-  { to: "/admin/projects", label: "作品集", icon: FolderKanban },
-  { to: "/admin/profile", label: "个人资料", icon: UserCog },
-];
+import { useI18n } from "@/hooks/useI18n";
 
 export default function AdminLayout() {
-  const { projects, site, persist, load, loaded, export: exportData, importJSON, reset } = useAdminStore();
+  const { t } = useI18n();
+  const navItems = [
+    { to: "/admin", label: t.admin.overview, icon: LayoutDashboard, end: true },
+    { to: "/admin/projects", label: t.admin.projects, icon: FolderKanban },
+    { to: "/admin/profile", label: t.admin.profile, icon: UserCog },
+  ];
+  const { projects, persist, load, loaded, export: exportData, importJSON, reset } = useAdminStore();
   const [saving, setSaving] = useState(false);
   const [toast, setToast] = useState<string | null>(null);
   const navigate = useNavigate();
@@ -37,12 +37,12 @@ export default function AdminLayout() {
     setSaving(true);
     await persist();
     setSaving(false);
-    showToast("✓ 已保存到浏览器");
+    showToast(t.admin.saveToast);
   };
 
   const handleExport = () => {
     exportData();
-    showToast("✓ 已导出 JSON 文件");
+    showToast(t.admin.exportToast);
   };
 
   const handleImport = () => {
@@ -55,18 +55,16 @@ export default function AdminLayout() {
       const text = await file.text();
       try {
         await importJSON(text);
-        showToast("✓ 导入成功");
+        showToast(t.admin.importOk);
       } catch {
-        showToast("✗ 文件格式错误");
+        showToast(t.admin.importFail);
       }
     };
     input.click();
   };
 
   const handleReset = async () => {
-    if (!confirm("确定重置所有数据？这会恢复到初始示例内容")) return;
     await reset();
-    showToast("✓ 已重置");
   };
 
   return (
@@ -78,9 +76,9 @@ export default function AdminLayout() {
               NV
             </div>
             <div>
-              <p className="font-display font-semibold text-sm">作品集</p>
+              <p className="font-display font-semibold text-sm">{t.admin.projects}</p>
               <p className="font-mono text-[10px] uppercase tracking-wider text-foreground-subtle">
-                管理后台
+                {t.admin.panel}
               </p>
             </div>
           </div>
@@ -113,25 +111,25 @@ export default function AdminLayout() {
             className="w-full flex items-center justify-center gap-2 rounded-button bg-foreground text-background px-3 py-2.5 text-sm font-medium hover:bg-accent transition-colors disabled:opacity-50"
           >
             <Save size={16} />
-            {saving ? "保存中..." : "保存"}
+            {saving ? t.admin.saving : t.admin.save}
           </button>
           <button
             onClick={handleExport}
             className="w-full flex items-center gap-2 rounded-button px-3 py-2 text-sm text-foreground-muted hover:text-foreground hover:bg-background-elevated transition-colors"
           >
-            <Download size={16} /> 导出
+            <Download size={16} /> {t.admin.export}
           </button>
           <button
             onClick={handleImport}
             className="w-full flex items-center gap-2 rounded-button px-3 py-2 text-sm text-foreground-muted hover:text-foreground hover:bg-background-elevated transition-colors"
           >
-            <Upload size={16} /> 导入
+            <Upload size={16} /> {t.admin.import}
           </button>
           <button
             onClick={() => window.open("/", "_blank")}
             className="w-full flex items-center gap-2 rounded-button px-3 py-2 text-sm text-foreground-muted hover:text-foreground hover:bg-background-elevated transition-colors"
           >
-            <Eye size={16} /> 预览网站
+            <Eye size={16} /> {t.admin.viewSite}
           </button>
         </div>
       </aside>
@@ -143,9 +141,9 @@ export default function AdminLayout() {
               NV
             </div>
             <div className="min-w-0">
-              <h1 className="font-display font-semibold text-sm truncate">管理后台</h1>
+              <h1 className="font-display font-semibold text-sm truncate">{t.admin.panel}</h1>
               <p className="font-mono text-[10px] text-foreground-subtle truncate">
-                共 {projects.length} 个作品
+                {t.admin.projectsCount.replace("{n}", String(projects.length))}
               </p>
             </div>
           </div>
@@ -155,13 +153,13 @@ export default function AdminLayout() {
               disabled={saving}
               className="inline-flex items-center gap-1 rounded-button bg-foreground text-background px-3 py-1.5 text-xs font-medium hover:bg-accent transition-colors disabled:opacity-50"
             >
-              <Save size={12} /> {saving ? "..." : "保存"}
+              <Save size={12} /> {saving ? "..." : t.admin.save}
             </button>
             <button
               onClick={() => navigate("/")}
               className="text-xs text-foreground-muted hover:text-foreground px-2 py-1.5"
             >
-              预览
+              {t.admin.site}
             </button>
           </div>
         </header>
