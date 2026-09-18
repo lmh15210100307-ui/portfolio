@@ -1,5 +1,14 @@
 /** @type {import('tailwindcss').Config} */
 
+function withOpacity(variableName) {
+  return ({ opacityValue }) => {
+    if (opacityValue !== undefined) {
+      return `var(${variableName})`;
+    }
+    return `var(${variableName})`;
+  };
+}
+
 export default {
   darkMode: "class",
   content: ["./index.html", "./src/**/*.{js,ts,jsx,tsx}"],
@@ -15,22 +24,22 @@ export default {
     extend: {
       colors: {
         background: {
-          DEFAULT: "#0A0A0B",
-          card: "#1C1C1E",
-          elevated: "#2C2C2E",
+          DEFAULT: withOpacity("--background"),
+          card: withOpacity("--background-card"),
+          elevated: withOpacity("--background-elevated"),
         },
         foreground: {
-          DEFAULT: "#F5F5F7",
-          muted: "#6B6B70",
-          subtle: "#3A3A3C",
+          DEFAULT: withOpacity("--foreground"),
+          muted: withOpacity("--foreground-muted"),
+          subtle: withOpacity("--foreground-subtle"),
         },
         accent: {
-          DEFAULT: "#4F7FFF",
-          hover: "#6B93FF",
+          DEFAULT: withOpacity("--accent"),
+          hover: withOpacity("--accent-hover"),
         },
         border: {
-          DEFAULT: "#2C2C2E",
-          light: "#3A3A3C",
+          DEFAULT: withOpacity("--border"),
+          light: withOpacity("--border-light"),
         },
       },
       fontFamily: {
