@@ -43,9 +43,10 @@ export default {
         },
       },
       fontFamily: {
-        display: ['"Playfair Display"', "serif"],
-        body: ["Inter", "sans-serif"],
-        mono: ['"JetBrains Mono"', "monospace"],
+        display: ['"Playfair Display"', '"Noto Serif SC"', "Georgia", "serif"],
+        "display-italic": ['"Playfair Display"', '"Noto Serif SC"', "Georgia", "serif"],
+        body: ['"Inter"', '"Noto Sans SC"', '"PingFang SC"', '"Microsoft YaHei"', "system-ui", "sans-serif"],
+        mono: ['"JetBrains Mono"', '"SF Mono"', "Consolas", "monospace"],
       },
       borderRadius: {
         card: "20px",
