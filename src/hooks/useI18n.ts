@@ -1,5 +1,5 @@
-import { useState, useEffect } from "react";
-import { translations, Lang, Dict, DEFAULT_LANG, TextValue, pickText } from "@/config/i18n";
+import { create } from "zustand";
+import { translations, Lang, DEFAULT_LANG, TextValue, pickText, Dict } from "@/config/i18n";
 
 const STORAGE_KEY = "navi_portfolio_lang";
 
@@ -12,15 +12,40 @@ function resolveInitialLang(): Lang {
   return DEFAULT_LANG;
 }
 
-export function useI18n() {
-  const [lang, setLang] = useState<Lang>(resolveInitialLang);
+interface LangState {
+  lang: Lang;
+  setLang: (l: Lang) => void;
+  toggle: () => void;
+}
 
-  useEffect(() => {
+export const useLangStore = create<LangState>((set) => ({
+  lang: resolveInitialLang(),
+  setLang: (lang) => {
+    set({ lang });
     try {
       localStorage.setItem(STORAGE_KEY, lang);
     } catch {}
     document.documentElement.lang = lang === "zh" ? "zh-CN" : "en";
-  }, [lang]);
+  },
+  toggle: () => {
+    set((state) => {
+      const lang = state.lang === "zh" ? "en" : "zh";
+      try {
+        localStorage.setItem(STORAGE_KEY, lang);
+      } catch {}
+      document.documentElement.lang = lang === "zh" ? "zh-CN" : "en";
+      return { lang };
+    });
+  },
+}));
+
+// 初始化时同步 html.lang
+document.documentElement.lang = useLangStore.getState().lang === "zh" ? "zh-CN" : "en";
+
+export function useI18n() {
+  const lang = useLangStore((s) => s.lang);
+  const setLang = useLangStore((s) => s.setLang);
+  const toggle = useLangStore((s) => s.toggle);
 
   const t: Dict = translations[lang];
   const pick = (v: TextValue | undefined, fallback = ""): string => pickText(v, lang, fallback);
@@ -28,7 +53,7 @@ export function useI18n() {
   return {
     lang,
     setLang,
-    toggle: () => setLang((l) => (l === "zh" ? "en" : "zh")),
+    toggle,
     t,
     pick,
     isZh: lang === "zh",
