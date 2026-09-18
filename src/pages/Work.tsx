@@ -11,7 +11,7 @@ import { useI18n } from "@/hooks/useI18n";
 
 export default function Work() {
   const projects = useAdminStore((s) => s.projects);
-  const { t } = useI18n();
+  const { t, pick } = useI18n();
   const [filter, setFilter] = useState<string>("all");
   const filtered =
     filter === "all"
@@ -96,7 +96,7 @@ function FilterButton({
 
 function ProjectCard({ project }: { project: Project }) {
   const ref = useReveal<HTMLAnchorElement>();
-  const { t } = useI18n();
+  const { t, pick } = useI18n();
   return (
     <Link
       ref={ref}
@@ -108,7 +108,7 @@ function ProjectCard({ project }: { project: Project }) {
       >
         <div className="absolute inset-0 bg-[radial-gradient(circle_at_30%_30%,rgba(255,255,255,0.1),transparent_60%)]" />
         <span className="relative font-display font-bold text-4xl lg:text-5xl opacity-30 group-hover:opacity-60 group-hover:scale-110 transition-all duration-500">
-          {project.title.charAt(0)}
+          {pick(project.title).charAt(0)}
         </span>
       </div>
       <div className="p-6">
@@ -121,10 +121,10 @@ function ProjectCard({ project }: { project: Project }) {
           </span>
         </div>
         <h3 className="font-display font-semibold text-lg lg:text-xl mb-1 group-hover:text-accent transition-colors">
-          {project.title}
+          {pick(project.title)}
         </h3>
         <p className="text-sm text-foreground-muted line-clamp-2">
-          {project.summary}
+          {pick(project.summary)}
         </p>
         <div className="mt-4 flex items-center gap-1 text-xs font-mono text-foreground-muted group-hover:text-accent transition-colors">
           {t.work.viewCase}

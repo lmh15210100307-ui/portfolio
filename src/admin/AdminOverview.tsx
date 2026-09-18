@@ -5,7 +5,7 @@ import { useI18n } from "@/hooks/useI18n";
 
 export default function AdminOverview() {
   const { projects, site } = useAdminStore();
-  const { t } = useI18n();
+  const { t, pick } = useI18n();
 
   const categories = projects.reduce<Record<string, number>>((acc, p) => {
     acc[p.category] = (acc[p.category] || 0) + 1;
@@ -22,9 +22,9 @@ export default function AdminOverview() {
             {t.admin.welcome}
           </p>
           <h2 className="font-display font-bold text-3xl mb-2">
-            {site.name}
+            {pick(site.name)}
           </h2>
-          <p className="text-foreground-muted">{site.tagline}</p>
+          <p className="text-foreground-muted">{pick(site.tagline)}</p>
         </div>
       </section>
 
@@ -73,7 +73,7 @@ export default function AdminOverview() {
               </p>
             </div>
           </div>
-          <p className="text-sm text-foreground-muted line-clamp-2">{site.bio}</p>
+          <p className="text-sm text-foreground-muted line-clamp-2">{pick(site.bio)}</p>
         </Link>
       </section>
 

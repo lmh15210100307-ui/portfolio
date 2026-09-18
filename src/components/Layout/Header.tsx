@@ -9,7 +9,7 @@ import { useI18n } from "@/hooks/useI18n";
 export default function Header() {
   const site = useAdminStore((s) => s.site);
   const { mode, toggle: toggleTheme, isDark } = useTheme();
-  const { lang, toggle: toggleLang, t } = useI18n();
+  const { lang, toggle: toggleLang, t, pick } = useI18n();
   const [scrolled, setScrolled] = useState(false);
   const [mobileOpen, setMobileOpen] = useState(false);
 
@@ -33,10 +33,10 @@ export default function Header() {
       <div className="container flex items-center justify-between h-16 lg:h-20">
         <Link to="/" className="group flex items-center gap-3">
           <div className="w-9 h-9 rounded-card bg-accent/10 border border-accent/30 flex items-center justify-center font-display font-bold text-accent text-sm transition-all group-hover:bg-accent group-hover:text-background">
-            {site.initials}
+            {pick(site.initials)}
           </div>
           <span className="font-display font-semibold text-lg hidden sm:block">
-            {site.name}
+            {pick(site.name)}
           </span>
         </Link>
 

@@ -7,7 +7,7 @@ import { useI18n } from "@/hooks/useI18n";
 export default function Philosophy() {
   const site = useAdminStore((s) => s.site);
   const ref = useReveal<HTMLDivElement>();
-  const { t } = useI18n();
+  const { t, pick } = useI18n();
 
   return (
     <section className="relative py-24 lg:py-32 border-t border-border/50 overflow-hidden">
@@ -21,7 +21,7 @@ export default function Philosophy() {
             {t.philosophy.tag}
           </p>
           <blockquote className="font-display font-semibold text-2xl md:text-4xl lg:text-5xl leading-[1.2] mb-10">
-            "{site.philosophy}"
+            "{pick(site.philosophy)}"
           </blockquote>
           <Link
             to="/about"

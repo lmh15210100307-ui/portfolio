@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { translations, Lang, Dict, DEFAULT_LANG } from "@/config/i18n";
+import { translations, Lang, Dict, DEFAULT_LANG, TextValue, pickText } from "@/config/i18n";
 
 const STORAGE_KEY = "navi_portfolio_lang";
 
@@ -23,12 +23,14 @@ export function useI18n() {
   }, [lang]);
 
   const t: Dict = translations[lang];
+  const pick = (v: TextValue | undefined, fallback = ""): string => pickText(v, lang, fallback);
 
   return {
     lang,
     setLang,
     toggle: () => setLang((l) => (l === "zh" ? "en" : "zh")),
     t,
+    pick,
     isZh: lang === "zh",
   };
 }

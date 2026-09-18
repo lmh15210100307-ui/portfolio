@@ -1,5 +1,13 @@
 export type Lang = "zh" | "en";
 
+export type TextValue = string | { zh: string; en: string };
+
+export function pickText(v: TextValue | undefined, lang: Lang, fallback = ""): string {
+  if (!v) return fallback;
+  if (typeof v === "string") return v;
+  return v[lang] || v.zh || fallback;
+}
+
 export interface Dict {
   nav: { home: string; work: string; about: string; contact: string };
   hero: {

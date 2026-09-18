@@ -11,33 +11,104 @@ import {
   type FigmaFrame,
 } from "@/utils/figmaApi";
 import { useI18n } from "@/hooks/useI18n";
+import { TextValue, pickText } from "@/config/i18n";
+
+const emptyText: TextValue = { zh: "", en: "" };
 
 const emptyProject: Project = {
   slug: "",
-  title: "",
-  subtitle: "",
+  title: { ...emptyText },
+  subtitle: { ...emptyText },
   category: "AI 产品",
   year: new Date().getFullYear(),
-  role: "",
-  client: "",
+  role: { ...emptyText },
+  client: { ...emptyText },
   cover: "",
   coverGradient: "from-blue-600/20 via-purple-600/20 to-pink-600/20",
-  summary: "",
+  summary: { ...emptyText },
   highlights: [],
   metrics: [],
   featured: false,
-  challenge: "",
+  challenge: { ...emptyText },
   process: [],
-  outcome: "",
-  roleDetail: "",
+  outcome: { ...emptyText },
+  roleDetail: { ...emptyText },
   tools: [],
   teamSize: "",
   duration: "",
 };
 
+function TextInputZhEn({
+  value,
+  onChange,
+  label,
+  placeholderZh,
+  placeholderEn,
+  rows,
+}: {
+  value: TextValue | undefined;
+  onChange: (v: TextValue) => void;
+  label?: string;
+  placeholderZh?: string;
+  placeholderEn?: string;
+  rows?: number;
+}) {
+  const vObj: { zh: string; en: string } =
+    value && typeof value === "object"
+      ? value
+      : { zh: (value as string) || "", en: (value as string) || "" };
+  const inputCls =
+    "w-full rounded-button border border-border bg-background-elevated px-3 py-2 text-sm focus:border-accent focus:outline-none";
+  const handleZh = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) =>
+    onChange({ zh: e.target.value, en: vObj.en });
+  const handleEn = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) =>
+    onChange({ zh: vObj.zh, en: e.target.value });
+  const wrap = "space-y-1.5";
+  const hintZh = (
+    <span className="text-[10px] font-mono text-foreground-subtle uppercase">zh</span>
+  );
+  const hintEn = (
+    <span className="text-[10px] font-mono text-foreground-subtle uppercase">en</span>
+  );
+
+  const renderZh = rows && rows > 1 ? (
+    <div className={wrap}>
+      {hintZh}
+      <textarea rows={rows} className={inputCls + " resize-none"} value={vObj.zh} onChange={handleZh} placeholder={placeholderZh} />
+    </div>
+  ) : (
+    <div className={wrap}>
+      {hintZh}
+      <input className={inputCls} value={vObj.zh} onChange={handleZh} placeholder={placeholderZh} />
+    </div>
+  );
+  const renderEn = rows && rows > 1 ? (
+    <div className={wrap}>
+      {hintEn}
+      <textarea rows={rows} className={inputCls + " resize-none"} value={vObj.en} onChange={handleEn} placeholder={placeholderEn} />
+    </div>
+  ) : (
+    <div className={wrap}>
+      {hintEn}
+      <input className={inputCls} value={vObj.en} onChange={handleEn} placeholder={placeholderEn} />
+    </div>
+  );
+
+  return (
+    <div>
+      {label && (
+        <label className="block font-mono text-[10px] uppercase tracking-wider text-foreground-subtle mb-1.5">
+          {label}
+        </label>
+      )}
+      <div className="grid grid-cols-2 gap-2">{renderZh}{renderEn}</div>
+    </div>
+  );
+}
+
 export default function AdminProjects() {
   const { projects, addProject, deleteProject, persist } = useAdminStore();
-  const { t } = useI18n();
+  const { t, pick } = useI18n();
   const [editing, setEditing] = useState<Project | null>(null);
   const [showForm, setShowForm] = useState(false);
 
@@ -58,7 +129,7 @@ export default function AdminProjects() {
   };
 
   const handleSave = async (p: Project) => {
-    if (!p.slug) p.slug = slugify(p.title || "untitled");
+    if (!p.slug) p.slug = slugify(pick(p.title as TextValue) || "untitled");
     const exists = projects.find((x) => x.slug === p.slug);
     if (exists && editing?.slug !== p.slug) {
       alert(t.adminProjects.slugExists);
@@ -97,10 +168,10 @@ export default function AdminProjects() {
               className={`relative h-40 bg-gradient-to-br ${p.coverGradient} flex items-center justify-center group`}
             >
               {p.cover ? (
-                <img src={p.cover} alt={p.title} className="w-full h-full object-cover" />
+                <img src={p.cover} alt={pick(p.title as TextValue)} className="w-full h-full object-cover" />
               ) : (
                 <span className="font-display font-bold text-6xl opacity-30">
-                  {p.title.charAt(0) || "?"}
+                  {pick(p.title as TextValue).charAt(0) || "?"}
                 </span>
               )}
               <div className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center gap-2">
@@ -123,8 +194,8 @@ export default function AdminProjects() {
                   </span>
                 )}
               </div>
-              <h3 className="font-display font-semibold text-lg mb-1">{p.title}</h3>
-              <p className="text-sm text-foreground-muted line-clamp-2">{p.summary}</p>
+              <h3 className="font-display font-semibold text-lg mb-1">{pick(p.title as TextValue)}</h3>
+              <p className="text-sm text-foreground-muted line-clamp-2">{pick(p.summary as TextValue)}</p>
             </div>
           </div>
         ))}
@@ -149,7 +220,7 @@ export default function AdminProjects() {
 }
 
 function ProjectModal({ project, onClose, onSave }: { project: Project; onClose: () => void; onSave: (p: Project) => void; }) {
-  const { t } = useI18n();
+  const { t, pick } = useI18n();
   const [form, setForm] = useState<Project>(project);
 
   const set = <K extends keyof Project>(key: K, value: Project[K]) => {
@@ -167,7 +238,7 @@ function ProjectModal({ project, onClose, onSave }: { project: Project; onClose:
 
   return (
     <div className="fixed inset-0 z-50 bg-black/60 backdrop-blur-sm flex items-start lg:items-center justify-center p-4 overflow-y-auto">
-      <div className="w-full max-w-2xl bg-background border border-border rounded-card shadow-2xl my-8">
+      <div className="w-full max-w-3xl bg-background border border-border rounded-card shadow-2xl my-8">
         <div className="sticky top-0 flex items-center justify-between p-5 border-b border-border bg-background rounded-t-card">
           <h3 className="font-display font-semibold text-lg">
             {project.slug ? t.adminProjects.editProject : t.adminProjects.newProject}
@@ -188,14 +259,13 @@ function ProjectModal({ project, onClose, onSave }: { project: Project; onClose:
           />
 
           <div className="grid grid-cols-2 gap-3">
-            <Field label={t.adminProjects.fields.title}>
-              <input
-                className="w-full rounded-button border border-border bg-background-elevated px-3 py-2 text-sm focus:border-accent focus:outline-none"
-                value={form.title}
-                onChange={(e) => set("title", e.target.value)}
-                placeholder={t.adminProjects.ph.title}
-              />
-            </Field>
+            <TextInputZhEn
+              label={t.adminProjects.fields.title}
+              value={form.title as TextValue}
+              onChange={(v) => set("title", v)}
+              placeholderZh={t.adminProjects.ph.title}
+              placeholderEn="AI Copilot Platform"
+            />
             <Field label={t.adminProjects.fields.slug}>
               <input
                 className="w-full rounded-button border border-border bg-background-elevated px-3 py-2 text-sm focus:border-accent focus:outline-none font-mono"
@@ -206,14 +276,13 @@ function ProjectModal({ project, onClose, onSave }: { project: Project; onClose:
             </Field>
           </div>
 
-          <Field label={t.adminProjects.fields.subtitle}>
-            <input
-              className="w-full rounded-button border border-border bg-background-elevated px-3 py-2 text-sm focus:border-accent focus:outline-none"
-              value={form.subtitle}
-              onChange={(e) => set("subtitle", e.target.value)}
-              placeholder={t.adminProjects.ph.subtitle}
-            />
-          </Field>
+          <TextInputZhEn
+            label={t.adminProjects.fields.subtitle}
+            value={form.subtitle as TextValue}
+            onChange={(v) => set("subtitle", v)}
+            placeholderZh={t.adminProjects.ph.subtitle}
+            placeholderEn="Enterprise-grade AI copilot platform"
+          />
 
           <div className="grid grid-cols-3 gap-3">
             <Field label={t.adminProjects.fields.category}>
@@ -237,17 +306,30 @@ function ProjectModal({ project, onClose, onSave }: { project: Project; onClose:
           </div>
 
           <div className="grid grid-cols-2 gap-3">
-            <Field label={t.adminProjects.fields.role}>
-              <input className="w-full rounded-button border border-border bg-background-elevated px-3 py-2 text-sm focus:border-accent focus:outline-none" value={form.role} onChange={(e) => set("role", e.target.value)} placeholder={t.adminProjects.ph.role} />
-            </Field>
-            <Field label={t.adminProjects.fields.client}>
-              <input className="w-full rounded-button border border-border bg-background-elevated px-3 py-2 text-sm focus:border-accent focus:outline-none" value={form.client || ""} onChange={(e) => set("client", e.target.value)} placeholder="ByteDance" />
-            </Field>
+            <TextInputZhEn
+              label={t.adminProjects.fields.role}
+              value={form.role as TextValue}
+              onChange={(v) => set("role", v)}
+              placeholderZh={t.adminProjects.ph.role}
+              placeholderEn="Lead Product Designer"
+            />
+            <TextInputZhEn
+              label={t.adminProjects.fields.client}
+              value={(form.client as TextValue) || emptyText}
+              onChange={(v) => set("client", v)}
+              placeholderZh="内部项目"
+              placeholderEn="Internal"
+            />
           </div>
 
-          <Field label={t.adminProjects.fields.summary}>
-            <textarea rows={2} className="w-full rounded-button border border-border bg-background-elevated px-3 py-2 text-sm focus:border-accent focus:outline-none resize-none" value={form.summary} onChange={(e) => set("summary", e.target.value)} placeholder={t.adminProjects.ph.summary} />
-          </Field>
+          <TextInputZhEn
+            label={t.adminProjects.fields.summary}
+            value={form.summary as TextValue}
+            onChange={(v) => set("summary", v)}
+            placeholderZh={t.adminProjects.ph.summary}
+            placeholderEn="One-line description of the project"
+            rows={2}
+          />
 
           <div className="grid grid-cols-2 gap-3">
             <Field label={t.adminProjects.fields.teamSize}>
@@ -258,21 +340,36 @@ function ProjectModal({ project, onClose, onSave }: { project: Project; onClose:
             </Field>
           </div>
 
-          <Field label={t.adminProjects.fields.challenge}>
-            <textarea rows={3} className="w-full rounded-button border border-border bg-background-elevated px-3 py-2 text-sm focus:border-accent focus:outline-none resize-none" value={form.challenge || ""} onChange={(e) => set("challenge", e.target.value)} placeholder={t.adminProjects.ph.challenge} />
-          </Field>
+          <TextInputZhEn
+            label={t.adminProjects.fields.challenge}
+            value={(form.challenge as TextValue) || emptyText}
+            onChange={(v) => set("challenge", v)}
+            placeholderZh={t.adminProjects.ph.challenge}
+            placeholderEn="What was the core problem or challenge?"
+            rows={3}
+          />
 
-          <DynamicList label={t.adminProjects.fields.process} items={form.process || []} onChange={(arr) => set("process", arr)} placeholder={t.adminProjects.ph.process} />
-          <DynamicList label={t.adminProjects.fields.highlights} items={form.highlights || []} onChange={(arr) => set("highlights", arr)} placeholder={t.adminProjects.ph.highlights} />
+          <TextValueList label={t.adminProjects.fields.process} items={(form.process as TextValue[]) || []} onChange={(arr) => set("process", arr)} placeholderZh={t.adminProjects.ph.process} placeholderEn="Each step of the design process" />
+          <TextValueList label={t.adminProjects.fields.highlights} items={(form.highlights as TextValue[]) || []} onChange={(arr) => set("highlights", arr)} placeholderZh={t.adminProjects.ph.highlights} placeholderEn="2-3 key highlights" />
           <DynamicList label={t.adminProjects.fields.tools} items={form.tools || []} onChange={(arr) => set("tools", arr)} placeholder="Figma, React, Framer..." />
 
-          <Field label={t.adminProjects.fields.outcome}>
-            <textarea rows={3} className="w-full rounded-button border border-border bg-background-elevated px-3 py-2 text-sm focus:border-accent focus:outline-none resize-none" value={form.outcome || ""} onChange={(e) => set("outcome", e.target.value)} placeholder={t.adminProjects.ph.outcome} />
-          </Field>
+          <TextInputZhEn
+            label={t.adminProjects.fields.outcome}
+            value={(form.outcome as TextValue) || emptyText}
+            onChange={(v) => set("outcome", v)}
+            placeholderZh={t.adminProjects.ph.outcome}
+            placeholderEn="Final results and impact"
+            rows={3}
+          />
 
-          <Field label={t.adminProjects.fields.roleDetail}>
-            <textarea rows={2} className="w-full rounded-button border border-border bg-background-elevated px-3 py-2 text-sm focus:border-accent focus:outline-none resize-none" value={form.roleDetail || ""} onChange={(e) => set("roleDetail", e.target.value)} placeholder={t.adminProjects.ph.roleDetail} />
-          </Field>
+          <TextInputZhEn
+            label={t.adminProjects.fields.roleDetail}
+            value={(form.roleDetail as TextValue) || emptyText}
+            onChange={(v) => set("roleDetail", v)}
+            placeholderZh={t.adminProjects.ph.roleDetail}
+            placeholderEn="What you specifically did"
+            rows={2}
+          />
 
           <MetricsEditor metrics={form.metrics || []} onChange={(m) => set("metrics", m)} />
           <FigmaMediaField url={form.figmaUrl || ""} images={form.figmaImages || []} onChangeUrl={(v) => set("figmaUrl", v)} onChangeImages={(arr) => set("figmaImages", arr)} />
@@ -282,7 +379,7 @@ function ProjectModal({ project, onClose, onSave }: { project: Project; onClose:
           <button onClick={onClose} className="rounded-button border border-border px-4 py-2 text-sm hover:bg-background-card">{t.adminProjects.cancel}</button>
           <button
             onClick={() => {
-              if (!form.slug) form.slug = slugify(form.title);
+              if (!form.slug) form.slug = slugify(pick(form.title as TextValue));
               if (!form.slug) { alert(t.adminProjects.titleRequired); return; }
               onSave({ ...form });
             }}
@@ -325,24 +422,78 @@ function DynamicList({ label, items, onChange, placeholder }: { label: string; i
   );
 }
 
+function TextValueList({ label, items, onChange, placeholderZh, placeholderEn }: { label: string; items: TextValue[]; onChange: (arr: TextValue[]) => void; placeholderZh?: string; placeholderEn?: string; }) {
+  const { t } = useI18n();
+  const toObj = (v: TextValue): { zh: string; en: string } =>
+    typeof v === "string" ? { zh: v, en: v } : v;
+  return (
+    <div>
+      <label className="block font-mono text-[10px] uppercase tracking-wider text-foreground-subtle mb-2">{label}</label>
+      <div className="space-y-2">
+        {items.map((item, i) => {
+          const v = toObj(item);
+          return (
+            <div key={i} className="flex gap-2 items-start">
+              <div className="flex-1 grid grid-cols-2 gap-1.5">
+                <input
+                  className="rounded-button border border-border bg-background-elevated px-2 py-2 text-sm focus:border-accent focus:outline-none"
+                  value={v.zh}
+                  onChange={(e) => { const arr = items.map((x) => toObj(x)); arr[i] = { ...arr[i], zh: e.target.value }; onChange(arr); }}
+                  placeholder={placeholderZh}
+                />
+                <input
+                  className="rounded-button border border-border bg-background-elevated px-2 py-2 text-sm focus:border-accent focus:outline-none"
+                  value={v.en}
+                  onChange={(e) => { const arr = items.map((x) => toObj(x)); arr[i] = { ...arr[i], en: e.target.value }; onChange(arr); }}
+                  placeholder={placeholderEn}
+                />
+              </div>
+              <button onClick={() => onChange(items.filter((_, j) => j !== i))} className="px-2 text-foreground-muted hover:text-red-400 pt-1"><X size={16} /></button>
+            </div>
+          );
+        })}
+        <button onClick={() => onChange([...items, { zh: "", en: "" }])} className="text-xs text-accent hover:text-accent-hover flex items-center gap-1 py-1">
+          <Plus size={12} /> {t.adminProjects.addItem}
+        </button>
+      </div>
+    </div>
+  );
+}
+
 function MetricsEditor({ metrics, onChange }: { metrics: Project["metrics"]; onChange: (m: NonNullable<Project["metrics"]>) => void; }) {
   const { t } = useI18n();
   const items = metrics || [];
-  const update = (i: number, key: "label" | "value" | "unit", val: string) => { const arr = items.map((m) => ({ ...m })); arr[i][key] = val; onChange(arr); };
+  const toObj = (v: TextValue): { zh: string; en: string } =>
+    typeof v === "string" ? { zh: v, en: v } : v;
+  const update = (i: number, key: "label" | "value" | "unit", val: string | TextValue) => {
+    const arr = items.map((m) => ({ ...m }));
+    if (key === "label") {
+      arr[i].label = typeof val === "string" ? { zh: val, en: val } : val;
+    } else {
+      arr[i][key] = val as string;
+    }
+    onChange(arr);
+  };
   const remove = (i: number) => onChange(items.filter((_, j) => j !== i));
-  const add = () => onChange([...items, { label: "", value: "", unit: "" }]);
+  const add = () => onChange([...items, { label: { zh: "", en: "" }, value: "", unit: "" }]);
 
   return (
     <div>
       <label className="block font-mono text-[10px] uppercase tracking-wider text-foreground-subtle mb-2">{t.adminProjects.metrics.label}</label>
       <div className="space-y-2">
-        {items.map((m, i) => (
-          <div key={i} className="flex gap-2">
-            <input className="flex-1 rounded-button border border-border bg-background-elevated px-3 py-2 text-sm focus:border-accent focus:outline-none" placeholder={t.adminProjects.metrics.phLabel} value={m.label} onChange={(e) => update(i, "label", e.target.value)} />
-            <input className="w-24 rounded-button border border-border bg-background-elevated px-3 py-2 text-sm focus:border-accent focus:outline-none font-mono text-center" placeholder="120K" value={m.value} onChange={(e) => update(i, "value", e.target.value)} />
-            <button onClick={() => remove(i)} className="px-2 text-foreground-muted hover:text-red-400"><X size={16} /></button>
-          </div>
-        ))}
+        {items.map((m, i) => {
+          const lbl = toObj(m.label as TextValue);
+          return (
+            <div key={i} className="flex gap-2 items-start">
+              <div className="flex-1 grid grid-cols-2 gap-1.5">
+                <input className="rounded-button border border-border bg-background-elevated px-2 py-2 text-sm focus:border-accent focus:outline-none" placeholder={t.adminProjects.metrics.phLabel + " (zh)"} value={lbl.zh} onChange={(e) => update(i, "label", { zh: e.target.value, en: lbl.en })} />
+                <input className="rounded-button border border-border bg-background-elevated px-2 py-2 text-sm focus:border-accent focus:outline-none" placeholder="Metric (en)" value={lbl.en} onChange={(e) => update(i, "label", { zh: lbl.zh, en: e.target.value })} />
+              </div>
+              <input className="w-20 rounded-button border border-border bg-background-elevated px-3 py-2 text-sm focus:border-accent focus:outline-none font-mono text-center" placeholder="120K" value={m.value} onChange={(e) => update(i, "value", e.target.value)} />
+              <button onClick={() => remove(i)} className="px-2 text-foreground-muted hover:text-red-400 pt-1"><X size={16} /></button>
+            </div>
+          );
+        })}
         <button onClick={add} className="text-xs text-accent hover:text-accent-hover flex items-center gap-1 py-1">
           <Plus size={12} /> {t.adminProjects.metrics.add}
         </button>
@@ -559,7 +710,7 @@ function FigmaImportModal({ fileKey, initialNodeId, token, onClose, onImport }: 
           {!loading && !error && frames.length === 0 && (
             <div className="text-center py-12 text-foreground-muted text-sm">{t.adminProjects.figma.noFrames}</div>
           )}
-          {!loading && frames.length > 0 && (
+          {!loading && !error && frames.length > 0 && (
             <>
               <div className="flex items-center justify-between mb-3">
                 <p className="text-xs text-foreground-muted">{t.adminProjects.figma.found.replace("{n}", String(frames.length)).replace("{s}", String(selected.size))}</p>

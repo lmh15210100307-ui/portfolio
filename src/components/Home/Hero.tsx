@@ -7,7 +7,7 @@ const keywords = ["AI", "B2B SaaS", "Design Systems", "Interaction", "Product"];
 
 export default function Hero() {
   const site = useAdminStore((s) => s.site);
-  const { t } = useI18n();
+  const { t, pick } = useI18n();
   return (
     <section className="relative min-h-screen flex items-center pt-24 lg:pt-32 pb-20 lg:pb-32 overflow-hidden">
       <div className="absolute top-1/4 -left-40 gradient-glow" />
@@ -62,7 +62,7 @@ export default function Hero() {
           transition={{ duration: 0.6, ease: [0.16, 1, 0.3, 1], delay: 0.4 }}
           className="mt-8 max-w-xl text-lg lg:text-xl text-foreground-muted leading-relaxed"
         >
-          {site.tagline}. {site.name} — {site.title}.
+          {pick(site.tagline)}. {pick(site.name)} — {pick(site.title)}.
         </motion.p>
 
         <motion.div

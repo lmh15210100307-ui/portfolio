@@ -19,7 +19,7 @@ import { useI18n } from "@/hooks/useI18n";
 
 export default function CaseStudy() {
   const projects = useAdminStore((s) => s.projects);
-  const { t } = useI18n();
+  const { t, pick } = useI18n();
   const { slug } = useParams<{ slug: string }>();
   const project = slug ? projects.find((p) => p.slug === slug) : undefined;
 
@@ -40,6 +40,11 @@ export default function CaseStudy() {
   const related = projects.filter(
     (p) => p.category === project.category && p.slug !== project.slug
   );
+
+  const hasProcess = project.process && project.process.length > 0;
+  const processItems = hasProcess
+    ? (project.process as any[]).map((p) => pick(p))
+    : t.caseStudy.defaultProcess;
 
   return (
     <div className="relative">
@@ -70,10 +75,10 @@ export default function CaseStudy() {
                 </span>
               </div>
               <h1 className="font-display font-bold text-4xl md:text-6xl lg:text-7xl leading-tight mb-6">
-                {project.title}
+                {pick(project.title)}
               </h1>
               <p className="text-lg lg:text-xl text-foreground-muted max-w-2xl">
-                {project.subtitle}
+                {pick(project.subtitle)}
               </p>
             </motion.div>
           </div>
@@ -83,10 +88,10 @@ export default function CaseStudy() {
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-16">
             <aside className="lg:col-span-4">
               <div className="space-y-8 lg:sticky lg:top-28">
-                <InfoRow label={t.caseStudy.role} value={project.role} />
+                <InfoRow label={t.caseStudy.role} value={pick(project.role)} />
                 <InfoRow
                   label={t.caseStudy.client}
-                  value={project.client || t.caseStudy.internal}
+                  value={pick(project.client) || t.caseStudy.internal}
                 />
                 <InfoRow label={t.caseStudy.duration} value={project.duration || "—"} />
                 <InfoRow label={t.caseStudy.team} value={project.teamSize || "—"} />
@@ -124,9 +129,9 @@ export default function CaseStudy() {
               {project.metrics && project.metrics.length > 0 && (
                 <section>
                   <div className="grid grid-cols-2 lg:grid-cols-3 gap-4 lg:gap-6">
-                    {project.metrics.map((m) => (
+                    {project.metrics.map((m, idx) => (
                       <div
-                        key={m.label}
+                        key={idx}
                         className="rounded-card border border-border bg-background-card p-6 lg:p-8"
                       >
                         <BarChart3
@@ -142,7 +147,7 @@ export default function CaseStudy() {
                           )}
                         </div>
                         <div className="text-xs font-mono uppercase tracking-wider text-foreground-muted mt-1">
-                          {m.label}
+                          {pick(m.label)}
                         </div>
                       </div>
                     ))}
@@ -157,7 +162,7 @@ export default function CaseStudy() {
                   title={t.caseStudy.challengeTitle}
                 />
                 <p className="text-lg lg:text-xl leading-relaxed text-foreground/90">
-                  {project.challenge || project.summary}
+                  {pick(project.challenge) || pick(project.summary)}
                 </p>
               </section>
 
@@ -168,21 +173,19 @@ export default function CaseStudy() {
                   title={t.caseStudy.processTitle}
                 />
                 <div className="space-y-4">
-                  {(project.process || t.caseStudy.defaultProcess).map(
-                    (step, i) => (
-                      <div
-                        key={i}
-                        className="flex gap-4 items-start rounded-button border border-border bg-background-card p-4 lg:p-5"
-                      >
-                        <div className="font-mono text-sm text-foreground-subtle pt-0.5 min-w-[2rem]">
-                          0{i + 1}
-                        </div>
-                        <p className="text-sm lg:text-base leading-relaxed">
-                          {step}
-                        </p>
+                  {processItems.map((step: string, i: number) => (
+                    <div
+                      key={i}
+                      className="flex gap-4 items-start rounded-button border border-border bg-background-card p-4 lg:p-5"
+                    >
+                      <div className="font-mono text-sm text-foreground-subtle pt-0.5 min-w-[2rem]">
+                        0{i + 1}
                       </div>
-                    )
-                  )}
+                      <p className="text-sm lg:text-base leading-relaxed">
+                        {step}
+                      </p>
+                    </div>
+                  ))}
                 </div>
               </section>
 
@@ -193,14 +196,14 @@ export default function CaseStudy() {
                   title={t.caseStudy.outcomeTitle}
                 />
                 <p className="text-lg lg:text-xl leading-relaxed text-foreground/90">
-                  {project.outcome || t.caseStudy.outcomeFallback}
+                  {pick(project.outcome) || t.caseStudy.outcomeFallback}
                 </p>
               </section>
 
               <section>
                 <SectionHeader label={t.caseStudy.roleLabel} title={t.caseStudy.roleTitle} />
                 <p className="text-lg leading-relaxed text-foreground/90">
-                  {project.roleDetail || project.role}
+                  {pick(project.roleDetail) || pick(project.role)}
                 </p>
               </section>
 
@@ -236,12 +239,12 @@ export default function CaseStudy() {
                         loading="lazy"
                       />
                     </div>
+                    <p className="text-xs text-foreground-subtle mt-2 font-mono px-4 py-2">
+                      {parseFigmaUrl(project.figmaUrl)?.fileKey}
+                      {parseFigmaUrl(project.figmaUrl)?.nodeId &&
+                        ` · node ${parseFigmaUrl(project.figmaUrl)?.nodeId}`}
+                    </p>
                   </div>
-                  <p className="text-xs text-foreground-subtle mt-2 font-mono">
-                    {parseFigmaUrl(project.figmaUrl)?.fileKey}
-                    {parseFigmaUrl(project.figmaUrl)?.nodeId &&
-                      ` · node ${parseFigmaUrl(project.figmaUrl)?.nodeId}`}
-                  </p>
                 </section>
               )}
 
@@ -295,10 +298,10 @@ export default function CaseStudy() {
                     />
                     <div className="p-5">
                       <h3 className="font-display font-semibold mb-1 group-hover:text-accent transition-colors">
-                        {r.title}
+                        {pick(r.title)}
                       </h3>
                       <p className="text-sm text-foreground-muted line-clamp-1">
-                        {r.summary}
+                        {pick(r.summary)}
                       </p>
                     </div>
                   </Link>
