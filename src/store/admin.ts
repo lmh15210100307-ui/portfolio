@@ -15,6 +15,7 @@ import {
   downloadData,
   parseImportedJSON,
 } from "@/storage/cloud";
+import { migrateToBilingual, needsMigration } from "@/utils/migrate";
 
 interface AdminState {
   projects: Project[];
@@ -43,9 +44,13 @@ export const useAdminStore = create<AdminState>((set, get) => ({
     try {
       const local = loadLocalData();
       if (local) {
+        const data = needsMigration(local)
+          ? migrateToBilingual(local)
+          : local;
+        if (data !== local) saveLocalData({ ...data, savedAt: data.savedAt || new Date().toISOString() });
         set({
-          projects: local.projects,
-          site: local.site,
+          projects: data.projects,
+          site: data.site,
           loaded: true,
         });
         return;
@@ -55,7 +60,21 @@ export const useAdminStore = create<AdminState>((set, get) => ({
         loadSite(),
       ]);
       if (dbProjects && dbSite) {
-        saveLocalData({ projects: dbProjects, site: dbSite, savedAt: new Date().toISOString() });
+        const data = { projects: dbProjects, site: dbSite };
+        const migrated = needsMigration(data)
+          ? migrateToBilingual(data)
+          : data;
+        saveLocalData({
+          projects: migrated.projects,
+          site: migrated.site,
+          savedAt: new Date().toISOString(),
+        });
+        set({
+          projects: migrated.projects,
+          site: migrated.site,
+          loaded: true,
+        });
+        return;
       }
       set({
         projects: dbProjects || defaultProjects,
