@@ -1,5 +1,6 @@
 import { useEffect } from "react";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import SiteLayout from "@/components/Layout/SiteLayout";
 import Home from "@/pages/Home";
 import Work from "@/pages/Work";
 import CaseStudy from "@/pages/CaseStudy";
@@ -28,11 +29,15 @@ export default function App() {
   return (
     <Router>
       <Routes>
-        <Route path="/" element={<Home />} />
-        <Route path="/work" element={<Work />} />
-        <Route path="/work/:slug" element={<CaseStudy />} />
-        <Route path="/about" element={<About />} />
-        <Route path="/contact" element={<Contact />} />
+        {/* 前台：Header/Footer 常驻，避免切换路由时重挂载跳动 */}
+        <Route element={<SiteLayout />}>
+          <Route path="/" element={<Home />} />
+          <Route path="/work" element={<Work />} />
+          <Route path="/work/:slug" element={<CaseStudy />} />
+          <Route path="/about" element={<About />} />
+          <Route path="/contact" element={<Contact />} />
+        </Route>
+        {/* 后台 */}
         <Route path="/admin" element={<AdminLayout />}>
           <Route index element={<AdminOverview />} />
           <Route path="projects" element={<AdminProjects />} />

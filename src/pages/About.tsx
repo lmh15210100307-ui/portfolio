@@ -1,7 +1,5 @@
 import { motion } from "framer-motion";
 import { LayoutGrid, Sparkles, Layers, Code, Mail, MapPin, Star, Plus, X, Upload, Trash2, Pencil } from "lucide-react";
-import Header from "@/components/Layout/Header";
-import Footer from "@/components/Layout/Footer";
 import { useAdminStore } from "@/store/admin";
 import { useReveal } from "@/hooks/useReveal";
 import { useI18n } from "@/hooks/useI18n";
@@ -66,40 +64,35 @@ export default function About() {
   const [mode, setMode] = useState<"resume" | "life">("resume");
 
   return (
-    <div className="relative">
-      <div className="noise-bg" />
-      <Header />
-      <main className="relative z-10 pt-24 lg:pt-32 pb-24 lg:pb-32">
-        <div className="container">
-          <div className="flex justify-center mb-12 lg:mb-16">
-            <div className="inline-flex items-center rounded-pill border border-border bg-background-card p-1">
-              <button
-                onClick={() => setMode("resume")}
-                className={`px-5 py-2 text-sm font-medium rounded-pill transition-colors duration-200 ${
-                  mode === "resume"
-                    ? "bg-accent/10 text-accent border border-accent/20"
-                    : "text-foreground-muted hover:text-foreground"
-                }`}
-              >
-                {t.about.resume}
-              </button>
-              <button
-                onClick={() => setMode("life")}
-                className={`px-5 py-2 text-sm font-medium rounded-pill transition-colors duration-200 ${
-                  mode === "life"
-                    ? "bg-accent/10 text-accent border border-accent/20"
-                    : "text-foreground-muted hover:text-foreground"
-                }`}
-              >
-                {t.about.life}
-              </button>
-            </div>
+    <div className="pt-24 lg:pt-32 pb-24 lg:pb-32">
+      <div className="container">
+        <div className="flex justify-center mb-12 lg:mb-16">
+          <div className="inline-flex items-center rounded-pill border border-border bg-background-card p-1">
+            <button
+              onClick={() => setMode("resume")}
+              className={`px-5 py-2 text-sm font-medium rounded-pill transition-colors duration-200 ${
+                mode === "resume"
+                  ? "bg-accent/10 text-accent border border-accent/20"
+                  : "text-foreground-muted hover:text-foreground"
+              }`}
+            >
+              {t.about.resume}
+            </button>
+            <button
+              onClick={() => setMode("life")}
+              className={`px-5 py-2 text-sm font-medium rounded-pill transition-colors duration-200 ${
+                mode === "life"
+                  ? "bg-accent/10 text-accent border border-accent/20"
+                  : "text-foreground-muted hover:text-foreground"
+              }`}
+            >
+              {t.about.life}
+            </button>
           </div>
-
-          {mode === "resume" ? <ResumeView site={site} t={t} pick={pick} /> : <LifeView />}
         </div>
-      </main>
-      <Footer />
+
+        {mode === "resume" ? <ResumeView site={site} t={t} pick={pick} /> : <LifeView />}
+      </div>
     </div>
   );
 }
