@@ -41,7 +41,7 @@ export default function Hero() {
           initial={{ opacity: 0, y: 30 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1], delay: 0.1 }}
-          className="font-display font-bold leading-[1.05] tracking-tight"
+          className="font-display font-bold leading-[0.95] tracking-tight"
         >
           <span className="block text-[clamp(2.25rem,12vw,8rem)]">
             {t.hero.line1}
