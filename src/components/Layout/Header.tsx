@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect } from "react";
 import { Link, NavLink, useLocation } from "react-router-dom";
 import { motion, AnimatePresence } from "framer-motion";
 import { Menu, X, Sun, Moon, Globe } from "lucide-react";
@@ -14,35 +14,11 @@ export default function Header() {
   const [scrolled, setScrolled] = useState(false);
   const [mobileOpen, setMobileOpen] = useState(false);
 
-  const navRef = useRef<HTMLDivElement>(null);
-  const activeRef = useRef<HTMLAnchorElement>(null);
-  const [pill, setPill] = useState({ left: 0, width: 0, opacity: 0 });
-
   useEffect(() => {
     const handleScroll = () => setScrolled(window.scrollY > 20);
     window.addEventListener("scroll", handleScroll, { passive: true });
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
-
-  // 计算选中 pill 的位置 — 只在 mount + 路由变化 + resize 时计算
-  useEffect(() => {
-    const updatePill = () => {
-      if (activeRef.current && navRef.current) {
-        const navRect = navRef.current.getBoundingClientRect();
-        const itemRect = activeRef.current.getBoundingClientRect();
-        setPill({
-          left: itemRect.left - navRect.left,
-          width: itemRect.width,
-          opacity: 1,
-        });
-      }
-    };
-    updatePill();
-    window.addEventListener("resize", updatePill);
-    // 字体加载完成后重新计算（字体加载会改变文字宽度）
-    if (document.fonts) document.fonts.ready.then(updatePill);
-    return () => window.removeEventListener("resize", updatePill);
-  }, [location.pathname, t]);
 
   const navItems = [
     { to: "/", end: true, label: t.nav.home },
@@ -72,23 +48,7 @@ export default function Header() {
           </span>
         </Link>
 
-        <nav ref={navRef} className="hidden md:flex items-center gap-1 relative">
-          {/* 单一绝对定位 pill — 稳定滑动，不跳 */}
-          <motion.div
-            className="absolute bg-foreground rounded-full pointer-events-none"
-            animate={{
-              left: pill.left,
-              width: pill.width,
-              opacity: pill.opacity,
-            }}
-            transition={{ type: "spring", bounce: 0.25, duration: 0.5 }}
-            style={{
-              top: "50%",
-              height: "32px",
-              y: "-50%",
-            }}
-          />
-
+        <nav className="hidden md:flex items-center gap-1">
           {navItems.map((item) => {
             const isActive = item.end
               ? location.pathname === item.to
@@ -98,10 +58,9 @@ export default function Header() {
                 key={item.to}
                 to={item.to}
                 end={item.end}
-                ref={isActive ? activeRef : null}
-                className={`relative z-10 text-sm font-medium rounded-full px-4 py-1.5 transition-colors ${
+                className={`text-sm font-medium rounded-full px-4 py-1.5 transition-colors duration-200 ${
                   isActive
-                    ? "text-background"
+                    ? "bg-foreground text-background"
                     : "text-foreground hover:text-accent"
                 }`}
               >
@@ -115,7 +74,7 @@ export default function Header() {
               onClick={toggleTheme}
               aria-label={isDark ? "Switch to light mode" : "Switch to dark mode"}
               title={isDark ? t.header.light : t.header.dark}
-              className="w-9 h-9 flex items-center justify-center rounded-pill border border-border hover:border-accent/50 text-foreground-muted hover:text-accent transition-all"
+              className="w-9 h-9 flex items-center justify-center rounded-pill border border-border hover:border-accent/50 text-foreground-muted hover:text-accent transition-colors duration-200"
             >
               <AnimatePresence mode="wait" initial={false}>
                 <motion.span
@@ -134,7 +93,7 @@ export default function Header() {
               onClick={toggleLang}
               aria-label="Switch language"
               title={lang === "zh" ? "English" : "中文"}
-              className="w-9 h-9 flex items-center justify-center rounded-pill border border-border hover:border-accent/50 text-foreground-muted hover:text-accent transition-all font-mono text-xs font-bold"
+              className="w-9 h-9 flex items-center justify-center rounded-pill border border-border hover:border-accent/50 text-foreground-muted hover:text-accent transition-colors duration-200 font-mono text-xs font-bold"
             >
               {lang === "zh" ? "EN" : (
                 <AnimatePresence mode="wait" initial={false}>
@@ -183,10 +142,25 @@ export default function Header() {
             className="md:hidden overflow-hidden bg-background/95 backdrop-blur-xl border-b border-border"
           >
             <nav className="container py-4 flex flex-col gap-1">
-              <Link to="/" onClick={() => setMobileOpen(false)} className="px-4 py-3 rounded-button text-base font-medium text-foreground-muted hover:text-foreground hover:bg-background-card transition-all">{t.nav.home}</Link>
-              <Link to="/work" onClick={() => setMobileOpen(false)} className="px-4 py-3 rounded-button text-base font-medium text-foreground-muted hover:text-foreground hover:bg-background-card transition-all">{t.nav.work}</Link>
-              <Link to="/about" onClick={() => setMobileOpen(false)} className="px-4 py-3 rounded-button text-base font-medium text-foreground-muted hover:text-foreground hover:bg-background-card transition-all">{t.nav.about}</Link>
-              <Link to="/contact" onClick={() => setMobileOpen(false)} className="px-4 py-3 rounded-button text-base font-medium text-foreground-muted hover:text-foreground hover:bg-background-card transition-all">{t.nav.contact}</Link>
+              {navItems.map((item) => {
+                const isActive = item.end
+                  ? location.pathname === item.to
+                  : location.pathname.startsWith(item.to);
+                return (
+                  <Link
+                    key={item.to}
+                    to={item.to}
+                    onClick={() => setMobileOpen(false)}
+                    className={`px-4 py-3 rounded-button text-base font-medium transition-colors ${
+                      isActive
+                        ? "bg-foreground text-background"
+                        : "text-foreground-muted hover:text-foreground hover:bg-background-card"
+                    }`}
+                  >
+                    {item.label}
+                  </Link>
+                );
+              })}
             </nav>
           </motion.div>
         )}

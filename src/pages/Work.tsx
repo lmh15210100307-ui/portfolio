@@ -83,7 +83,7 @@ function FilterButton({
   return (
     <button
       onClick={onClick}
-      className={`rounded-pill px-4 py-2 text-sm font-medium border transition-all ${
+      className={`rounded-pill px-4 py-2 text-sm font-medium border transition-colors duration-200 ${
         active
           ? "bg-foreground text-background border-foreground"
           : "text-foreground-muted border-border hover:border-border-light hover:text-foreground"
