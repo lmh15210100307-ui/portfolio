@@ -52,7 +52,6 @@ export default function Hero() {
             >
               {t.hero.line2}
             </span>
-            <span className="mx-2 inline-block w-px h-8 md:h-12 bg-gradient-to-b from-pink-500 to-orange-400 self-center flex-shrink-0" />
           </span>
           <span className="block text-[clamp(2.25rem,12vw,8rem)] relative break-words">
             <span className="bg-gradient-to-r from-accent via-blue-400 to-purple-400 bg-clip-text text-transparent">
@@ -67,13 +66,12 @@ export default function Hero() {
               />
             </span>
           </span>
-          <span className="block text-[clamp(2.25rem,12vw,8rem)] flex items-baseline">
+          <span className="block text-[clamp(2.25rem,12vw,8rem)]">
             <span
               style={{ WebkitTextStroke: "1.5px currentColor", color: "transparent" }}
             >
               {t.hero.line4}
             </span>
-            <span className="ml-3 inline-block w-px h-8 md:h-12 bg-gradient-to-b from-pink-500 to-orange-400 self-center flex-shrink-0" />
           </span>
         </motion.h1>
 
