@@ -1,8 +1,6 @@
 import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { MessageSquare, Send, X, Sparkles, User, ChevronDown } from "lucide-react";
-import Header from "@/components/Layout/Header";
-import Footer from "@/components/Layout/Footer";
 import { useAdminStore } from "@/store/admin";
 import { useI18n } from "@/hooks/useI18n";
 
@@ -156,11 +154,7 @@ export default function Contact() {
   };
 
   return (
-    <div className="relative">
-      <div className="noise-bg" />
-      <Header />
-
-      <main className="relative z-10 pt-24 lg:pt-32 pb-24 lg:pb-48">
+    <div className="pt-24 lg:pt-32 pb-24 lg:pb-48">
         <div className="container">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
@@ -195,9 +189,6 @@ export default function Contact() {
             ))}
           </div>
         </div>
-      </main>
-
-      <Footer />
 
       {/* Floating Write Button */}
       <motion.button

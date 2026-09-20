@@ -10,8 +10,6 @@ import {
   Figma,
   ImageIcon,
 } from "lucide-react";
-import Header from "@/components/Layout/Header";
-import Footer from "@/components/Layout/Footer";
 import { useAdminStore } from "@/store/admin";
 import Badge from "@/components/UI/Badge";
 import { buildFigmaEmbedUrl, parseFigmaUrl } from "@/utils/figma";
@@ -47,11 +45,7 @@ export default function CaseStudy() {
     : t.caseStudy.defaultProcess;
 
   return (
-    <div className="relative">
-      <div className="noise-bg" />
-      <Header />
-
-      <main className="relative z-10 pt-24 lg:pt-32">
+    <div className="pt-24 lg:pt-32">
         <div
           className={`relative py-20 lg:py-32 bg-gradient-to-br ${project.coverGradient}`}
         >
@@ -310,9 +304,6 @@ export default function CaseStudy() {
             </div>
           </section>
         )}
-      </main>
-
-      <Footer />
     </div>
   );
 }

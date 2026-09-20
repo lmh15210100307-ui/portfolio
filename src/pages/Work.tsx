@@ -2,8 +2,6 @@ import { useState } from "react";
 import { Link } from "react-router-dom";
 import { motion } from "framer-motion";
 import { ArrowUpRight } from "lucide-react";
-import Header from "@/components/Layout/Header";
-import Footer from "@/components/Layout/Footer";
 import { useAdminStore } from "@/store/admin";
 import { categories, Project } from "@/data/projects";
 import { useReveal } from "@/hooks/useReveal";
@@ -19,54 +17,49 @@ export default function Work() {
       : projects.filter((p) => p.category === filter);
 
   return (
-    <div className="relative">
-      <div className="noise-bg" />
-      <Header />
-      <main className="relative z-10 pt-24 lg:pt-32 pb-24 lg:pb-32">
-        <div className="container">
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6 }}
-            className="mb-16 lg:mb-20"
+    <div className="pt-24 lg:pt-32 pb-24 lg:pb-32">
+      <div className="container">
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.6 }}
+          className="mb-16 lg:mb-20"
+        >
+          <p className="font-mono text-xs uppercase tracking-[0.2em] text-accent mb-3">
+            {t.work.tag}
+          </p>
+          <h1 className="font-display font-bold text-4xl md:text-6xl lg:text-7xl leading-tight">
+            {t.work.title}
+          </h1>
+          <p className="mt-6 text-foreground-muted max-w-xl">
+            {t.work.subtitle}
+          </p>
+        </motion.div>
+
+        <div className="flex flex-wrap gap-2 mb-10 lg:mb-12">
+          <FilterButton
+            active={filter === "all"}
+            onClick={() => setFilter("all")}
           >
-            <p className="font-mono text-xs uppercase tracking-[0.2em] text-accent mb-3">
-              {t.work.tag}
-            </p>
-            <h1 className="font-display font-bold text-4xl md:text-6xl lg:text-7xl leading-tight">
-              {t.work.title}
-            </h1>
-            <p className="mt-6 text-foreground-muted max-w-xl">
-              {t.work.subtitle}
-            </p>
-          </motion.div>
-
-          <div className="flex flex-wrap gap-2 mb-10 lg:mb-12">
+            {t.work.all}
+          </FilterButton>
+          {categories.map((c) => (
             <FilterButton
-              active={filter === "all"}
-              onClick={() => setFilter("all")}
+              key={c}
+              active={filter === c}
+              onClick={() => setFilter(c)}
             >
-              {t.work.all}
+              {c}
             </FilterButton>
-            {categories.map((c) => (
-              <FilterButton
-                key={c}
-                active={filter === c}
-                onClick={() => setFilter(c)}
-              >
-                {c}
-              </FilterButton>
-            ))}
-          </div>
-
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-            {filtered.map((p) => (
-              <ProjectCard key={p.slug} project={p} />
-            ))}
-          </div>
+          ))}
         </div>
-      </main>
-      <Footer />
+
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+          {filtered.map((p) => (
+            <ProjectCard key={p.slug} project={p} />
+          ))}
+        </div>
+      </div>
     </div>
   );
 }
