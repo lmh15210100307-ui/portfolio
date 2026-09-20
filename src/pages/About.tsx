@@ -75,7 +75,7 @@ export default function About() {
             <div className="inline-flex items-center rounded-pill border border-border bg-background-card p-1">
               <button
                 onClick={() => setMode("resume")}
-                className={`px-5 py-2 text-sm font-medium rounded-pill transition-all ${
+                className={`px-5 py-2 text-sm font-medium rounded-pill transition-colors duration-200 ${
                   mode === "resume"
                     ? "bg-accent/10 text-accent border border-accent/20"
                     : "text-foreground-muted hover:text-foreground"
@@ -85,7 +85,7 @@ export default function About() {
               </button>
               <button
                 onClick={() => setMode("life")}
-                className={`px-5 py-2 text-sm font-medium rounded-pill transition-all ${
+                className={`px-5 py-2 text-sm font-medium rounded-pill transition-colors duration-200 ${
                   mode === "life"
                     ? "bg-accent/10 text-accent border border-accent/20"
                     : "text-foreground-muted hover:text-foreground"

@@ -97,7 +97,7 @@ export default function AdminLayout() {
               to={item.to}
               end={item.end}
               className={({ isActive }) =>
-                `flex items-center gap-3 rounded-button px-3 py-2.5 text-sm transition-all ${
+                `flex items-center gap-3 rounded-button px-3 py-2.5 text-sm transition-colors duration-200 ${
                   isActive
                     ? "bg-accent/10 text-accent border border-accent/20"
                     : "text-foreground-muted hover:text-foreground hover:bg-background-elevated"
@@ -177,7 +177,7 @@ export default function AdminLayout() {
               to={item.to}
               end={item.end}
               className={({ isActive }) =>
-                `flex items-center gap-2 rounded-pill px-3 py-1.5 text-xs whitespace-nowrap transition-all ${
+                `flex items-center gap-2 rounded-pill px-3 py-1.5 text-xs whitespace-nowrap transition-colors duration-200 ${
                   isActive
                     ? "bg-accent/10 text-accent border border-accent/20"
                     : "text-foreground-muted hover:text-foreground hover:bg-background-card"
